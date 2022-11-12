@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("SDL2 Window",
+    SDL_Window* window = SDL_CreateWindow("Apollo has started",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         SCREEN_WIDTH, SCREEN_HEIGHT,
