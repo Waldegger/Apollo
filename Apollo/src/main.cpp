@@ -40,12 +40,13 @@ int main(int argc, char* argv[])
     while (keep_window_open)
     {
         SDL_Event e;
-        while (SDL_PollEvent(&e) > 0)
+
+        while (SDL_PollEvent(&e))
         {
             switch (e.type)
             {
-            case SDL_QUIT:
-                keep_window_open = false;
+                case SDL_QUIT:
+                    keep_window_open = false;
                 break;
             }
 
@@ -55,6 +56,6 @@ int main(int argc, char* argv[])
 
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-
+    
 	return EXIT_SUCCESS;
 }
