@@ -1,61 +1,62 @@
+#define NO_SDL_GLEXT
+#define GL_GLEXT_PROTOTYPES 1
+
+#include "render_window.h"
+#include <GL/glew.h>
+#include <SDL2/SDL_opengl.h>
+
 #include <iostream>
 
-#include <SDL2/SDL.h>
+#include "vector2.h"
+#include "matrix4.h"
 
 int main(int argc, char* argv[])
 {
 	static constexpr int SCREEN_WIDTH = 640;
 	static constexpr int SCREEN_HEIGHT = 480;
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    try
     {
-        std::cout << "Failed to initialize the SDL2 library\n";
-        std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
-        return -1;
-    }
+        apollo::render_window rwindow{ "Apollo flies to the moon!", SCREEN_WIDTH, SCREEN_HEIGHT, 0 };
 
-    SDL_Window* window = SDL_CreateWindow("Apollo has started",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        0);
+        GLuint vbo;
+       
+        glGenBuffers(1, &vbo);
 
-    if (!window)
-    {
-        std::cout << "Failed to create window\n";
-        std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
-        return -1;
-    }
+        apollo::vector2f vec;
+        apollo::matrix4f mat1, mat2;
 
-    SDL_Surface* window_surface = SDL_GetWindowSurface(window);
+        mat1.translate(apollo::vector2f{ 4.0f, 3.0f }).scale(apollo::vector2f{ 2.0f, 2.0f });
+        mat2.scale(apollo::vector2f{ 0.4f, 0.1f }).combine(mat1);
 
-    if (!window_surface)
-    {
-        std::cout << "Failed to get the surface from the window\n";
-        std::cout << "SDL2 Error: " << SDL_GetError() << "\n";
-        return -1;
-    }
-
-    bool keep_window_open = true;
-    while (keep_window_open)
-    {
-        SDL_Event e;
-
-        while (SDL_PollEvent(&e))
+        bool keep_window_open = true;
+        while (rwindow.is_open())
         {
-            switch (e.type)
+            SDL_Event e;
+
+            while (SDL_PollEvent(&e))
             {
+                switch (e.type)
+                {
                 case SDL_QUIT:
-                    keep_window_open = false;
-                break;
+                    rwindow.close();
+                    break;
+                }
             }
 
-            SDL_UpdateWindowSurface(window);
+            //Here comes rendercode
+            /* Clear the color and depth buffers. */
+            rwindow.clear();
+            
+
+            //Update screen
+            rwindow.display();
         }
     }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what();
+    }
 
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-    
 	return EXIT_SUCCESS;
 }
