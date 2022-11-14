@@ -1,14 +1,16 @@
 #define NO_SDL_GLEXT
 #define GL_GLEXT_PROTOTYPES 1
 
-#include "render_window.h"
+#include "graphics/render_window.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 
 #include <iostream>
 
-#include "vector2.h"
-#include "matrix4.h"
+#include "graphics/vector2.h"
+#include "graphics/matrix4.h"
+#include "graphics/shader_program.h"
+#include "system/assetstream.h"
 
 int main(int argc, char* argv[])
 {
@@ -18,7 +20,7 @@ int main(int argc, char* argv[])
     try
     {
         apollo::render_window rwindow{ "Apollo flies to the moon!", SCREEN_WIDTH, SCREEN_HEIGHT, 0 };
-
+      
         GLuint vbo;
        
         glGenBuffers(1, &vbo);
@@ -28,6 +30,11 @@ int main(int argc, char* argv[])
 
         mat1.translate(apollo::vector2f{ 4.0f, 3.0f }).scale(apollo::vector2f{ 2.0f, 2.0f });
         mat2.scale(apollo::vector2f{ 0.4f, 0.1f }).combine(mat1);
+
+        auto shader1 = apollo::shader{};
+        auto shader2 = apollo::shader{};
+        apollo::shader_program program;
+        program.link({ shader1, shader2 });
 
         bool keep_window_open = true;
         while (rwindow.is_open())

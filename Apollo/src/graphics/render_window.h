@@ -6,7 +6,7 @@
 #include <functional>
 #include <type_traits>
 
-#include "utility.h"
+#include "../utility/utility.h"
 
 namespace apollo
 {
