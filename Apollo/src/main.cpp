@@ -14,8 +14,8 @@
 
 int main(int argc, char* argv[])
 {
-	static constexpr int SCREEN_WIDTH = 640;
-	static constexpr int SCREEN_HEIGHT = 480;
+	static constexpr int SCREEN_WIDTH = 540;
+	static constexpr int SCREEN_HEIGHT = 960;
 
     try
     {
@@ -31,10 +31,38 @@ int main(int argc, char* argv[])
         mat1.translate(apollo::vector2f{ 4.0f, 3.0f }).scale(apollo::vector2f{ 2.0f, 2.0f });
         mat2.scale(apollo::vector2f{ 0.4f, 0.1f }).combine(mat1);
 
-        auto shader1 = apollo::shader{};
-        auto shader2 = apollo::shader{};
+        auto shader1 = apollo::shader{ apollo::shader::type::vertex };
+        auto shader2 = apollo::shader{ apollo::shader::type::fragment };
+
+        const char* vertexShaderSource = "#version 330 core\n"
+            "layout (location = 0) in vec3 aPos;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+            "}\0";
+
+        const char* fragmentShaderSource = "#version 330 core\n"
+            "out vec4 FragColor;\n"
+            "void main()\n"
+            "{\n"
+            "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+            "}\n";
+
+        shader1.compile(vertexShaderSource);
+        shader2.compile(fragmentShaderSource);
+
         apollo::shader_program program;
-        program.link({ shader1, shader2 });
+        program.attach_shader(shader1);
+        program.attach_shader(shader2);
+
+        program.link();
+        program.use();
+
+        float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f
+        };
 
         bool keep_window_open = true;
         while (rwindow.is_open())
