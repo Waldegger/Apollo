@@ -155,26 +155,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\camera_2d.cpp" />
+    <ClCompile Include="src\graphics\image.cpp" />
     <ClCompile Include="src\graphics\render_window.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\shader_program.cpp" />
+    <ClCompile Include="src\graphics\texture_2d.cpp" />
     <ClCompile Include="src\graphics\vertex_array_object.cpp" />
     <ClCompile Include="src\graphics\vertex_buffer_object.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\SDL_utlity.cpp" />
     <ClCompile Include="src\system\assetstream.cpp" />
     <ClCompile Include="src\utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\camera_2d.h" />
+    <ClInclude Include="src\graphics\image.h" />
     <ClInclude Include="src\graphics\matrix4.h" />
     <ClInclude Include="src\graphics\quaternion.h" />
     <ClInclude Include="src\graphics\render_window.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\shader_program.h" />
+    <ClInclude Include="src\graphics\texture_2d.h" />
     <ClInclude Include="src\graphics\vector2.h" />
     <ClInclude Include="src\graphics\vector3.h" />
     <ClInclude Include="src\graphics\vertex_array_object.h" />
     <ClInclude Include="src\graphics\vertex_buffer_object.h" />
+    <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\SDL_utility.h" />
     <ClInclude Include="src\system\assetstream.h" />
     <ClInclude Include="src\utility\utility.h" />

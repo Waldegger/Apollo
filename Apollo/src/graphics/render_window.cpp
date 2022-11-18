@@ -14,8 +14,8 @@ namespace apollo
 		static initializer<SDL_Init, SDL_Quit, Uint32> init_sdl{ SDL_INIT_VIDEO };
 
 		//Use OpenGL 2.1 -- or better 3.3
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 		//OpenGL ES profile - only a subset of the base OpenGL functionality is available
@@ -47,6 +47,9 @@ namespace apollo
 		{
 			SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
 		}
+
+		glViewport(0, 0, width, height);
+		glFrustum(0.0f, width, height, 0.0f, -1.0f, 1.0f);
 	}
 
 	render_window::~render_window()

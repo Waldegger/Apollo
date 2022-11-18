@@ -13,7 +13,7 @@ namespace apollo
 	public:
 		friend class shader_program;
 
-		enum class type
+		enum class type : GLuint
 		{
 			vertex = GL_VERTEX_SHADER,
 			geometry = GL_GEOMETRY_SHADER,

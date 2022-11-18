@@ -37,6 +37,8 @@ namespace apollo
 
 		constexpr const matrix4<T>& get_identity() const { return matrix4<T>::identity; }
 
+		constexpr const std::array<T, 4 * 4>& get_data() const { return m_data; }
+
 		constexpr matrix4<T> get_inverse() const
 		{
 			// Compute the determinant
