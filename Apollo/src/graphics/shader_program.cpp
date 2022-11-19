@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace apollo
+namespace agl
 {
 	shader_program::shader_program()
 		: m_handle{ glCreateProgram() }
@@ -62,9 +62,14 @@ namespace apollo
 		}
 	}
 
-	void shader_program::use()
+	void shader_program::bind()
 	{
 		glUseProgram(get_handle());
+	}
+
+	void shader_program::release()
+	{
+		glUseProgram(0);
 	}
 
 	int32_t shader_program::get_uniform_location(const std::string_view& name)
@@ -195,6 +200,11 @@ namespace apollo
 	void shader_program::set_uniform(int32_t location, const matrix4f& v, bool transpose)
 	{
 		glUniformMatrix4fv(location, 1, transpose, v.get_data().data());
+	}
+
+	void shader_program::set_uniform(int32_t location, const matrix4f* v[], size_t size, bool transpose)
+	{
+		glUniformMatrix4fv(location, size, transpose, reinterpret_cast<float*>(v));
 	}
 
 	void shader_program::set_uniform(const std::string_view& name, float v0)
@@ -370,6 +380,13 @@ namespace apollo
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v, transpose);
+	}
+
+	void shader_program::set_uniform(const std::string_view& name, const matrix4f* v[], size_t size, bool transpose)
+	{
+		auto loc = get_uniform_location(name);
+
+		set_uniform(loc, v, size, transpose);
 	}
 
 	void shader_program::delete_handle(GLuint handle)

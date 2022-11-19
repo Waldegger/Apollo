@@ -66,11 +66,20 @@
     <ClCompile Include="src\graphics\image.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\camera_2d.cpp">
+    <ClCompile Include="src\graphics\view_2d.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="src\graphics\view_3d.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\render_target.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system\clock.cpp">
+      <Filter>Quelldateien\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\font.cpp">
+      <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,11 +125,23 @@
     <ClInclude Include="src\graphics\image.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\camera_2d.h">
+    <ClInclude Include="src\graphics\view_2d.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="src\graphics\view_3d.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\render_target.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system\clock.h">
+      <Filter>Headerdateien\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system\time.h">
+      <Filter>Headerdateien\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\font.h">
+      <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace apollo
+namespace agl
 {
 	template<
 		typename T,

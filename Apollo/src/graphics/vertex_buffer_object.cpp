@@ -1,6 +1,6 @@
 #include "vertex_buffer_object.h"
 
-namespace apollo
+namespace agl
 {
 	vertex_buffer_object::vertex_buffer_object(target target)
 		: m_handle{ create_handle() }

@@ -22,22 +22,22 @@ int main(int argc, char* argv[])
 
     try
     {
-        apollo::render_window rwindow{ "Apollo flies to the moon!", SCREEN_WIDTH, SCREEN_HEIGHT, 0 };
+        agl::render_window rwindow{ "Apollo flies to the moon!", SCREEN_WIDTH, SCREEN_HEIGHT, 0 };
       
-        apollo::vector2f vec;
-        apollo::matrix4f mat1, mat2;
+        agl::vector2f vec;
+        agl::matrix4f mat1, mat2;
 
-        mat1.translate(apollo::vector2f{ 4.0f, 3.0f }).scale(apollo::vector2f{ 2.0f, 2.0f });
-        mat2.scale(apollo::vector2f{ 0.4f, 0.1f }).combine(mat1);
+        mat1.translate(agl::vector2f{ 4.0f, 3.0f }).scale(agl::vector2f{ 2.0f, 2.0f });
+        mat2.scale(agl::vector2f{ 0.4f, 0.1f }).combine(mat1);
 
-        auto shader1 = apollo::shader{ apollo::shader::type::vertex };
-        auto shader2 = apollo::shader{ apollo::shader::type::fragment };
+        auto shader1 = agl::shader{ agl::shader::type::vertex };
+        auto shader2 = agl::shader{ agl::shader::type::fragment };
 
         std::ifstream fs{ "D:/temp/test.frag" };
         std::stringstream buffer;
         buffer << fs.rdbuf();
 
-        auto shader3 = apollo::shader{ apollo::shader::type::fragment };
+        auto shader3 = agl::shader{ agl::shader::type::fragment };
         shader3.compile(buffer.str());
 
         const char* vertexShaderSource = "attribute vec4 vPosition; \n"
@@ -55,34 +55,34 @@ int main(int argc, char* argv[])
         shader1.compile(vertexShaderSource);
         shader2.compile(fragmentShaderSource);
 
-        apollo::shader_program program;
+        agl::shader_program program;
         program.attach_shader(shader1);
-        program.attach_shader(shader2);
-        //program.attach_shader(shader3);
+        //program.attach_shader(shader2);
+        program.attach_shader(shader3);
 
         program.bind_attrib_location(VPOSITION_INDEX, "vPosition");
 
         program.link();
-        program.use();
+        program.bind();
 
-        program.set_uniform("iResolution", SCREEN_WIDTH, SCREEN_HEIGHT);
-        program.set_uniform("iTime", 8.0f);
+        program.set_uniform("iResolution", static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT));
+        //program.set_uniform("iResolution", SCREEN_WIDTH, SCREEN_HEIGHT);
+        program.set_uniform("iTime", 0.0f);
 
-        float vertices[] = {
-            -0.5f, -0.5f, 0.9f,
-             0.5f, -0.5f, 0.9f,
-             0.5f,  0.5f, 0.9f,
-            -0.5f,  0.5f, -0.9f
+        std::array<float, 12> vertices = {
+            -1.0f, -1.0f, 0.0f,
+             1.0f, -1.0f, 0.0f,
+             1.0f,  1.0f, 0.0f,
+            -1.0f,  1.0f, 0.0f
         };
 
-        unsigned int indizes[] = {
+        std::array<uint32_t, 6> indizes = {
             0, 1, 2,
             2, 3, 0
         };
 
         // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices.data());
         glEnableVertexAttribArray(VPOSITION_INDEX);
 
         bool keep_window_open = true;
@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
             
             //Lets draw our test triangle
             //glDrawArrays(GL_TRIANGLES, 0, 3);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indizes);
+            glDrawElements(GL_TRIANGLES, indizes.size(), GL_UNSIGNED_INT, indizes.data());
            
 
             //Update screen

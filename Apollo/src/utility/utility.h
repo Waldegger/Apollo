@@ -3,7 +3,7 @@
 #include <utility>
 #include <functional>
 
-namespace apollo
+namespace agl
 {
 	template <typename T, auto fn>
 	struct deleter

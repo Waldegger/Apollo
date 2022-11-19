@@ -2,7 +2,7 @@
 
 namespace agl
 {
-	class texture_2d
+	class font
 	{
 	public:
 

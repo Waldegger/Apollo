@@ -2,7 +2,7 @@
 
 namespace agl
 {
-	class texture_2d
+	class view_2d
 	{
 	public:
 

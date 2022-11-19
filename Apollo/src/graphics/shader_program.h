@@ -9,7 +9,7 @@
 #include "matrix4.h"
 #include "../utility/utility.h"
 
-namespace apollo
+namespace agl
 {
 	class shader_program
 	{
@@ -23,7 +23,8 @@ namespace apollo
 		void bind_attrib_location(uint32_t index, const std::string_view& name);
 
 		void link();
-		void use();
+		void bind();
+		void release();
 
 		int32_t get_uniform_location(const std::string_view& name);
 
@@ -52,6 +53,7 @@ namespace apollo
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 3>& v);
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 4>& v);
 		void set_uniform(int32_t location, const matrix4f& v, bool transpose);
+		void set_uniform(int32_t location, const matrix4f* v[], size_t size, bool transpose);
 		//If necessary add more uniforms for matrices: https://registry.khronos.org/OpenGL-Refpages/gl4/html/glUniform.xhtml
 
 		void set_uniform(const std::string_view& name, float v0);
@@ -79,6 +81,7 @@ namespace apollo
 		void set_uniform(const std::string_view& name, uint32_t count, const std::array<uint32_t, 3>& v);
 		void set_uniform(const std::string_view& name, uint32_t count, const std::array<uint32_t, 4>& v);
 		void set_uniform(const std::string_view& name, const matrix4f& v, bool transpose);
+		void set_uniform(const std::string_view& name, const matrix4f* v[], size_t size, bool transpose);
 
 	protected:
 

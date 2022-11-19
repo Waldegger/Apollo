@@ -7,7 +7,7 @@
 #include <string_view>
 #include <stdexcept>
 
-namespace apollo
+namespace agl
 {
 	render_window::render_window(const std::string_view& title, uint16_t width, uint16_t height, uint32_t flags)
 	{

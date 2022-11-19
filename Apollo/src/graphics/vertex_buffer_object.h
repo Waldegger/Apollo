@@ -4,7 +4,7 @@
 
 #include "../utility/utility.h"
 
-namespace apollo
+namespace agl
 {
 	class vertex_buffer_object
 	{

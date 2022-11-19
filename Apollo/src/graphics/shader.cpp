@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace apollo
+namespace agl
 {
 	shader::shader(type shader_type)
 		: m_type{ shader_type }

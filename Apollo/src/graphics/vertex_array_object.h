@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-namespace apollo
+namespace agl
 {
 	class vertex_array_object
 	{

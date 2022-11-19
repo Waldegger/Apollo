@@ -7,7 +7,7 @@
 #include <array>
 
 #include "../utility/utility.h"
-namespace apollo
+namespace agl
 {
 	class asset_streambuf
 		: public std::streambuf
@@ -48,7 +48,7 @@ namespace apollo
 
 #else
 #include <fstream>
-namespace apollo
+namespace agl
 {
 	using assetistream = std::ifstream;
 }

@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 #if defined(ANDROID) || defined(__ANDROID__)
-namespace apollo
+namespace agl
 {
 	asset_streambuf::asset_streambuf()
 	{

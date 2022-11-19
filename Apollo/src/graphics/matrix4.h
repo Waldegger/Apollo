@@ -7,7 +7,7 @@
 #include "vector3.h"
 #include "quaternion.h"
 
-namespace apollo
+namespace agl
 {
 	template<
 		typename T,
@@ -34,6 +34,9 @@ namespace apollo
 
 	public:
 		constexpr T operator[](size_t i) const { return m_data[i]; }
+
+		//As OpenGL ES 2 doesnt let us load matrix anyway with glLoadMatrix we dont need that operator
+		//constexpr operator const T* () const { return m_data.data(); }
 
 		constexpr const matrix4<T>& get_identity() const { return matrix4<T>::identity; }
 
@@ -155,7 +158,7 @@ namespace apollo
 					pw + px - py - pz, 2 * q.x * q.y - 2 * q.w * q.z, 2 * q.x * q.z + 2 * q.w * q.y,	0.0,
 					2 * q.x * q.y, + 2 * q.w * q.z, pw - px + py - pz, 2 * q.y * q.z + 2 * q.w * q.x,	0.0,
 					2 * q.x * q.z - 2 * q.w * q.y, 2 * q.y * q.z - 2 * q.w * q.x, pw - px - py + pz,	0.0,
-					0.0, 0.0, 0.0,														1.0
+					0.0, 0.0, 0.0,																		1.0
 				}
 			};
 

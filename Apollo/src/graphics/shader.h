@@ -6,7 +6,7 @@
 
 #include "../utility/utility.h"
 
-namespace apollo
+namespace agl
 {
 	class shader
 	{
