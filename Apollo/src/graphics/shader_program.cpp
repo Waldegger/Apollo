@@ -64,7 +64,14 @@ namespace agl
 
 	void shader_program::bind()
 	{
-		glUseProgram(get_handle());
+		auto handle = get_handle();
+
+		if (m_current_bound_program != handle)
+		{
+			glUseProgram(handle);
+
+			m_current_bound_program = handle;
+		}
 	}
 
 	void shader_program::release()
@@ -79,131 +86,183 @@ namespace agl
 
 	void shader_program::set_uniform(int32_t location, float v0)
 	{
+		bind();
+
 		glUniform1f(location, v0);
 	}
 
 	void shader_program::set_uniform(int32_t location, float v0, float v1)
 	{
+		bind();
+
 		glUniform2f(location, v0, v1);
 	}
 
 	void shader_program::set_uniform(int32_t location, float v0, float v1, float v2)
 	{
+		bind();
+
 		glUniform3f(location, v0, v1, v2);
 	}
 
 	void shader_program::set_uniform(int32_t location, float v0, float v1, float v2, float v3)
 	{
+		bind();
+
 		glUniform4f(location, v0, v1, v2, v3);
 	}
 
 	void shader_program::set_uniform(int32_t location, int32_t v0)
 	{
+		bind();
+
 		glUniform1i(location, v0);
 	}
 
 	void shader_program::set_uniform(int32_t location, int32_t v0, int32_t v1)
 	{
+		bind();
+
 		glUniform2i(location, v0, v1);
 	}
 
 	void shader_program::set_uniform(int32_t location, int32_t v0, int32_t v1, int32_t v2)
 	{
+		bind();
+
 		glUniform3i(location, v0, v1, v2);
 	}
 
 	void shader_program::set_uniform(int32_t location, int32_t v0, int32_t v1, int32_t v2, int32_t v3)
 	{
+		bind();
+
 		glUniform4i(location, v0, v1, v2, v3);
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t v0)
 	{
+		bind();
+
 		glUniform1ui(location, v0);
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t v0, uint32_t v1)
 	{
+		bind();
+
 		glUniform2ui(location, v0, v1);
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t v0, uint32_t v1, uint32_t v2)
 	{
+		bind();
+
 		glUniform3ui(location, v0, v1, v2);
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3)
 	{
+		bind();
+
 		glUniform4ui(location, v0, v1, v2, v3);
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<float, 1>& v)
 	{
+		bind();
+		
 		glUniform1fv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<float, 2>& v)
 	{
+		bind();
+
 		glUniform2fv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<float, 3>& v)
 	{
+		bind();
+
 		glUniform3fv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<float, 4>& v)
 	{
+		bind();
+
 		glUniform4fv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<int32_t, 1>& v)
 	{
+		bind();
+
 		glUniform1iv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<int32_t, 2>& v)
 	{
+		bind();
+
 		glUniform2iv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<int32_t, 3>& v)
 	{
+		bind();
+
 		glUniform3iv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<int32_t, 4>& v)
 	{
+		bind();
+
 		glUniform4iv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 1>& v)
 	{
+		bind();
+
 		glUniform1uiv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 2>& v)
 	{
+		bind();
+
 		glUniform2uiv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 3>& v)
 	{
+		bind();
+
 		glUniform3uiv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 4>& v)
 	{
+		bind();
+
 		glUniform4uiv(location, count, v.data());
 	}
 
 	void shader_program::set_uniform(int32_t location, const matrix4f& v, bool transpose)
 	{
+		bind();
+
 		glUniformMatrix4fv(location, 1, transpose, v.get_data().data());
 	}
 
 	void shader_program::set_uniform(int32_t location, const matrix4f* v[], size_t size, bool transpose)
 	{
+		bind();
+
 		glUniformMatrix4fv(location, size, transpose, reinterpret_cast<float*>(v));
 	}
 

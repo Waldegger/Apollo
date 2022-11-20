@@ -81,6 +81,9 @@
     <ClCompile Include="src\graphics\font.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SDL_utility.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="src\graphics\font.h">
       <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

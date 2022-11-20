@@ -86,6 +86,7 @@ namespace agl
 	protected:
 
 	private:
+		inline static GLuint m_current_bound_program;
 
 		GLuint get_handle() const { return m_handle; }
 
