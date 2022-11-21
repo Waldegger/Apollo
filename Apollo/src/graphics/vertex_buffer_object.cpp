@@ -11,7 +11,14 @@ namespace agl
 
 	void vertex_buffer_object::bind()
 	{
-		glBindBuffer(static_cast<GLenum>(m_target), get_handle());
+		auto handle = get_handle();
+
+		if (m_current_bound_buffer != handle)
+		{
+			glBindBuffer(static_cast<GLenum>(m_target), get_handle());
+
+			m_current_bound_buffer = handle;
+		}
 	}
 
 	void vertex_buffer_object::buffer_data(void* data, size_t size_in_bytes, usage usage)

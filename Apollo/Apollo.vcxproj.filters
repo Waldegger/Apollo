@@ -36,9 +36,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\SDL_utlity.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="src\system\assetstream.cpp">
       <Filter>Quelldateien\system</Filter>
     </ClCompile>
@@ -84,11 +81,17 @@
     <ClCompile Include="src\engine.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\test_app.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\render_states.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\blend_mode.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\SDL_utility.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\system\assetstream.h">
       <Filter>Headerdateien\system</Filter>
     </ClInclude>
@@ -148,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="src\engine.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\test_app.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\render_states.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\blend_mode.h">
+      <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

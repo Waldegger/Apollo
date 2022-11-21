@@ -2,5 +2,8 @@
 
 namespace agl
 {
+	render_target::render_target()
+	{
 
+	}
 }

@@ -9,6 +9,11 @@ namespace agl
 		typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 	struct vector2
 	{
+		vector2(T x, T y)
+			: x{ x }
+			, y{ y }
+		{}
+
 		constexpr T length2() { return x * x + y * y; }
 		constexpr T length()
 		{

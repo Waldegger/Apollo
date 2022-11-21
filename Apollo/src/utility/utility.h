@@ -20,7 +20,7 @@ namespace agl
 	public:
 		initializer(init_params&&... params)
 		{
-			fn_init(std::forward<init_params>(params)...);
+			m_result = fn_init(std::forward<init_params>(params)...);
 		}
 
 		~initializer()
@@ -35,10 +35,15 @@ namespace agl
 		initializer& operator = (initializer&& other) = delete;
 
 	public:
+		using init_return_type = decltype(fn_init(std::declval<init_params...>()));
+
+		inline const init_return_type& get_result() const { return m_result; }
 
 	protected:
 
 	private:
+
+		init_return_type m_result{};
 	};
 
 	template <typename T, auto delete_func, T invalid_value = T{}>

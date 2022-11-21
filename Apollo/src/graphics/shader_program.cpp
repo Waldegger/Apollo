@@ -1,5 +1,7 @@
 #include "shader_program.h"
 
+#include <GL/glew.h>
+
 #include <stdexcept>
 #include <string>
 
@@ -263,7 +265,7 @@ namespace agl
 	{
 		bind();
 
-		glUniformMatrix4fv(location, size, transpose, reinterpret_cast<float*>(v));
+		glUniformMatrix4fv(location, static_cast<GLsizei>(size), transpose, reinterpret_cast<float*>(v));
 	}
 
 	void shader_program::set_uniform(const std::string_view& name, float v0)

@@ -1,41 +1,36 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#define NO_SDL_GLEXT
+#define GL_GLEXT_PROTOTYPES 1
 
+#include <SDL2/SDL.h>
 #include <string_view>
+
+#include "graphics/render_window.h"
+#include "utility/utility.h"
 
 namespace agl
 {
-	/*
-		SDL_WINDOW_FULLSCREEN: fullscreen window
-		SDL_WINDOW_FULLSCREEN_DESKTOP: fullscreen window at desktop resolution
-		SDL_WINDOW_OPENGL: window usable with an OpenGL context
-		SDL_WINDOW_VULKAN: window usable with a Vulkan instance
-		SDL_WINDOW_METAL: window usable with a Metal instance
-		SDL_WINDOW_HIDDEN: window is not visible
-		SDL_WINDOW_BORDERLESS: no window decoration
-		SDL_WINDOW_RESIZABLE: window can be resized
-		SDL_WINDOW_MINIMIZED: window is minimized
-		SDL_WINDOW_MAXIMIZED: window is maximized
-		SDL_WINDOW_INPUT_GRABBED: window has grabbed input focus
-		SDL_WINDOW_ALLOW_HIGHDPI: window should be created in high-DPI mode if supported (>= SDL 2.0.1)
-	*/
 	enum class window_flag : uint32_t
 	{
-		fullscreen = SDL_WINDOW_FULLSCREEN,
-		fullscreen_desktop = SDL_WINDOW_FULLSCREEN_DESKTOP,
-		hidden = SDL_WINDOW_HIDDEN,
-		borderless = SDL_WINDOW_BORDERLESS,
-		resizable = SDL_WINDOW_RESIZABLE,
-		minimized = SDL_WINDOW_MINIMIZED,
-		maximized = SDL_WINDOW_MAXIMIZED,
-		input_grabbed = SDL_WINDOW_INPUT_GRABBED,
-		allow_highdpi = SDL_WINDOW_ALLOW_HIGHDPI
+		fullscreen = 1 << 0,
+		fullscreen_desktop = 1 << 1,
+		hidden = 1 << 2,
+		borderless = 1 << 3,
+		resizable = 1 << 4,
+		minimized = 1 << 5,
+		maximized = 1 << 6,
+		input_grabbed = 1 << 7
 	};
 
-	inline uint32_t operator | (window_flag lhs, window_flag rhs)
+	inline std::underlying_type<window_flag>::type operator | (window_flag lhs, window_flag rhs)
 	{
 		return static_cast<std::underlying_type<window_flag>::type>(lhs) | static_cast<std::underlying_type<window_flag>::type>(rhs);
+	}
+
+	inline std::underlying_type<window_flag>::type operator & (std::underlying_type<window_flag>::type lhs, window_flag rhs)
+	{
+		return static_cast<std::underlying_type<window_flag>::type>(lhs) & static_cast<std::underlying_type<window_flag>::type>(rhs);
 	}
 
 	class engine
@@ -52,9 +47,11 @@ namespace agl
 
 	public:
 	
-		void start(const std::string_view& title, uint32_t display_index, int32_t width, int32_t height, uint32_t flags);
-
+		int32_t start(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags);
 		void stop(int32_t exit_code);
+
+		inline const render_window& get_render_window() const { return m_render_window; }
+		inline render_window& get_render_window() { return m_render_window; }
 
 	protected:
 		virtual void on_create() = 0;
@@ -62,10 +59,17 @@ namespace agl
 		virtual void on_destroy() = 0;
 
 	private:
+		static int32_t init_lib(uint32_t flags);
+		static void quit_lib();
+
 		void create();
 		void update();
 		void destroy();
 
+		render_window m_render_window;
+		initializer<SDL_Init, SDL_Quit, Uint32> m_initializer;
+
+		int32_t m_exit_code = 0;
 		bool m_running = true;
 	};
 }

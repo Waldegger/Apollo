@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
-
 #include <vector>
 #include <string_view>
 
@@ -86,13 +84,12 @@ namespace agl
 	protected:
 
 	private:
-		inline static GLuint m_current_bound_program;
+		inline static uint32_t m_current_bound_program;
+		static void delete_handle(uint32_t handle);
 
-		GLuint get_handle() const { return m_handle; }
+		uint32_t get_handle() const { return m_handle; }
 
-		static void delete_handle(GLuint handle);
-		unique_handle <GLuint, delete_handle> m_handle;
-
-		std::vector<GLuint> m_attached_shaders;
+		std::vector<uint32_t> m_attached_shaders;
+		unique_handle <uint32_t, delete_handle> m_handle;
 	};
 }

@@ -156,8 +156,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine.cpp" />
+    <ClCompile Include="src\graphics\blend_mode.cpp" />
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\graphics\image.cpp" />
+    <ClCompile Include="src\graphics\render_states.cpp" />
     <ClCompile Include="src\graphics\render_target.cpp" />
     <ClCompile Include="src\graphics\render_window.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
@@ -168,17 +170,19 @@
     <ClCompile Include="src\graphics\view_2d.cpp" />
     <ClCompile Include="src\graphics\view_3d.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\SDL_utlity.cpp" />
     <ClCompile Include="src\system\assetstream.cpp" />
     <ClCompile Include="src\system\clock.cpp" />
+    <ClCompile Include="src\test_app.cpp" />
     <ClCompile Include="src\utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\graphics\blend_mode.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\image.h" />
     <ClInclude Include="src\graphics\matrix4.h" />
     <ClInclude Include="src\graphics\quaternion.h" />
+    <ClInclude Include="src\graphics\render_states.h" />
     <ClInclude Include="src\graphics\render_target.h" />
     <ClInclude Include="src\graphics\render_window.h" />
     <ClInclude Include="src\graphics\shader.h" />
@@ -190,10 +194,10 @@
     <ClInclude Include="src\graphics\vertex_buffer_object.h" />
     <ClInclude Include="src\graphics\view_2d.h" />
     <ClInclude Include="src\graphics\view_3d.h" />
-    <ClInclude Include="src\SDL_utility.h" />
     <ClInclude Include="src\system\assetstream.h" />
     <ClInclude Include="src\system\clock.h" />
     <ClInclude Include="src\system\time.h" />
+    <ClInclude Include="src\test_app.h" />
     <ClInclude Include="src\utility\utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

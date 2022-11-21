@@ -37,6 +37,8 @@ namespace agl
 	protected:
 
 	private:
+		inline static uint32_t m_current_bound_buffer;
+
 		GLuint get_handle() const { return m_handle; }
 
 		static GLuint create_handle();
