@@ -107,7 +107,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphics\blend_mode.cpp" />
+    <ClCompile Include="src\graphics\color.cpp" />
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\graphics\image.cpp" />
     <ClCompile Include="src\graphics\render_states.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\shader_program.cpp" />
     <ClCompile Include="src\graphics\texture_2d.cpp" />
+    <ClCompile Include="src\graphics\vertex_2d.cpp" />
     <ClCompile Include="src\graphics\vertex_array_object.cpp" />
     <ClCompile Include="src\graphics\vertex_buffer_object.cpp" />
     <ClCompile Include="src\graphics\view_2d.cpp" />
@@ -178,6 +180,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine.h" />
     <ClInclude Include="src\graphics\blend_mode.h" />
+    <ClInclude Include="src\graphics\color.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\image.h" />
     <ClInclude Include="src\graphics\matrix4.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="src\graphics\texture_2d.h" />
     <ClInclude Include="src\graphics\vector2.h" />
     <ClInclude Include="src\graphics\vector3.h" />
+    <ClInclude Include="src\graphics\vertex_2d.h" />
     <ClInclude Include="src\graphics\vertex_array_object.h" />
     <ClInclude Include="src\graphics\vertex_buffer_object.h" />
     <ClInclude Include="src\graphics\view_2d.h" />

@@ -1,12 +1,14 @@
 #include "shader.h"
 
+#include <GL/glew.h>
+
 #include <stdexcept>
 
 namespace agl
 {
 	shader::shader(type shader_type)
 		: m_type{ shader_type }
-		, m_handle{ glCreateShader(static_cast<GLuint>(shader_type)) }
+		, m_handle{ glCreateShader(convert_type(shader_type)) }
 	{
 		if (!m_handle)
 		{
@@ -33,7 +35,25 @@ namespace agl
 		};
 	}
 
-	void shader::delete_handle(GLuint handle)
+	uint32_t shader::convert_type(type type_to_convert)
+	{
+		switch (type_to_convert)
+		{
+		case type::fragment:
+			return GL_FRAGMENT_SHADER;
+
+		case type::geometry:
+			return GL_GEOMETRY_SHADER;
+
+		case type::vertex:
+			return GL_VERTEX_SHADER;
+
+		default:
+			throw std::runtime_error{ "SHADER::CONVERT_TYPE INVALID SHADER_TYPE!" };
+		}
+	}
+
+	void shader::delete_handle(uint32_t handle)
 	{
 		glDeleteShader(handle);
 	}

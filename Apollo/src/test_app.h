@@ -2,6 +2,8 @@
 
 #include "engine.h"
 #include "graphics/shader_program.h"
+#include "graphics/vertex_2d.h"
+#include "graphics/matrix4.h"
 
 class test_app
 	: public agl::engine
@@ -16,11 +18,24 @@ protected:
 	virtual void on_destroy() override;
 
 private:
-    std::array<float, 12> m_vertices = {
-            -1.0f, -1.0f, 0.0f,
-             1.0f, -1.0f, 0.0f,
-             1.0f,  1.0f, 0.0f,
-            -1.0f,  1.0f, 0.0f
+    static constexpr uint32_t A_POSITION_INDEX = 0;
+    static constexpr uint32_t A_COLOR_INDEX = 1;
+    static constexpr uint32_t A_TEX_COORDS_INDEX = 2;
+
+    std::array<agl::vertex_2d, 4> m_vertices = 
+    {
+        agl::vertex_2d{ agl::vector2f{ -1.0f, -1.0f } },
+        agl::vertex_2d{ agl::vector2f{ 1.0f, -1.0f } },
+        agl::vertex_2d{ agl::vector2f{ 1.0f, 1.0f } },
+        agl::vertex_2d{ agl::vector2f{ -1.0f, 1.0f } }
+    };
+
+    std::array<agl::vertex_2d, 4> m_rect_vertices =
+    {
+        agl::vertex_2d{ agl::vector2f{ -0.1f, -0.1f }, agl::color{255, 0, 0, 255 }, agl::vector2f{0.0f, 0.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.1f, -0.1f }, agl::color{0, 255, 0, 255 }, agl::vector2f{0.0f, 0.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.1f, 0.1f }, agl::color{0, 0, 255, 255 }, agl::vector2f{0.0f, 0.0f} },
+        agl::vertex_2d{ agl::vector2f{ -0.1f, 0.1f }, agl::color{255, 255, 0, 255 }, agl::vector2f{0.0f, 0.0f} }
     };
 
     std::array<uint32_t, 6> m_indizes = {
@@ -28,5 +43,15 @@ private:
         2, 3, 0
     };
 
-	agl::shader_program m_test_program;
+    agl::matrix4f m_rect_matrix;
+
+    agl::shader_program m_background_program;
+    agl::shader_program m_default_program;
+
+    uint64_t m_timer_now = SDL_GetPerformanceCounter();
+    uint64_t m_timer_last = 0;
+    float m_delta_time = 0.0;
+
+    bool m_key_left = false;
+    bool m_key_right = false;
 };
