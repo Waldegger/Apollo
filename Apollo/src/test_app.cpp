@@ -3,10 +3,16 @@
 #include <fstream>
 #include <sstream>
 
+#include "graphics/image.h"
+#include "system/assetstream.h"
+
 void test_app::on_create()
 {
     auto shader1 = agl::shader{ agl::shader::type::vertex };
     auto shader2 = agl::shader{ agl::shader::type::fragment };
+
+    agl::image test_image;
+    test_image.load("D:/temp/test.png");
 
     std::ifstream fs{ "D:\\temp\\test.frag" };
     std::stringstream buffer;

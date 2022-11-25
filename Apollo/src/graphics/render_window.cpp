@@ -50,7 +50,7 @@ namespace agl
 
 		glEnableVertexAttribArray(A_POSITION_INDEX);
 		glEnableVertexAttribArray(A_COLOR_INDEX);
-		glEnableVertexAttribArray(A_TEX_COORDS_INDEX);
+		//glEnableVertexAttribArray(A_TEX_COORDS_INDEX);
 	}
 
 	void render_window::open(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
