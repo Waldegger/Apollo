@@ -57,7 +57,7 @@
     <ClCompile Include="src\utility\utility.cpp">
       <Filter>Quelldateien\utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\texture_2d.cpp">
+    <ClCompile Include="src\graphics\texture.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\image.cpp">
@@ -88,9 +88,6 @@
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\blend_mode.cpp">
-      <Filter>Quelldateien\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\vertex_2d.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\color.cpp">
@@ -131,7 +128,7 @@
     <ClInclude Include="src\graphics\vertex_buffer_object.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\texture_2d.h">
+    <ClInclude Include="src\graphics\texture.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\image.h">
@@ -171,6 +168,9 @@
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\color.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\rect.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
   </ItemGroup>

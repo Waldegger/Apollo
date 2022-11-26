@@ -29,7 +29,7 @@ namespace agl
 		struct states_cache
 		{
 			blend_mode last_blend_mode;
-			const texture_2d* last_texture = nullptr;
+			const texture* last_texture = nullptr;
 		};
 
 		states_cache m_states_cache;

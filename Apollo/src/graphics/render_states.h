@@ -6,7 +6,7 @@
 
 namespace agl
 {
-	class texture_2d;
+	class texture;
 	class shader_program;
 
 	struct render_states
@@ -20,7 +20,7 @@ namespace agl
 			, transform{ the_transform }
 		{}
 
-		render_states(const shader_program& the_program, const texture_2d* the_texture, const matrix4f& the_transform)
+		render_states(const shader_program& the_program, const texture* the_texture, const matrix4f& the_transform)
 			: texture{ the_texture }
 			, shader_program{ the_program }
 			, transform{ the_transform }
@@ -32,14 +32,14 @@ namespace agl
 			, transform{ the_transform }
 		{}
 
-		render_states(const shader_program& the_program, const texture_2d* the_texture, const blend_mode& the_blend_mode, const matrix4f& the_transform)
+		render_states(const shader_program& the_program, const texture* the_texture, const blend_mode& the_blend_mode, const matrix4f& the_transform)
 			: texture{ the_texture }
 			, shader_program{ the_program }
 			, blend_mode{ the_blend_mode }
 			, transform{ the_transform }
 		{}
 		
-		const texture_2d* texture = nullptr;
+		const texture* texture = nullptr;
 		const shader_program& shader_program;
 
 		blend_mode blend_mode;

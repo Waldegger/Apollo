@@ -10,28 +10,13 @@
 
 namespace agl
 {
-	template<
-		typename T,
-		typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+	template<typename T>
 	class matrix4
 	{
 	public:
-		constexpr matrix4()
-		{}
-
-		constexpr matrix4(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22)
-			: m_data
-			{ 
-				a00, a10, 0.0, a20,
-				a01, a11, 0.0, a21,
-				0.0, 0.0, 1.0, 0.0,
-				a02, a12, 0.0, a22 
-			}
-		{}
-
-		constexpr matrix4(const std::array<T, 4 * 4>& m)
-			: m_data { m }
-		{}
+		constexpr matrix4();
+		constexpr matrix4(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22);
+		constexpr matrix4(const std::array<T, 4 * 4>& m);
 
 	public:
 		constexpr T operator[](size_t i) const { return m_data[i]; }
@@ -327,14 +312,38 @@ namespace agl
 		};
 	}
 
+	using matrix4u = matrix4<uint32_t>;
+	using matrix4i = matrix4<int32_t>;
+	using matrix4f = matrix4<float>;
+	using matrix4d = matrix4<double>;
+
+	template<typename T>
+	constexpr matrix4<T>::matrix4()
+	{
+		static_assert(std::is_arithmetic_v<T>, "Type needs to be arithmetic");
+	}
+
+	template<typename T>
+	constexpr matrix4<T>::matrix4(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22)
+		: m_data{
+			a00, a10, 0.0, a20,
+			a01, a11, 0.0, a21,
+			0.0, 0.0, 1.0, 0.0,
+			a02, a12, 0.0, a22 }
+	{
+		static_assert(std::is_arithmetic_v<T>, "Type needs to be arithmetic");
+	}
+
+	template<typename T>
+	constexpr matrix4<T>::matrix4(const std::array<T, 4 * 4>& m)
+		: m_data{ m }
+	{
+		static_assert(std::is_arithmetic_v<T>, "Type needs to be arithmetic");
+	}
+
 	template<typename T>
 	constexpr matrix4<T>& operator *= (const matrix4<T>& lhs, const matrix4<T>& rhs)
 	{
 		return lhs.combine(rhs);
 	}
-
-	using matrix4u = matrix4<uint32_t>;
-	using matrix4i = matrix4<int32_t>;
-	using matrix4f = matrix4<float>;
-	using matrix4d = matrix4<double>;
 }

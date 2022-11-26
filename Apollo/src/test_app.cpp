@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "graphics/image.h"
+#include "graphics/texture.h"
 #include "system/assetstream.h"
 
 void test_app::on_create()
@@ -71,6 +72,8 @@ void test_app::on_create()
     m_default_program.bind_attrib_location(A_TEX_COORDS_INDEX, "a_tex_coords");
 
     m_default_program.link();
+
+    agl::texture texture;
 }
 
 void test_app::on_update()

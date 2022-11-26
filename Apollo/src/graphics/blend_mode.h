@@ -27,12 +27,12 @@ namespace agl
 			max
 		};
 
-		factor   color_src_factor; //!< Source blending factor for the color channels
-		factor   color_dst_factor; //!< Destination blending factor for the color channels
-		equation color_equation;  //!< Blending equation for the color channels
-		factor   alpha_src_factor; //!< Source blending factor for the alpha channel
-		factor   alpha_dst_factor; //!< Destination blending factor for the alpha channel
-		equation alpha_equation;  //!< Blending equation for the alpha channel
+		factor color_src_factor = factor::src_alpha;			//!< Source blending factor for the color channels
+		factor color_dst_factor = factor::one_minus_src_alpha;	//!< Destination blending factor for the color channels
+		equation color_equation = equation::add;				//!< Blending equation for the color channels
+		factor alpha_src_factor = factor::one;					//!< Source blending factor for the alpha channel
+		factor alpha_dst_factor = factor::one_minus_src_alpha;	//!< Destination blending factor for the alpha channel
+		equation alpha_equation = equation::add;				//!< Blending equation for the alpha channel
 	};
 
 	constexpr inline bool operator == (const blend_mode& lhs, const blend_mode& rhs)

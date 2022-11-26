@@ -165,8 +165,7 @@
     <ClCompile Include="src\graphics\render_window.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\shader_program.cpp" />
-    <ClCompile Include="src\graphics\texture_2d.cpp" />
-    <ClCompile Include="src\graphics\vertex_2d.cpp" />
+    <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\vertex_array_object.cpp" />
     <ClCompile Include="src\graphics\vertex_buffer_object.cpp" />
     <ClCompile Include="src\graphics\view_2d.cpp" />
@@ -185,12 +184,13 @@
     <ClInclude Include="src\graphics\image.h" />
     <ClInclude Include="src\graphics\matrix4.h" />
     <ClInclude Include="src\graphics\quaternion.h" />
+    <ClInclude Include="src\graphics\rect.h" />
     <ClInclude Include="src\graphics\render_states.h" />
     <ClInclude Include="src\graphics\render_target.h" />
     <ClInclude Include="src\graphics\render_window.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\shader_program.h" />
-    <ClInclude Include="src\graphics\texture_2d.h" />
+    <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\vector2.h" />
     <ClInclude Include="src\graphics\vector3.h" />
     <ClInclude Include="src\graphics\vertex_2d.h" />
