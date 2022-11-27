@@ -29,6 +29,7 @@ namespace agl
 		void set_pixel(const vector2u& coords, const color& pixel_color);
 		color get_pixel(const vector2u& coords) const;
 
+		const vector2u& get_size() const;
 		const uint8_t* get_pixel_ptr() const;
 
 		void flip_horizontal();

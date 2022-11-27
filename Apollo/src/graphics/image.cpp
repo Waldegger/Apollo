@@ -256,6 +256,11 @@ namespace agl
 		*pixel++ = pixel_color.a;
 	}
 
+	const vector2u& image::get_size() const
+	{
+		return m_size;
+	}
+
 	color image::get_pixel(const vector2u& coords) const
 	{
 		const std::uint8_t* pixel = &m_pixels[(coords.x + coords.y * m_size.x) * 4];
@@ -264,7 +269,7 @@ namespace agl
 
 	const uint8_t* image::get_pixel_ptr() const
 	{
-		return nullptr;
+		return m_pixels.data();
 	}
 
 	void image::flip_horizontal()

@@ -29,7 +29,8 @@ namespace agl
 		T height{};
 	};
 
-	using int_rect = rect<int>;
+	using int_rect = rect<int32_t>;
+	using uint_rect = rect<uint32_t>;
 	using float_rect = rect<float>;
 
 	template<typename T>

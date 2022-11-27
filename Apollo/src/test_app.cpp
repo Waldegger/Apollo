@@ -40,11 +40,13 @@ void test_app::on_create()
 
     const char* fragment_shader_source = 
         "precision mediump float;\n"
+        "uniform sampler2D u_texture;\n"
         "varying vec4 v_color;\n"
         "varying vec2 v_tex_coords;\n"
         "void main()\n"
         "{\n"
-        "    gl_FragColor = v_color;\n"
+        "    //gl_FragColor = v_color;\n"
+        "    gl_FragColor = texture2D(u_texture, v_tex_coords);\n"
         "}";
 
     shader1.compile(vertex_shader_source);
@@ -73,7 +75,7 @@ void test_app::on_create()
 
     m_default_program.link();
 
-    agl::texture texture;
+    m_test_texture.load("D:/temp/test.png");
 }
 
 void test_app::on_update()
@@ -138,7 +140,7 @@ void test_app::on_update()
 
     //Draw Stuff
     get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_background_program });
-    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_default_program, m_rect_matrix });
+    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_default_program, &m_test_texture, m_rect_matrix });
 
     //Update screen
     get_render_window().display();

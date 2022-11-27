@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 
 #include "render_states.h"
+#include "texture.h"
 
 namespace agl
 {
@@ -26,18 +27,14 @@ namespace agl
 		{
 			if (!m_states_cache.last_texture)
 			{
-				/*
-				Maybe this is needed
+				//Maybe this is needed
 				glActiveTexture(GL_TEXTURE0);
-				*/
+				
 				glEnableVertexAttribArray(A_TEX_COORDS_INDEX);
 			}
 
-			//ToDo: Compare the handle of the texture, as the texture could be moved and the address is the same, but the handle might have been changed
-			if (states.texture != m_states_cache.last_texture)
-			{
-				m_states_cache.last_texture = states.texture;
-			}
+			states.texture->bind();
+			states.shader_program.set_uniform("u_texture", 0);
 
 			glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].tex_coords);
 		}
@@ -45,7 +42,10 @@ namespace agl
 		{
 			if(m_states_cache.last_texture)
 				glDisableVertexAttribArray(A_TEX_COORDS_INDEX);
+
+			texture::bind(nullptr);
 		}
+		m_states_cache.last_texture = states.texture;
 
 		//Implement this
 		if (states.blend_mode != m_states_cache.last_blend_mode)

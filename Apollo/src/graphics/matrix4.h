@@ -20,9 +20,7 @@ namespace agl
 
 	public:
 		constexpr T operator[](size_t i) const { return m_data[i]; }
-
-		//As OpenGL ES 2 doesnt let us load matrix anyway with glLoadMatrix we dont need that operator
-		//constexpr operator const T* () const { return m_data.data(); }
+		constexpr operator const T* () const { return m_data.data(); }
 
 		inline static constexpr const matrix4<T>& get_identity() { static constexpr matrix4<T> result; return result; }
 

@@ -4,6 +4,7 @@
 #include "graphics/shader_program.h"
 #include "graphics/vertex_2d.h"
 #include "graphics/matrix4.h"
+#include "graphics/texture.h"
 
 class test_app
 	: public agl::engine
@@ -32,10 +33,10 @@ private:
 
     std::array<agl::vertex_2d, 4> m_rect_vertices =
     {
-        agl::vertex_2d{ agl::vector2f{ -0.1f, -0.1f }, agl::color{255, 0, 0, 255 }, agl::vector2f{0.0f, 0.0f} },
-        agl::vertex_2d{ agl::vector2f{ 0.1f, -0.1f }, agl::color{0, 255, 0, 255 }, agl::vector2f{0.0f, 0.0f} },
-        agl::vertex_2d{ agl::vector2f{ 0.1f, 0.1f }, agl::color{0, 0, 255, 255 }, agl::vector2f{0.0f, 0.0f} },
-        agl::vertex_2d{ agl::vector2f{ -0.1f, 0.1f }, agl::color{255, 255, 0, 255 }, agl::vector2f{0.0f, 0.0f} }
+        agl::vertex_2d{ agl::vector2f{ -0.1f, -0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{0.0f, 0.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.1f, -0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{1.0f, 0.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.1f, 0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{1.0f, 1.0f} },
+        agl::vertex_2d{ agl::vector2f{ -0.1f, 0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{0.0f, 1.0f} }
     };
 
     std::array<uint32_t, 6> m_indizes = {
@@ -47,6 +48,8 @@ private:
 
     agl::shader_program m_background_program;
     agl::shader_program m_default_program;
+
+    agl::texture m_test_texture;
 
     uint64_t m_timer_now = SDL_GetPerformanceCounter();
     uint64_t m_timer_last = 0;

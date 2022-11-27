@@ -258,7 +258,7 @@ namespace agl
 	{
 		bind();
 
-		glUniformMatrix4fv(location, 1, transpose ? GL_TRUE : GL_FALSE, v.get_data().data());
+		glUniformMatrix4fv(location, 1, transpose ? GL_TRUE : GL_FALSE, v);
 	}
 
 	void shader_program::set_uniform(int32_t location, const matrix4f* v[], size_t size, bool transpose) const
