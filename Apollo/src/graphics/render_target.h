@@ -2,6 +2,7 @@
 
 #include "render_states.h"
 #include "vertex_2d.h"
+#include "view_2d.h"
 
 namespace agl
 {
@@ -17,7 +18,13 @@ namespace agl
 		render_target& operator = (const render_target& other) = default;
 		render_target& operator = (render_target&& other) = default;
 
+		int_rect get_viewport(const view_2d& view) const;
+
+		virtual vector2u get_size() const = 0;
+
 	public:
+		void apply_view(const view_2d& view);
+
 		void draw(const agl::vertex_2d vertices[], const uint32_t indices[], size_t num_indices, const agl::render_states& states);
 
 	protected:
@@ -25,13 +32,18 @@ namespace agl
 		static constexpr uint32_t A_COLOR_INDEX = 1;
 		static constexpr uint32_t A_TEX_COORDS_INDEX = 2;
 
+		void init();
+
 	private:
 		struct states_cache
 		{
-			blend_mode last_blend_mode;
+			blend_mode last_blend_mode = blend_mode::blend_none;
 			const texture* last_texture = nullptr;
 		};
 
+		void apply_blend_mode(const blend_mode& mode);
+
+		matrix4f m_projection_matrix;
 		states_cache m_states_cache;
 	};
 }

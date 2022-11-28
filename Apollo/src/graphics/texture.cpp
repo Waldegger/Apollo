@@ -45,10 +45,9 @@ namespace agl
 			throw std::runtime_error{ message.str() };
 		}
 
-		vector2u actual_size = vector2u{ next_pow_2(size.x), next_pow_2(size.y) };
 		uint32_t max_size = get_maximum_size();
 
-		if (actual_size.x > max_size || actual_size.y > max_size)
+		if (size.x > max_size || size.y > max_size)
 		{
 			std::stringstream message;
 			message << "Internal size of texture is too high (" << size.x << ", " << size.y << ") maximum is: " << max_size;
@@ -57,17 +56,15 @@ namespace agl
 		}
 
 		m_size = size;
-		m_actual_size = actual_size;
-		//m_actual_size = size;
-
+	
 		bind();
 
 		glTexImage2D(
 			GL_TEXTURE_2D, 
 			0,
 			GL_RGBA,
-			static_cast<GLsizei>(m_actual_size.x),
-			static_cast<GLsizei>(m_actual_size.y),
+			static_cast<GLsizei>(m_size.x),
+			static_cast<GLsizei>(m_size.y),
 			0,
 			GL_RGBA,
 			GL_UNSIGNED_BYTE,
@@ -360,16 +357,6 @@ namespace agl
 		}
 
 		return result;
-	}
-
-	uint32_t texture::next_pow_2(uint32_t value)
-	{
-		uint32_t next_pow_2 = 1;
-
-		while (value > next_pow_2)
-			next_pow_2 *= 2;
-
-		return next_pow_2;
 	}
 
 	uint32_t texture::gen_handle()

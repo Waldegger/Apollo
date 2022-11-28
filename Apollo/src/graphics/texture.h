@@ -68,15 +68,13 @@ namespace agl
 	private:
 		inline static uint32_t m_current_bound_texture;
 
-		static uint32_t next_pow_2(uint32_t value);
-
 		static uint32_t gen_handle();
 		static void delete_handle(uint32_t handle);
 
 		uint32_t get_handle() const { return m_handle; }
 
 		vector2u m_size;
-		vector2u m_actual_size;
+
 		unique_handle<uint32_t, delete_handle> m_handle;
 		bool m_smooth = false;
 		bool m_srgb = false;

@@ -177,6 +177,7 @@
     <ClCompile Include="src\utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\defaults.h" />
     <ClInclude Include="src\engine.h" />
     <ClInclude Include="src\graphics\blend_mode.h" />
     <ClInclude Include="src\graphics\color.h" />

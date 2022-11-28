@@ -5,6 +5,7 @@
 #include <SDL2/SDL_opengl.h>
 
 #include <string>
+#include <sstream>
 #include <string_view>
 #include <stdexcept>
 
@@ -14,8 +15,8 @@ namespace agl
 		: m_clear_flags{ GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT }
 	{
 		//Use OpenGL 2.1
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 		//OpenGL ES profile - only a subset of the base OpenGL functionality is available
@@ -23,7 +24,10 @@ namespace agl
 
 		if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0)
 		{
-			SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Warning: Unable to set Doublebuffer! SDL Error: %s", SDL_GetError());
+			std::stringstream warning;
+			warning << "Warning: Unable to set Doublebuffer! SDL Error: " << SDL_GetError();
+
+			SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, warning.str().c_str());
 		}
 
 		m_windowhandle.reset(SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL));
@@ -47,10 +51,7 @@ namespace agl
 		}
 
 		glewInit();
-
-		glEnableVertexAttribArray(A_POSITION_INDEX);
-		glEnableVertexAttribArray(A_COLOR_INDEX);
-		//glEnableVertexAttribArray(A_TEX_COORDS_INDEX);
+		init();
 	}
 
 	void render_window::open(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
@@ -80,7 +81,10 @@ namespace agl
 		if (!(flags & SDL_WINDOW_HIDDEN))
 			SDL_ShowWindow(handle);
 		
-		glViewport(0, 0, width, height);                                                                                                                                            
+		vector2f view_size{ 1.0f, static_cast<float>(height) / static_cast<float>(width) };
+		view_2d view{ view_size * 0.5f, view_size };
+
+		apply_view(view);
 	}
 
 	void render_window::clear()

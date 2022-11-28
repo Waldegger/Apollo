@@ -46,7 +46,7 @@ void test_app::on_create()
         "void main()\n"
         "{\n"
         "    //gl_FragColor = v_color;\n"
-        "    gl_FragColor = texture2D(u_texture, v_tex_coords);\n"
+        "    gl_FragColor = v_color * texture2D(u_texture, v_tex_coords);\n"
         "}";
 
     shader1.compile(vertex_shader_source);
@@ -64,8 +64,7 @@ void test_app::on_create()
     auto window_size = get_render_window().get_size();
 
     m_background_program.set_uniform("iResolution", static_cast<float>(window_size.x), static_cast<float>(window_size.y));
-    m_background_program.set_uniform("iTime", 0.0f);
-
+    
     m_default_program.attach_shader(shader1);
     m_default_program.attach_shader(shader2);
 
@@ -76,6 +75,8 @@ void test_app::on_create()
     m_default_program.link();
 
     m_test_texture.load("D:/temp/test.png");
+
+    m_rect_matrix.translate(agl::vector2f{ 0.5f, -1.5f });
 }
 
 void test_app::on_update()
@@ -120,6 +121,8 @@ void test_app::on_update()
     m_timer_now = SDL_GetPerformanceCounter();
 
     m_delta_time = (float)((m_timer_now - m_timer_last) / (float)SDL_GetPerformanceFrequency());
+    m_elapsed_time += m_delta_time;
+    m_background_program.set_uniform("iTime", m_elapsed_time);
 
     if (m_key_left)
     {
@@ -139,8 +142,8 @@ void test_app::on_update()
     get_render_window().clear();
 
     //Draw Stuff
-    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_background_program });
-    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_default_program, &m_test_texture, m_rect_matrix });
+    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_background_program, m_test_texture, agl::matrix4f::get_identity() });
+    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_default_program, m_test_texture, m_rect_matrix });
 
     //Update screen
     get_render_window().display();

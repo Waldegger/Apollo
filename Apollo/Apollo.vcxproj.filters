@@ -173,5 +173,8 @@
     <ClInclude Include="src\graphics\rect.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\defaults.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

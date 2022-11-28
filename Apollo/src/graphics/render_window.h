@@ -28,7 +28,7 @@ namespace agl
 		void clear();
 		void display();
 
-		vector2u get_size() const;
+		virtual vector2u get_size() const override;
 
 	protected:
 

@@ -5,6 +5,7 @@
 #include "graphics/vertex_2d.h"
 #include "graphics/matrix4.h"
 #include "graphics/texture.h"
+#include "graphics/view_2d.h"
 
 class test_app
 	: public agl::engine
@@ -25,18 +26,18 @@ private:
 
     std::array<agl::vertex_2d, 4> m_vertices = 
     {
-        agl::vertex_2d{ agl::vector2f{ -1.0f, -1.0f } },
-        agl::vertex_2d{ agl::vector2f{ 1.0f, -1.0f } },
-        agl::vertex_2d{ agl::vector2f{ 1.0f, 1.0f } },
-        agl::vertex_2d{ agl::vector2f{ -1.0f, 1.0f } }
+        agl::vertex_2d{ agl::vector2f{ 0.0f, 0.0f } },
+        agl::vertex_2d{ agl::vector2f{ 1.0f, 0.0f } },
+        agl::vertex_2d{ agl::vector2f{ 1.0f, 1.777777f } },
+        agl::vertex_2d{ agl::vector2f{ 0.0f, 1.777777f } }
     };
-
+    
     std::array<agl::vertex_2d, 4> m_rect_vertices =
     {
-        agl::vertex_2d{ agl::vector2f{ -0.1f, -0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{0.0f, 0.0f} },
-        agl::vertex_2d{ agl::vector2f{ 0.1f, -0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{1.0f, 0.0f} },
-        agl::vertex_2d{ agl::vector2f{ 0.1f, 0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{1.0f, 1.0f} },
-        agl::vertex_2d{ agl::vector2f{ -0.1f, 0.1f }, agl::color{255, 255, 255, 255 }, agl::vector2f{0.0f, 1.0f} }
+        agl::vertex_2d{ agl::vector2f{ 0.0f, 0.0f }, agl::color{255, 255, 255, 255 }, agl::vector2f{0.0f, 109.0f / 2048.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.18f, 0.0f }, agl::color{255, 255, 255, 255 }, agl::vector2f{110.0f / 1024.0f, 109.0f / 2048.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.18f, 0.045f }, agl::color{255, 255, 255, 255 }, agl::vector2f{110.0f / 1024.0f, 136.0f / 2048.0f} },
+        agl::vertex_2d{ agl::vector2f{ 0.0f, 0.045f }, agl::color{255, 255, 255, 255 }, agl::vector2f{0.0f, 136.0f / 2048.0f} }
     };
 
     std::array<uint32_t, 6> m_indizes = {
@@ -54,6 +55,7 @@ private:
     uint64_t m_timer_now = SDL_GetPerformanceCounter();
     uint64_t m_timer_last = 0;
     float m_delta_time = 0.0;
+    float m_elapsed_time = 0.0f;
 
     bool m_key_left = false;
     bool m_key_right = false;

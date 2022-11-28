@@ -24,7 +24,7 @@ namespace
 
 		auto bytes_read = stream->gcount();
 
-		return bytes_read;
+		return static_cast<int>(bytes_read);
 	}
 
 	void skip(void* user, int size)

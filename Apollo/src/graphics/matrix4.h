@@ -287,7 +287,7 @@ namespace agl
 		auto& a = lhs;
 		auto& b = rhs;
 
-		return matrix4
+		return matrix4<T>
 		{ 
 			{
 				a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12],

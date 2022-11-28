@@ -7,6 +7,8 @@
 #include <string_view>
 
 #include "graphics/render_window.h"
+#include "graphics/texture.h"
+#include "graphics/shader_program.h"
 #include "utility/utility.h"
 
 namespace agl
@@ -66,8 +68,8 @@ namespace agl
 		void update();
 		void destroy();
 
-		render_window m_render_window;
 		initializer<SDL_Init, SDL_Quit, Uint32> m_initializer;
+		render_window m_render_window;
 
 		int32_t m_exit_code = 0;
 		bool m_running = true;

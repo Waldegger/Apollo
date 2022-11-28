@@ -23,9 +23,15 @@ namespace agl
 			add,
 			subtract,
 			reverse_subtract,
+			/*
+			* OpenGL ES 3.0
 			min,
 			max
+			*/
 		};
+
+		blend_mode(factor source_factor, factor destination_factor, equation blend_equation = equation::add);
+		blend_mode(factor color_source_factor, factor color_destination_factor, equation color_blend_equation, factor alpha_source_factor, factor alpha_destination_factor, equation alpha_blend_equation);
 
 		factor color_src_factor = factor::src_alpha;			//!< Source blending factor for the color channels
 		factor color_dst_factor = factor::one_minus_src_alpha;	//!< Destination blending factor for the color channels
@@ -33,6 +39,15 @@ namespace agl
 		factor alpha_src_factor = factor::one;					//!< Source blending factor for the alpha channel
 		factor alpha_dst_factor = factor::one_minus_src_alpha;	//!< Destination blending factor for the alpha channel
 		equation alpha_equation = equation::add;				//!< Blending equation for the alpha channel
+
+		static const blend_mode blend_alpha;
+		static const blend_mode blend_add;
+		static const blend_mode blend_multiply;
+		/*OpenGL ES 3.0
+		static const blend_mode blend_min;
+		static const blend_mode blend_max;
+		*/
+		static const blend_mode blend_none;
 	};
 
 	constexpr inline bool operator == (const blend_mode& lhs, const blend_mode& rhs)
