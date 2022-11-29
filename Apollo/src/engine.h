@@ -1,14 +1,11 @@
 #pragma once
 
-#define NO_SDL_GLEXT
-#define GL_GLEXT_PROTOTYPES 1
-
-#include <SDL2/SDL.h>
 #include <string_view>
 
 #include "graphics/render_window.h"
 #include "graphics/texture.h"
 #include "graphics/shader_program.h"
+#include "graphics/program_layout.h"
 #include "utility/utility.h"
 
 namespace agl
@@ -39,7 +36,7 @@ namespace agl
 	{
 	public:
 		engine();
-		virtual ~engine() = default;
+		virtual ~engine();
 
 		engine(const engine& other) = delete;
 		engine(engine&& other) = delete;
@@ -55,6 +52,11 @@ namespace agl
 		inline const render_window& get_render_window() const { return m_render_window; }
 		inline render_window& get_render_window() { return m_render_window; }
 
+		inline static const shader* get_default_vertex_shader() { return m_default_vertex_shader_ptr; }
+		inline static const shader* get_default_fragment_shader() { return m_default_fragment_shader_ptr; }
+		inline static const program_layout* get_default_program_layout() { return m_default_program_layout_ptr; }
+		inline static const texture* get_default_texture() { return m_default_texture_ptr; }
+
 	protected:
 		virtual void on_create() = 0;
 		virtual void on_update() = 0;
@@ -64,13 +66,26 @@ namespace agl
 		static int32_t init_lib(uint32_t flags);
 		static void quit_lib();
 
+		inline static const shader* m_default_vertex_shader_ptr;
+		inline static const shader* m_default_fragment_shader_ptr;
+		inline static const program_layout* m_default_program_layout_ptr;
+		inline static const texture* m_default_texture_ptr;
+
+		void init_defaults();
+
 		void create();
 		void update();
 		void destroy();
 
-		initializer<SDL_Init, SDL_Quit, Uint32> m_initializer;
+		initializer<init_lib, quit_lib, uint32_t> m_initializer;
 		render_window m_render_window;
 
+		shader m_default_vertex_shader{ shader::shader_type::vertex };
+		shader m_default_fragment_shader{ shader::shader_type::fragment };
+		shader_program m_default_shader_program;
+		program_layout m_default_program_layout;
+		texture m_default_texture;
+		
 		int32_t m_exit_code = 0;
 		bool m_running = true;
 	};

@@ -1,11 +1,14 @@
 #pragma once
 
-#include "render_states.h"
+#include "blend_mode.h"
 #include "vertex_2d.h"
 #include "view_2d.h"
 
 namespace agl
 {
+	class render_states;
+	class texture;
+
 	class render_target
 	{
 	public:

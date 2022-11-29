@@ -6,6 +6,7 @@
 #include "graphics/matrix4.h"
 #include "graphics/texture.h"
 #include "graphics/view_2d.h"
+#include "system/clock.h"
 
 class test_app
 	: public agl::engine
@@ -48,12 +49,13 @@ private:
     agl::matrix4f m_rect_matrix;
 
     agl::shader_program m_background_program;
-    agl::shader_program m_default_program;
-
     agl::texture m_test_texture;
 
-    uint64_t m_timer_now = SDL_GetPerformanceCounter();
-    uint64_t m_timer_last = 0;
+    agl::program_layout m_background_program_layout{ m_background_program };
+    int32_t m_background_program_time_location = -1;
+
+    agl::clock m_clock;
+
     float m_delta_time = 0.0;
     float m_elapsed_time = 0.0f;
 

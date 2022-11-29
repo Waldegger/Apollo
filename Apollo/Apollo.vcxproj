@@ -158,6 +158,7 @@
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphics\blend_mode.cpp" />
     <ClCompile Include="src\graphics\color.cpp" />
+    <ClCompile Include="src\graphics\drawable.cpp" />
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\graphics\image.cpp" />
     <ClCompile Include="src\graphics\render_states.cpp" />
@@ -165,7 +166,9 @@
     <ClCompile Include="src\graphics\render_window.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\shader_program.cpp" />
+    <ClCompile Include="src\graphics\text.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
+    <ClCompile Include="src\graphics\transformable_2d.cpp" />
     <ClCompile Include="src\graphics\vertex_array_object.cpp" />
     <ClCompile Include="src\graphics\vertex_buffer_object.cpp" />
     <ClCompile Include="src\graphics\view_2d.cpp" />
@@ -177,13 +180,14 @@
     <ClCompile Include="src\utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\defaults.h" />
     <ClInclude Include="src\engine.h" />
     <ClInclude Include="src\graphics\blend_mode.h" />
     <ClInclude Include="src\graphics\color.h" />
+    <ClInclude Include="src\graphics\drawable.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\image.h" />
     <ClInclude Include="src\graphics\matrix4.h" />
+    <ClInclude Include="src\graphics\program_layout.h" />
     <ClInclude Include="src\graphics\quaternion.h" />
     <ClInclude Include="src\graphics\rect.h" />
     <ClInclude Include="src\graphics\render_states.h" />
@@ -191,7 +195,9 @@
     <ClInclude Include="src\graphics\render_window.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\shader_program.h" />
+    <ClInclude Include="src\graphics\text.h" />
     <ClInclude Include="src\graphics\texture.h" />
+    <ClInclude Include="src\graphics\transformable_2d.h" />
     <ClInclude Include="src\graphics\vector2.h" />
     <ClInclude Include="src\graphics\vector3.h" />
     <ClInclude Include="src\graphics\vertex_2d.h" />

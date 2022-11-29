@@ -6,9 +6,9 @@
 
 namespace agl
 {
-	shader::shader(type shader_type)
-		: m_type{ shader_type }
-		, m_handle{ glCreateShader(convert_type(shader_type)) }
+	shader::shader(shader_type type)
+		: m_type{ type }
+		, m_handle{ glCreateShader(convert_type(type)) }
 	{
 		if (!m_handle)
 		{
@@ -35,17 +35,17 @@ namespace agl
 		};
 	}
 
-	uint32_t shader::convert_type(type type_to_convert)
+	uint32_t shader::convert_type(shader_type type_to_convert)
 	{
 		switch (type_to_convert)
 		{
-		case type::fragment:
+		case shader_type::fragment:
 			return GL_FRAGMENT_SHADER;
 
-		case type::geometry:
+		case shader_type::geometry:
 			return GL_GEOMETRY_SHADER;
 
-		case type::vertex:
+		case shader_type::vertex:
 			return GL_VERTEX_SHADER;
 
 		default:

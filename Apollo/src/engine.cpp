@@ -1,5 +1,10 @@
 #include "engine.h"
 
+#define NO_SDL_GLEXT
+#define GL_GLEXT_PROTOTYPES 1
+
+#include <SDL2/SDL.h>
+
 #include <stdexcept>
 #include <array>
 
@@ -9,6 +14,7 @@ namespace agl
 {
 	engine::engine()
 		: m_initializer{ SDL_INIT_VIDEO }
+		, m_default_program_layout{ m_default_shader_program }
 	{
 		static bool engine_instanced;
 
@@ -16,8 +22,18 @@ namespace agl
 		{
 			throw std::runtime_error{ "Only one instance of engine is allowed!" };
 		}
-		
+
+		init_defaults();
+
 		engine_instanced = true;
+	}
+
+	engine::~engine()
+	{
+		m_default_vertex_shader_ptr = nullptr;
+		m_default_fragment_shader_ptr = nullptr;
+		m_default_program_layout_ptr = nullptr;
+		m_default_texture_ptr = nullptr;
 	}
 
 	int32_t engine::start(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
@@ -98,6 +114,54 @@ namespace agl
 	void engine::quit_lib()
 	{
 		SDL_Quit();
+	}
+
+	void engine::init_defaults()
+	{
+		const char* vertex_shader_source =
+			"uniform mat4 u_mvp_matrix;\n"
+			"attribute vec2 a_position;\n"
+			"attribute vec4 a_color;\n"
+			"attribute vec2 a_tex_coords;\n"
+			"varying vec4 v_color;\n"
+			"varying vec2 v_tex_coords;\n"
+			"void main()\n"
+			"{\n"
+			"   gl_Position = u_mvp_matrix * vec4(a_position, 0.0, 1.0);\n"
+			"   v_color = a_color;\n"
+			"   v_tex_coords = a_tex_coords;\n"
+			"}";
+
+		const char* fragment_shader_source =
+			"precision mediump float;\n"
+			"uniform sampler2D u_texture;\n"
+			"varying vec4 v_color;\n"
+			"varying vec2 v_tex_coords;\n"
+			"void main()\n"
+			"{\n"
+			"    gl_FragColor = v_color * texture2D(u_texture, v_tex_coords);\n"
+			"}";
+
+		m_default_vertex_shader.compile(vertex_shader_source);
+		m_default_fragment_shader.compile(fragment_shader_source);
+
+		m_default_shader_program.attach_shader(m_default_vertex_shader);
+		m_default_shader_program.attach_shader(m_default_fragment_shader);
+		m_default_shader_program.bind_attrib_location(render_target::A_POSITION_INDEX, "a_position");
+		m_default_shader_program.bind_attrib_location(render_target::A_COLOR_INDEX, "a_color");
+		m_default_shader_program.bind_attrib_location(render_target::A_TEX_COORDS_INDEX, "a_tex_coords");
+		m_default_shader_program.link();
+
+		m_default_program_layout.mvp_matrix_name("u_mvp_matrix");
+		m_default_program_layout.texture_name("u_texture");
+
+		m_default_texture.create(vector2u{ 1, 1 });
+		m_default_texture.update(std::array<uint8_t, 4>{255, 255, 255, 255}.data());
+
+		m_default_vertex_shader_ptr = &m_default_vertex_shader;
+		m_default_fragment_shader_ptr = &m_default_fragment_shader;
+		m_default_program_layout_ptr = &m_default_program_layout;
+		m_default_texture_ptr = &m_default_texture;
 	}
 
 	void engine::create()

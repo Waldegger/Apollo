@@ -76,16 +76,24 @@ namespace agl
 		if (!vertices || !indices || !num_indices)
 			return;
 
-		states.shader_program->bind();
-		states.shader_program->set_uniform("u_mvp_matrix", m_projection_matrix * states.transform);
-		states.shader_program->set_uniform("u_texture", 0);
-		states.texture->bind();
+		auto& layout = states.get_program_layout();
+		auto& program = layout.get_program();
+	
+		program.bind();
+
+		if(layout.get_mvp_matrix_location() >= 0)
+			program.set_uniform(layout.get_mvp_matrix_location(), m_projection_matrix * states.get_transform());
+
+		if(layout.get_texture_location() >= 0)
+			program.set_uniform(layout.get_texture_location(), 0);
+
+		states.get_texture().bind();
 
 		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].position);
 		glVertexAttribPointer(A_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(agl::vertex_2d), &vertices[0].color);
 		glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].tex_coords);
 
-		apply_blend_mode(states.blend_mode);
+		apply_blend_mode(states.get_blend_mode());
 		
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, indices);
 	}
