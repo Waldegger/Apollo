@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 {
 	static constexpr uint32_t SCREEN_WIDTH = 540;
 	static constexpr uint32_t SCREEN_HEIGHT = 960;
-
+    
     try
     {
         test_app app;
