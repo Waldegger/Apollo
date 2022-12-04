@@ -16,10 +16,10 @@ namespace agl
 	{
 	public:
 		font();
-		font(const font& other);
-		font(const font&& other) noexcept;
+		font(const font& copy) = delete;
+		font(font&& other) noexcept;
 
-		font& operator = (const font& other);
+		font& operator = (const font& other) = delete;
 		font& operator = (font&& other) noexcept;
 
 		~font();
@@ -36,12 +36,15 @@ namespace agl
 			uint32_t ls_delta = 0;
 			uint32_t rs_delta = 0;
 			float_rect bounds;
-			float_rect texture_rect;
+			int_rect texture_rect;
+
+			float_rect render_texture_rect;
 		};
 
 		void load(const std::string_view& fn);
 		void load(const void* data, size_t size_in_bytes);
 		void load(std::unique_ptr<std::istream> in_stream);
+		void load(std::istream& in_stream);
 
 		const info& get_info() const;
 		const glyph& get_glyph(uint32_t code_point, uint32_t character_size, bool bold, float outline_thickness = 0.0f) const;
@@ -58,17 +61,19 @@ namespace agl
 		void set_smooth(bool value);
 		bool get_smooth() const;
 
-		void pre_buffer(const std::string_view& letters, uint32_t character_size);
+		void pre_cache_glyphs(const std::string_view& letters, uint32_t character_size);
 
 	protected:
 
 	private:
+		void load_from_stream(std::istream& in_stream);
+		void cleanup();
 
 		struct row
 		{
-			float width = 0.0f;
-			float height = 0.0f;
-			float top = 0.0f;
+			uint32_t width{};
+			uint32_t height{};
+			uint32_t top{};
 		};
 
 		struct page
@@ -91,6 +96,6 @@ namespace agl
 		std::unique_ptr<font_handles> m_font_handles;
 		std::unique_ptr<std::istream> m_stream;
 
-		bool m_smooth = false;
+		bool m_smooth = true;
 	};
 }

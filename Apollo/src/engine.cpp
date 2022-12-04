@@ -139,7 +139,9 @@ namespace agl
 			"varying vec2 v_tex_coords;\n"
 			"void main()\n"
 			"{\n"
-			"    gl_FragColor = v_color * texture2D(u_texture, v_tex_coords);\n"
+			"    vec4 texel = texture2D(u_texture, v_tex_coords);\n"
+			"    if(texel.a == 0.0) discard;"
+			"    gl_FragColor = v_color * texel;\n"
 			"}";
 
 		m_default_vertex_shader.compile(vertex_shader_source);

@@ -172,7 +172,9 @@ namespace agl
 		else
 		{
 			// Dump the pixel buffer
-			std::vector<std::uint8_t>().swap(m_pixels);
+			//std::vector<std::uint8_t>().swap(m_pixels);
+			m_pixels.clear();
+			m_pixels.shrink_to_fit();
 
 			// Assign the new size
 			m_size.x = 0;
@@ -196,7 +198,9 @@ namespace agl
 		else
 		{
 			// Dump the pixel buffer
-			std::vector<std::uint8_t>().swap(m_pixels);
+			//std::vector<std::uint8_t>().swap(m_pixels);
+			m_pixels.clear();
+			m_pixels.shrink_to_fit();
 
 			// Assign the new size
 			m_size.x = 0;
