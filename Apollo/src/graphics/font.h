@@ -6,6 +6,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <tuple>
 
 #include "rect.h"
 #include "texture.h"
@@ -33,8 +34,8 @@ namespace agl
 		struct glyph
 		{
 			float advance = 0.0f;
-			uint32_t ls_delta = 0;
-			uint32_t rs_delta = 0;
+			int32_t lsb_delta = 0;
+			int32_t rsb_delta = 0;
 			float_rect bounds;
 			int_rect texture_rect;
 
@@ -66,11 +67,14 @@ namespace agl
 	protected:
 
 	private:
-		void load_from_stream(std::istream& in_stream);
-		void cleanup();
-
 		struct row
 		{
+			row(unsigned int row_top, unsigned int row_height) 
+				: width{ 0 }
+				, top{ row_top }
+				, height{ row_height }
+			{}
+
 			uint32_t width{};
 			uint32_t height{};
 			uint32_t top{};
@@ -80,13 +84,24 @@ namespace agl
 		{
 			explicit page(bool smooth);
 
-			std::unordered_map<uint32_t, glyph> glyphs;
-			texture m_texture;
-			float next_row;
+			std::unordered_map<uint64_t, glyph> glyphs;
+			texture texture;
+			uint32_t next_row;
 			std::vector<row> rows;
 		};
 
 		class font_handles;
+
+		void load_from_stream(std::istream& in_stream);
+
+		page& load_page(uint32_t character_size) const;
+		glyph load_glyph(uint32_t code_point, uint32_t character_size, bool bold, float outline_thickness) const;
+
+		int_rect find_glyph_rect(page& page, const vector2u& size) const;
+
+		void set_current_size(uint32_t character_size) const;
+
+		void cleanup();
 
 		info m_info;
 

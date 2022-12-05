@@ -61,17 +61,18 @@ namespace agl
 		}
 
 		unique_handle(unique_handle&& other) noexcept
+			: m_handle{ std::move(other.m_handle) }
 		{
-			m_handle = std::move(other.m_handle);
 			other.m_handle = invalid_value;
 		}
 
 		unique_handle& operator = (unique_handle&& other) noexcept
 		{
-			delete_hanlde(m_handle);
-			m_handle = std::move(other.m_handle);
+			reset(std::move(other.m_handle));
 
 			other.m_handle = invalid_value;
+
+			return *this;
 		}
 
 		unique_handle(const unique_handle& other) = delete;
