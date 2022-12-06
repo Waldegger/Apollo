@@ -226,7 +226,54 @@ namespace agl
 
 	void image::save(const std::string_view& value)
 	{
+		auto errfunc = [&value]() {
+			std::stringstream ss;
 
+			ss << "Error saving image. " << value;
+			throw std::runtime_error{ ss.str() };
+		};
+
+		auto pos = value.find_last_of('.');
+		if (pos == value.npos)
+			errfunc();
+
+		if (value.substr(pos) == ".bmp")
+		{
+			// BMP format
+			if (!stbi_write_bmp(value.data(), static_cast<int>(m_size.x), static_cast<int>(m_size.y), 4, m_pixels.data()))
+				errfunc();
+
+			return;
+		}
+
+		if (value.substr(pos) == ".tga")
+		{
+			// TGA format
+			if (!stbi_write_tga(value.data(), static_cast<int>(m_size.x), static_cast<int>(m_size.y), 4, m_pixels.data()))
+				errfunc();
+
+			return;
+		}
+
+		if (value.substr(pos) == ".png")
+		{
+			// PNG format
+			if (!stbi_write_png(value.data(), static_cast<int>(m_size.x), static_cast<int>(m_size.y), 4, m_pixels.data(), 0))
+				errfunc();
+
+			return;
+		}
+
+		if (value.substr(pos) == ".jpg" || value.substr(pos) == ".jpeg")
+		{
+			// JPG format
+			if (!stbi_write_jpg(value.data(), static_cast<int>(m_size.x), static_cast<int>(m_size.y), 4, m_pixels.data(), 90))
+				errfunc();
+
+			return;
+		}
+
+		errfunc();
 	}
 
 	void image::save(std::vector<uint8_t>& data, const std::string_view& format)

@@ -6,6 +6,7 @@
 #include "graphics/matrix4.h"
 #include "graphics/texture.h"
 #include "graphics/view_2d.h"
+#include "graphics/font.h"
 #include "system/clock.h"
 
 class test_app
@@ -55,6 +56,8 @@ private:
     int32_t m_background_program_time_location = -1;
 
     agl::clock m_clock;
+
+    agl::font m_test_font;
 
     float m_delta_time = 0.0;
     float m_elapsed_time = 0.0f;

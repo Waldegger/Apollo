@@ -57,12 +57,12 @@ namespace agl
 		float get_underline_position(uint32_t character_size) const;
 		float get_underline_thickness(uint32_t character_size) const;
 
-		const texture& get_texture() const;
+		const texture& get_texture(uint32_t character_size) const;
 
 		void set_smooth(bool value);
 		bool get_smooth() const;
 
-		void pre_cache_glyphs(const std::string_view& letters, uint32_t character_size);
+		void pre_cache_glyphs(const std::u32string_view& letters, uint32_t character_size, bool bold, float outline_thickness);
 
 	protected:
 

@@ -44,6 +44,12 @@ void test_app::on_create()
 
     m_rect_matrix.translate(agl::vector2f{ 0.5f, -1.5f });
 
+    uint32_t text_size = 64;
+    m_test_font.load("D:/temp/ethnocentric rg.ttf");
+    m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 dome special chars !\"§$%/()=? and don't forget about Zonk or zuzu!", text_size, false, 0.0f);
+    auto font_image = m_test_font.get_texture(text_size).copy_to_image();
+    font_image.save("D:/temp/font_texture.png");
+
     m_clock.start();
 }
 

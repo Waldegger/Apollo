@@ -10,6 +10,7 @@
 #include <exception>
 #include <sstream>
 #include <limits>
+#include <codecvt>
 
 //Only temporary as long as there is no proper errorhandling
 #include <iostream>
@@ -29,7 +30,7 @@ unsigned long read(FT_Stream rec, unsigned long offset, unsigned char* buffer, u
 	{
 		if (count > 0)
 		{
-			return static_cast<unsigned long>(stream->read(reinterpret_cast<char*>(buffer), count).tellg());
+			return stream->read(reinterpret_cast<char*>(buffer), count).gcount();
 		}
 
 		return 0;
@@ -49,12 +50,6 @@ inline uint64_t combine(float outline_thickness, bool bold, std::uint32_t index)
 
 	return (static_cast<std::uint64_t>(*u_outline_thickness) << 32) |
 		(static_cast<std::uint64_t>(bold) << 31) | index;
-}
-
-//ToDo: Test me!!!
-void done_glypth_test(FT_Glyph glyph)
-{
-	FT_Done_Glyph(glyph);
 }
 
 namespace agl
@@ -85,6 +80,35 @@ namespace agl
 		std::unique_ptr<std::remove_pointer_t<FT_Stroker>, deleter> stroker;	//< Pointer to the stroker
 	};
 
+	class glyph_handle
+	{
+	public:
+		glyph_handle() = default;
+		glyph_handle(const glyph_handle& copy) = delete;
+		glyph_handle(glyph_handle&& other) = delete;
+
+		glyph_handle& operator = (const glyph_handle& other) = delete;
+		glyph_handle& operator = (glyph_handle&& other) = delete;
+
+		inline ~glyph_handle()
+		{
+			FT_Done_Glyph(m_glyph);
+		}
+
+	public:
+		inline FT_Glyph& get_glyph() { return m_glyph; }
+		inline const FT_Glyph& get_glyph() const { return m_glyph; };
+
+		inline operator FT_Glyph& () { return m_glyph; }
+		inline operator const FT_Glyph& () const { return m_glyph; }
+
+	protected:
+
+	private:
+		
+		FT_Glyph m_glyph;
+	};
+
 	font::font()
 		: m_font_handles{}
 	{}
@@ -96,7 +120,7 @@ namespace agl
 
 	void font::load(const std::string_view& fn)
 	{
-		load(std::make_unique<assetistream>(fn.data()));
+		load(std::make_unique<assetistream>(fn.data(), std::ios::binary));
 	}
 
 	void font::load(const void* data, size_t size_in_bytes)
@@ -185,7 +209,7 @@ namespace agl
 		in_stream.clear();
 		in_stream.seekg(cur_stream_pos);
 		*/
-
+		
 		handles->stream_rec = std::make_unique<FT_StreamRec>();
 		handles->stream_rec->base = nullptr;
 		//handles->stream_rec->size = size;
@@ -259,7 +283,7 @@ namespace agl
 	{
 		// Special case where first or second is 0 (null character)
 		if (first == 0 || second == 0)
-			return 0.f;
+			return 0.0f;
 
 		auto face = m_font_handles ? m_font_handles->face.get() : nullptr;
 
@@ -307,7 +331,110 @@ namespace agl
 
 	float font::get_line_spacing(uint32_t character_size) const
 	{
+		auto face = m_font_handles ? m_font_handles->face.get() : nullptr;
 
+		if (face)
+		{
+			try
+			{
+				set_current_size(character_size);
+			}
+			catch (...)
+			{
+				return 0.0f;
+			}
+
+			return static_cast<float>(face->size->metrics.height) / static_cast<float>(1 << 6);
+		}
+		else
+		{
+			return 0.0f;
+		}
+	}
+
+	float font::get_underline_position(uint32_t character_size) const
+	{
+		auto face = m_font_handles ? m_font_handles->face.get() : nullptr;
+
+		if (face)
+		{
+			try
+			{
+				set_current_size(character_size);
+			}
+			catch (...)
+			{
+				return 0.0f;
+			}
+
+			// Return a fixed position if font is a bitmap font
+			if (!FT_IS_SCALABLE(face))
+				return static_cast<float>(character_size) / 10.0f;
+
+			return -static_cast<float>(FT_MulFix(face->underline_position, face->size->metrics.y_scale)) /
+				static_cast<float>(1 << 6);
+		}
+		else
+		{
+			return 0.0f;
+		}
+	}
+
+	float font::get_underline_thickness(uint32_t character_size) const
+	{
+		auto face = m_font_handles ? m_font_handles->face.get() : nullptr;
+
+		if (face)
+		{
+			try
+			{
+				set_current_size(character_size);
+			}
+			catch (...)
+			{
+				return 0.0f;
+			}
+
+			// Return a fixed thickness if font is a bitmap font
+			if (!FT_IS_SCALABLE(face))
+				return static_cast<float>(character_size) / 14.0f;
+
+			return static_cast<float>(FT_MulFix(face->underline_thickness, face->size->metrics.y_scale)) /
+				static_cast<float>(1 << 6);
+		}
+		else
+		{
+			return 0.0f;
+		}
+	}
+
+	const texture& font::get_texture(uint32_t character_size) const
+	{
+		return load_page(character_size).texture;
+	}
+
+	void font::set_smooth(bool value)
+	{
+		if (value != m_smooth)
+		{
+			for (auto& [key, page] : m_pages)
+			{
+				page.texture.set_smooth(value);
+			}
+
+			m_smooth = value;
+		}
+	}
+
+	void font::pre_cache_glyphs(const std::u32string_view& letters, uint32_t character_size, bool bold, float outline_thickness)
+	{
+		for (auto& u32_c : letters)
+			get_glyph(u32_c, character_size, bold, outline_thickness);
+	}
+
+	bool font::get_smooth() const
+	{
+		return m_smooth;
 	}
 
 	font::page& font::load_page(uint32_t character_size) const
@@ -336,21 +463,18 @@ namespace agl
 		if (FT_Load_Char(face, code_point, flags) != 0)
 			return result;
 
-		FT_Glyph glyph_desc;
-		if (FT_Get_Glyph(face->glyph, &glyph_desc) != 0)
+		glyph_handle glyph_desc;
+		if (FT_Get_Glyph(face->glyph, &glyph_desc.get_glyph()) != 0)
 			return result;
-		
-		using glyph_deleter = deleter<std::remove_pointer_t<FT_Glyph>, done_glypth_test>;
-		std::unique_ptr<std::remove_pointer_t<FT_Glyph>, glyph_deleter> glyph_desc_ptr{ glyph_desc };
 
 		FT_Pos weight = 1 << 6;
 
-		bool outline = glyph_desc->format == FT_GLYPH_FORMAT_OUTLINE;
+		bool outline = glyph_desc.get_glyph()->format == FT_GLYPH_FORMAT_OUTLINE;
 		if (outline)
 		{
 			if (bold)
 			{
-				auto outline_glyph = reinterpret_cast<FT_OutlineGlyph>(glyph_desc);
+				auto outline_glyph = reinterpret_cast<FT_OutlineGlyph>(glyph_desc.get_glyph());
 				FT_Outline_Embolden(&outline_glyph->outline, weight);
 
 				if (outline_thickness != 0.0f)
@@ -363,13 +487,13 @@ namespace agl
 						FT_STROKER_LINEJOIN_ROUND,
 						0);
 
-					FT_Glyph_Stroke(&glyph_desc, stroker, true);
+					FT_Glyph_Stroke(&glyph_desc.get_glyph(), stroker, true);
 				}
 			}
 		}
 
-		FT_Glyph_To_Bitmap(&glyph_desc, FT_RENDER_MODE_NORMAL, nullptr, 1);
-		auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph_desc);
+		FT_Glyph_To_Bitmap(&glyph_desc.get_glyph(), FT_RENDER_MODE_NORMAL, nullptr, 1);
+		auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph_desc.get_glyph());
 		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
 		if (!outline)
@@ -406,6 +530,13 @@ namespace agl
 
 			result.texture_rect = find_glyph_rect(cur_page, size);
 
+			// Make sure the texture data is positioned in the center
+			// of the allocated texture rectangle
+			result.texture_rect.left += static_cast<int>(padding);
+			result.texture_rect.top += static_cast<int>(padding);
+			result.texture_rect.width -= static_cast<int>(2 * padding);
+			result.texture_rect.height -= static_cast<int>(2 * padding);
+
 			//Precache tex coordinated for rendering
 			{
 				auto& render_tex_rect = result.render_texture_rect;
@@ -417,13 +548,6 @@ namespace agl
 				render_tex_rect.width = static_cast<float>(tex_rect.width) / static_cast<float>(texture_size.x);
 				render_tex_rect.height = static_cast<float>(tex_rect.height) / static_cast<float>(texture_size.y);
 			}
-
-			// Make sure the texture data is positioned in the center
-			// of the allocated texture rectangle
-			result.texture_rect.left += static_cast<int>(padding);
-			result.texture_rect.top += static_cast<int>(padding);
-			result.texture_rect.width -= static_cast<int>(2 * padding);
-			result.texture_rect.height -= static_cast<int>(2 * padding);
 
 			// Compute the glyph's bounding box
 			result.bounds.left = static_cast<float>(bitmap_glyph->left);
@@ -484,7 +608,7 @@ namespace agl
 			cur_page.texture.update(m_pixel_buffer.data(), uint_rect{ vector2u{x,y}, vector2u{w,h} });
 		}
 
-		// Delete the FT glyph is done by unique_ptr glyph_desc_ptr
+		// Delete the FT glyph is done by glyph_handle
 		//FT_Done_Glyph(glyph_desc);
 
 		return result;
