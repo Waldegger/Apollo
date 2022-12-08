@@ -77,7 +77,7 @@
     <IncludePath>$(SDL2);$(GLEW)\include;$(FREETYPE)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SDL2);$(GLEW)\include;$(FREETYPE)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SDL2);$(GLEW)\include;$(FREETYPE)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
@@ -94,8 +94,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;freetyped.lib;glew32s.lib;opengl32.lib;msvcrtd.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SDL2)\lib\Win32\Debug;$(GLEW)\lib\Release\Win32;%(AdditionalLibraryDirectories);$(FREETYPE)\lib\Win32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;freetyped.lib;glew32sd.lib;opengl32.lib;msvcrtd.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(GLEW)\lib\Win32;$(FREETYPE)\lib\Win32;$(SDL2)\lib\Win32\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,7 +115,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2main.lib;SDL2.lib;freetype.lib;glew32s.lib;opengl32.lib;msvcrtd.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SDL2)\lib\Win32\Release;$(GLEW)\lib\Release\Win32;%(AdditionalLibraryDirectories);$(FREETYPE)\lib\Win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(GLEW)\lib\Win32;$(FREETYPE)\lib\Win32;$(SDL2)\lib\Win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,8 +130,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;freetyped.lib;glew32s.lib;opengl32.lib;msvcrtd.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SDL2)\lib\x64\Debug;%(AdditionalLibraryDirectories);$(GLEW)\lib\Release\x64;$(FREETYPE)\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;freetyped.lib;glew32sd.lib;opengl32.lib;msvcrtd.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(FREETYPE)\lib\x64;$(GLEW)\lib\x64;$(SDL2)\lib\x64\Debug;%(AdditionalLibraryDirectories);$(FREETYPE)\lib\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,7 +151,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2main.lib;SDL2.lib;freetype.lib;glew32s.lib;opengl32.lib;msvcrtd.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SDL2)\lib\x64\Release;$(GLEW)\lib\Release\x64;%(AdditionalLibraryDirectories);$(FREETYPE)\lib\x64;$(FREETYPE)\lib\Win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(FREETYPE)\lib\x64;$(GLEW)\lib\x64;$(SDL2)\lib\x64\Release;%(AdditionalLibraryDirectories);$(FREETYPE)\lib\x64;$(FREETYPE)\lib\Win32</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
