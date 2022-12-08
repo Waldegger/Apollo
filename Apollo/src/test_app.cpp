@@ -13,9 +13,9 @@
 void test_app::on_create()
 {
     agl::image test_image;
-    test_image.load("D:/temp/test.png");
+    test_image.load("./test_data/test.png");
 
-    std::ifstream fs{ "D:\\temp\\test.frag" };
+    std::ifstream fs{ "./test_data/test.frag" };
     std::stringstream buffer;
 
     if (fs)
@@ -40,15 +40,15 @@ void test_app::on_create()
     m_background_program.set_uniform("iResolution", static_cast<float>(window_size.x), static_cast<float>(window_size.y));
     m_background_program_time_location = m_background_program.get_uniform_location("iTime");
     
-    m_test_texture.load("D:/temp/test.png");
+    m_test_texture.load("./test_data/test.png");
 
     m_rect_matrix.translate(agl::vector2f{ 0.5f, -1.5f });
 
     uint32_t text_size = 64;
-    m_test_font.load("D:/temp/ethnocentric rg.ttf");
-    m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 dome special chars !\"§$%/()=? and don't forget about Zonk or zuzu!", text_size, false, 0.0f);
+    m_test_font.load("./test_data/ethnocentric rg.ttf");
+    m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 some special chars !\"§$%/()=? and don't forget about Zonk or zuzu! Yolo ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", text_size, false, 0.0f);
     auto font_image = m_test_font.get_texture(text_size).copy_to_image();
-    font_image.save("D:/temp/font_texture.png");
+    font_image.save("./test_data/font_texture.png");
 
     m_clock.start();
 }

@@ -158,7 +158,6 @@
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphics\blend_mode.cpp" />
     <ClCompile Include="src\graphics\color.cpp" />
-    <ClCompile Include="src\graphics\drawable.cpp" />
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\graphics\image.cpp" />
     <ClCompile Include="src\graphics\render_states.cpp" />
@@ -181,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\graphics\angle.h" />
     <ClInclude Include="src\graphics\blend_mode.h" />
     <ClInclude Include="src\graphics\color.h" />
     <ClInclude Include="src\graphics\drawable.h" />

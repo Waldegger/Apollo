@@ -99,9 +99,6 @@
     <ClCompile Include="src\graphics\transformable_2d.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\drawable.cpp">
-      <Filter>Quelldateien\graphics</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -192,6 +189,9 @@
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\drawable.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\angle.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
   </ItemGroup>

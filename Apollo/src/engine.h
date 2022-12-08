@@ -12,14 +12,14 @@ namespace agl
 {
 	enum class window_flag : uint32_t
 	{
-		fullscreen = 1 << 0,
-		fullscreen_desktop = 1 << 1,
-		hidden = 1 << 2,
-		borderless = 1 << 3,
-		resizable = 1 << 4,
-		minimized = 1 << 5,
-		maximized = 1 << 6,
-		input_grabbed = 1 << 7
+		fullscreen			= 0,
+		fullscreen_desktop	= 1 << 0,
+		hidden				= 1 << 1,
+		borderless			= 1 << 2,
+		resizable			= 1 << 3,
+		minimized			= 1 << 4,
+		maximized			= 1 << 5,
+		input_grabbed		= 1 << 6
 	};
 
 	inline std::underlying_type<window_flag>::type operator | (window_flag lhs, window_flag rhs)
