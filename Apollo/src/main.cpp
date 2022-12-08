@@ -15,7 +15,13 @@ int main(int argc, char* argv[])
     }
     catch (const std::exception& e)
     {
-        std::cout << e.what();
+        std::cout << e.what() << std::endl;
+
+        return EXIT_FAILURE;
+    }
+    catch (...)
+    {
+        std::cout << "Unknown exception happened" << std::endl;
 
         return EXIT_FAILURE;
     }
