@@ -14,17 +14,17 @@ void add_line(std::vector<agl::vertex_2d>& vertices,
 	float top = std::floor(line_top + offset - (thickness / 2) + 0.5f);
 	float bottom = top + std::floor(thickness + 0.5f);
 
-	//ToDo: Update the tecture coordinate offset to the white pixels in the upper right corner of the texture
+	auto tex_coord = agl::vector2f{ pixel_size, pixel_size };
 
-	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, top - outline_thickness}, color, agl::vector2f{1.0f, 1.0f} });
+	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, top - outline_thickness}, color, agl::vector2f{1.0f, 1.0f} });
-	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, bottom + outline_thickness}, color, agl::vector2f{1.0f, 1.0f} });
-	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, bottom + outline_thickness}, color, agl::vector2f{1.0f, 1.0f} });
+		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
+	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
+	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, top - outline_thickness}, color, agl::vector2f{1.0f, 1.0f} });
+		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, bottom + outline_thickness}, color, agl::vector2f{1.0f, 1.0f} });
+		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, bottom + outline_thickness}, color, tex_coord });
 }
 
 void add_glyph_quad(std::vector<agl::vertex_2d>& vertices,
@@ -41,10 +41,10 @@ void add_glyph_quad(std::vector<agl::vertex_2d>& vertices,
 	float right = glyph.bounds.left + glyph.bounds.width + padding;
 	float bottom = glyph.bounds.top + glyph.bounds.height + padding;
 
-	float u1 = static_cast<float>(glyph.texture_rect.left) - padding;
-	float v1 = static_cast<float>(glyph.texture_rect.top) - padding;
-	float u2 = static_cast<float>(glyph.texture_rect.left + glyph.texture_rect.width) + padding;
-	float v2 = static_cast<float>(glyph.texture_rect.top + glyph.texture_rect.height) + padding;
+	float u1 = glyph.render_texture_rect.left - pixel_size;
+	float v1 = glyph.render_texture_rect.top - pixel_size;
+	float u2 = glyph.render_texture_rect.left + glyph.render_texture_rect.width + pixel_size;
+	float v2 = glyph.render_texture_rect.top + glyph.render_texture_rect.height + pixel_size;
 
 	vertices.emplace_back(
 		agl::vertex_2d{ agl::vector2f{position.x + left - italic_shear * top, position.y + top}, color, agl::vector2f{u1, v1} });
