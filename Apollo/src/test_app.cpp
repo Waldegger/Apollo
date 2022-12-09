@@ -50,6 +50,10 @@ void test_app::on_create()
     auto font_image = m_test_font.get_texture(text_size).copy_to_image();
     font_image.save("./test_data/font_texture.png");
 
+    m_test_text.set_font(m_test_font);
+    m_test_text.set_string(U"Apollo flies way higher than the moon!");
+    m_test_text.set_scale(agl::vector2f{ (1.0f / static_cast<float>(window_size.x)) * 20.0f, (1.0f / static_cast<float>(window_size.y)) * 20.0f });
+
     m_clock.start();
 }
 
@@ -115,6 +119,7 @@ void test_app::on_update()
     //Draw Stuff
     get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_background_program_layout, m_test_texture, agl::matrix4f::get_identity() });
     get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ *engine::get_default_program_layout(), m_test_texture, m_rect_matrix});
+    get_render_window().draw(m_test_text, agl::render_states{});
 
     //Update screen
     get_render_window().display();

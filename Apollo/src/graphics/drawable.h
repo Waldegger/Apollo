@@ -22,6 +22,8 @@ namespace agl
 	protected:
 
 	private:
+		friend class render_target;
+
 		virtual void draw(render_target& target, const render_states& states) const = 0;
 	};
 }

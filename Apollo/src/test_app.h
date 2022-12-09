@@ -7,6 +7,7 @@
 #include "graphics/texture.h"
 #include "graphics/view_2d.h"
 #include "graphics/font.h"
+#include "graphics/text.h"
 #include "system/clock.h"
 
 class test_app
@@ -58,6 +59,7 @@ private:
     agl::clock m_clock;
 
     agl::font m_test_font;
+    agl::text m_test_text;
 
     float m_delta_time = 0.0;
     float m_elapsed_time = 0.0f;

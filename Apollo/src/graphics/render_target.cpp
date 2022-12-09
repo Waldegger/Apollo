@@ -4,6 +4,7 @@
 
 #include "render_states.h"
 #include "texture.h"
+#include "drawable.h"
 
 namespace agl
 {
@@ -43,6 +44,13 @@ namespace agl
 		return GL_FUNC_ADD;
 	}
 
+	constexpr inline GLenum primitive_type_to_GL_constant(primitive_type value)
+	{
+		constexpr std::array<GLenum, 6> primitive_arr{GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN};
+
+		return primitive_arr[static_cast<uint32_t>(value)];
+	}
+
 	render_target::render_target()
 	{
 		
@@ -71,31 +79,27 @@ namespace agl
 		m_projection_matrix = value.get_transform();
 	}
 
-	void render_target::draw(const agl::vertex_2d vertices[], const uint32_t indices[], size_t num_indices, const agl::render_states& states)
+	void render_target::draw(const drawable& drawable_object, const render_states& states)
+	{
+		drawable_object.draw(*this, states);
+	}
+
+	void render_target::draw(const vertex_2d vertices[], const uint32_t indices[], size_t num_indices, const render_states& states)
 	{
 		if (!vertices || !indices || !num_indices)
 			return;
 
-		auto& layout = states.get_program_layout();
-		auto& program = layout.get_program();
-	
-		program.bind();
-
-		if(layout.get_mvp_matrix_location() >= 0)
-			program.set_uniform(layout.get_mvp_matrix_location(), m_projection_matrix * states.get_transform());
-
-		if(layout.get_texture_location() >= 0)
-			program.set_uniform(layout.get_texture_location(), 0);
-
-		states.get_texture().bind();
-
-		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].position);
-		glVertexAttribPointer(A_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(agl::vertex_2d), &vertices[0].color);
-		glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].tex_coords);
-
-		apply_blend_mode(states.get_blend_mode());
-		
+		prepare_draw(vertices, states);
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, indices);
+	}
+
+	void render_target::draw(const agl::vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states)
+	{
+		if (!vertices || !num_vertices)
+			return;
+
+		prepare_draw(vertices, states);
+		glDrawArrays(primitive_type_to_GL_constant(type), 0, static_cast<GLsizei>(num_vertices));
 	}
 
 	void render_target::init()
@@ -106,6 +110,28 @@ namespace agl
 		glEnable(GL_BLEND);
 
 		apply_blend_mode(blend_mode::blend_alpha);
+	}
+
+	void render_target::prepare_draw(const agl::vertex_2d vertices[], const render_states& states)
+	{
+		auto& layout = states.get_program_layout();
+		auto& program = layout.get_program();
+
+		program.bind();
+
+		if (layout.get_mvp_matrix_location() >= 0)
+			program.set_uniform(layout.get_mvp_matrix_location(), m_projection_matrix * states.get_transform());
+
+		if (layout.get_texture_location() >= 0)
+			program.set_uniform(layout.get_texture_location(), 0);
+
+		states.get_texture().bind();
+
+		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].position);
+		glVertexAttribPointer(A_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(agl::vertex_2d), &vertices[0].color);
+		glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].tex_coords);
+
+		apply_blend_mode(states.get_blend_mode());
 	}
 
 	void render_target::apply_blend_mode(const blend_mode& mode)

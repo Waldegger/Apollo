@@ -332,9 +332,9 @@ namespace agl
 			states_copy.set_texture(m_font->get_texture(m_character_size));
 
 			if (m_outline_thickness != 0.0f)
-				target.draw(nullptr, nullptr, 0, states_copy);
+				target.draw(m_outline_vertices.data(), m_outline_vertices.size(), primitive_type::triangles, states_copy);
 
-			target.draw(nullptr, nullptr, 0, states_copy);
+			target.draw(m_vertices.data(), m_vertices.size(), primitive_type::triangles, states_copy);
 		}
 	}
 
