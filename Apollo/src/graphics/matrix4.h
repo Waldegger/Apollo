@@ -7,6 +7,7 @@
 #include "vector2.h"
 #include "vector3.h"
 #include "quaternion.h"
+#include "rect.h"
 
 namespace agl
 {
@@ -26,44 +27,10 @@ namespace agl
 
 		constexpr const std::array<T, 4 * 4>& get_data() const { return m_data; }
 
-		constexpr matrix4<T> get_inverse() const
-		{
-			// Compute the determinant
-			T det =	m_data[0] * (m_data[15] * m_data[5] - m_data[7] * m_data[13]) -
-					m_data[1] * (m_data[15] * m_data[4] - m_data[7] * m_data[12]) +
-					m_data[3] * (m_data[13] * m_data[4] - m_data[5] * m_data[12]);
-			
-			// Compute the inverse if the determinant is not zero
-			// (don't use an epsilon because the determinant may *really* be tiny)
-			if (det != 0.0)
-			{
-				return matrix4<T>
-				{	
-					(m_data[15] * m_data[5] - m_data[7] * m_data[13]) / det,
-					-(m_data[15] * m_data[4] - m_data[7] * m_data[12]) / det,
-					(m_data[13] * m_data[4] - m_data[5] * m_data[12]) / det,
-					-(m_data[15] * m_data[1] - m_data[3] * m_data[13]) / det,
-					(m_data[15] * m_data[0] - m_data[3] * m_data[12]) / det,
-					-(m_data[13] * m_data[0] - m_data[1] * m_data[12]) / det,
-					(m_data[7] * m_data[1] - m_data[3] * m_data[5]) / det,
-					-(m_data[7] * m_data[0] - m_data[3] * m_data[4]) / det,
-					(m_data[5] * m_data[0] - m_data[1] * m_data[4]) / det 
-				};
-			}
-			else
-			{
-				return get_identity();
-			}
-		}
+		constexpr matrix4<T> get_inverse() const;
 
-		[[nodiscard]] constexpr vector2<T> transform_point(const vector2<T>& point)
-		{
-			return vector2<T>
-			{	
-				m_data[0] * point.x + m_data[4] * point.y + m_data[12],
-				m_data[1] * point.x + m_data[5] * point.y + m_data[13]
-			};
-		}
+		[[nodiscard]] constexpr vector2<T> transform_point(const vector2<T>& value) const;
+		[[nodiscard]] constexpr rect<T> transform_rect(const rect<T>& value) const;
 
 		constexpr matrix4<T>& combine(const matrix4<T>& other)
 		{
@@ -343,5 +310,73 @@ namespace agl
 	constexpr matrix4<T>& operator *= (const matrix4<T>& lhs, const matrix4<T>& rhs)
 	{
 		return lhs.combine(rhs);
+	}
+
+	template<typename T>
+	constexpr matrix4<T> matrix4<T>::get_inverse() const
+	{
+		// Compute the determinant
+		T det = m_data[0] * (m_data[15] * m_data[5] - m_data[7] * m_data[13]) -
+			m_data[1] * (m_data[15] * m_data[4] - m_data[7] * m_data[12]) +
+			m_data[3] * (m_data[13] * m_data[4] - m_data[5] * m_data[12]);
+
+		// Compute the inverse if the determinant is not zero
+		// (don't use an epsilon because the determinant may *really* be tiny)
+		if (det != 0.0)
+		{
+			return matrix4<T>
+			{
+				(m_data[15] * m_data[5] - m_data[7] * m_data[13]) / det,
+					-(m_data[15] * m_data[4] - m_data[7] * m_data[12]) / det,
+					(m_data[13] * m_data[4] - m_data[5] * m_data[12]) / det,
+					-(m_data[15] * m_data[1] - m_data[3] * m_data[13]) / det,
+					(m_data[15] * m_data[0] - m_data[3] * m_data[12]) / det,
+					-(m_data[13] * m_data[0] - m_data[1] * m_data[12]) / det,
+					(m_data[7] * m_data[1] - m_data[3] * m_data[5]) / det,
+					-(m_data[7] * m_data[0] - m_data[3] * m_data[4]) / det,
+					(m_data[5] * m_data[0] - m_data[1] * m_data[4]) / det
+			};
+		}
+		else
+		{
+			return get_identity();
+		}
+	}
+
+	template<typename T>
+	[[nodiscard]] constexpr vector2<T> matrix4<T>::transform_point(const vector2<T>& point) const
+	{
+		return vector2<T>
+		{
+			m_data[0] * point.x + m_data[4] * point.y + m_data[12],
+			m_data[1] * point.x + m_data[5] * point.y + m_data[13]
+		};
+	}
+
+	template<typename T>
+	[[nodiscard]] constexpr rect<T> matrix4<T>::transform_rect(const rect<T>& value) const
+	{
+		// Transform the 4 corners of the rectangle
+		const vector2<T> points[] = {	transform_point({value.left, value.top}),
+										transform_point({value.left, value.top + value.height}),
+										transform_point({value.left + value.width, value.top}),
+										transform_point({value.left + value.width, value.top + value.height}) };
+
+		// Compute the bounding rectangle of the transformed points
+		float left = points[0].x;
+		float top = points[0].y;
+		float right = points[0].x;
+		float bottom = points[0].y;
+
+		for (size_t i = 1; i < 4; ++i)
+		{
+			if (points[i].x < left)			left = points[i].x;
+			else if (points[i].x > right)	right = points[i].x;
+
+			if (points[i].y < top)			top = points[i].y;
+			else if (points[i].y > bottom)	bottom = points[i].y;
+		}
+
+		return rect<T>(vector2<T>{ left, top }, vector2<T>{ right - left, bottom - top });
 	}
 }

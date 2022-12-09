@@ -27,6 +27,11 @@ namespace agl
 			return sqrt(l2);
 		}
 
+		inline constexpr bool is_equal_to(const vector2<T>& other) const
+		{
+			return x == other.x && y == other.y;
+		}
+
 		T x{};
 		T y{};
 	};

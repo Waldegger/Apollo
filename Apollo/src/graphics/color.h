@@ -41,4 +41,17 @@ namespace agl
 	inline constexpr color color::magenta(255, 0, 255);
 	inline constexpr color color::cyan(0, 255, 255);
 	inline constexpr color color::transparent(0, 0, 0, 0);
+
+	inline bool operator == (const color& lhs, const color& rhs)
+	{
+		const uint32_t* lh = reinterpret_cast<const uint32_t*>(&lhs);
+		const uint32_t* rh = reinterpret_cast<const uint32_t*>(&rhs);
+
+		return *lh == *rh;
+	}
+
+	inline bool operator != (const color& lhs, const color& rhs)
+	{
+		return !(lhs == rhs);
+	}
 }

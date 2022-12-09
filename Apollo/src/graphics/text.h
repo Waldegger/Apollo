@@ -13,12 +13,9 @@
 
 namespace agl
 {
-	class text
-		: public drawable
-		, public transformable_2d
+	namespace text_styles
 	{
-	public:
-		enum class style : uint32_t
+		enum style
 		{
 			regular = 0,
 			bold = 1 << 0,
@@ -26,10 +23,16 @@ namespace agl
 			underlined = 1 << 2,
 			strike_through = 1 << 3
 		};
+	}
 
+	class text
+		: public drawable
+		, public transformable_2d
+	{
+	public:
 		text();
-		text(const std::string& the_string, const font& the_font, uint32_t the_character_size = 30);
-		text(const std::u32string& the_string, const font& the_font, uint32_t the_character_size = 30);
+		text(const std::string_view& the_text, const font& the_font, uint32_t the_character_size = 30);
+		text(const std::u32string_view& the_text, const font& the_font, uint32_t the_character_size = 30);
 
 		text(const text& other);
 		text(text&& other) noexcept;
@@ -40,7 +43,7 @@ namespace agl
 	public:
 		void set_string(const std::string_view& value);
 		void set_string(const std::u32string_view& value);
-		const std::u32string& get_string();
+		const std::u32string& get_string() const;
 
 		void set_font(const font& the_font);
 		const font* get_font() const;
@@ -77,9 +80,10 @@ namespace agl
 	private:
 		virtual void draw(render_target& target, const render_states& states) const override;
 
-		void ensure_geometry_update() const;
+		void ensure_geometry_is_updated() const;
 
 		std::u32string m_string;
+		std::u32string m_tmp_convert_string;
 		const font* m_font;
 		uint32_t m_character_size;
 		float m_letter_spacing_factor;
@@ -88,11 +92,13 @@ namespace agl
 		color m_fill_color;
 		color m_outline_color;
 		float m_outline_thickness;
+
+		mutable vector2u m_last_texture_size;
+		mutable uint32_t m_last_texture_id;
+
 		mutable std::vector<vertex_2d> m_vertices;
 		mutable std::vector<vertex_2d> m_outline_vertices;
+		mutable float_rect m_bounds;
 		mutable bool m_geometry_needs_update;
 	};
-
-	std::underlying_type<text::style>::type operator | (const text::style& lhs, const text::style& rhs);
-	bool operator & (const std::underlying_type<text::style>::type& lhs, const text::style& rhs);
 }

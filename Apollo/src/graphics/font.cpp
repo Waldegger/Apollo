@@ -30,7 +30,7 @@ unsigned long read(FT_Stream rec, unsigned long offset, unsigned char* buffer, u
 	{
 		if (count > 0)
 		{
-			return stream->read(reinterpret_cast<char*>(buffer), count).gcount();
+			return static_cast<unsigned long>(stream->read(reinterpret_cast<char*>(buffer), count).gcount());
 		}
 
 		return 0;
@@ -683,7 +683,7 @@ namespace agl
 				page.texture.swap(newTexture);
 				*/
 				page.texture = std::move(new_texture);
-
+			
 				//Update all the render_texture_rect of the glpyhs in the current page
 				for (auto& g : page.glyphs)
 				{

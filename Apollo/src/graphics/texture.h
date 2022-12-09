@@ -59,7 +59,7 @@ namespace agl
 		void generate_mipmap();
 		void invalidate_mipmap();
 
-		void swap(texture& other);
+		uint32_t get_id() const;
 
 		static void bind(const texture* tex);
 		static uint32_t get_maximum_size();

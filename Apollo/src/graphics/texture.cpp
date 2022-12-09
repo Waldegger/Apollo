@@ -321,9 +321,9 @@ namespace agl
 		m_has_mipmap = false;
 	}
 
-	void texture::swap(texture& other)
+	uint32_t texture::get_id() const
 	{
-		//ToDo: Finish me
+		return get_handle();
 	}
 
 	void texture::bind(const texture* tex)

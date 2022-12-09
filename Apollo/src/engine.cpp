@@ -55,14 +55,14 @@ namespace agl
 
 		uint32_t sdl_flags = SDL_WINDOW_OPENGL;
 		std::array<uint32_t, 8> own_flags{
-			static_cast<uint32_t>(window_flag::fullscreen),
-			static_cast<uint32_t>(window_flag::fullscreen_desktop),
-			static_cast<uint32_t>(window_flag::hidden),
-			static_cast<uint32_t>(window_flag::borderless),
-			static_cast<uint32_t>(window_flag::resizable),
-			static_cast<uint32_t>(window_flag::minimized),
-			static_cast<uint32_t>(window_flag::maximized),
-			static_cast<uint32_t>(window_flag::input_grabbed),
+			static_cast<uint32_t>(window_flags::fullscreen),
+			static_cast<uint32_t>(window_flags::fullscreen_desktop),
+			static_cast<uint32_t>(window_flags::hidden),
+			static_cast<uint32_t>(window_flags::borderless),
+			static_cast<uint32_t>(window_flags::resizable),
+			static_cast<uint32_t>(window_flags::minimized),
+			static_cast<uint32_t>(window_flags::maximized),
+			static_cast<uint32_t>(window_flags::input_grabbed),
 		};
 
 		std::array<uint32_t, 8> lib_flags{
