@@ -2,10 +2,10 @@
 
 #include "render_states.h"
 
-void add_line(std::vector<agl::vertex_2d>& vertices,
+void add_line(std::vector<age::vertex_2d>& vertices,
 	float line_length,
 	float line_top,
-	const agl::color& color,
+	const age::color& color,
 	float offset,
 	float thickness,
 	float pixel_size,
@@ -14,23 +14,23 @@ void add_line(std::vector<agl::vertex_2d>& vertices,
 	float top = std::floor(line_top + offset - (thickness / 2) + 0.5f);
 	float bottom = top + std::floor(thickness + 0.5f);
 
-	auto tex_coord = agl::vector2f{ pixel_size, pixel_size };
+	auto tex_coord = age::vector2f{ pixel_size, pixel_size };
 
-	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, top - outline_thickness}, color, tex_coord });
+	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
-	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
-	vertices.emplace_back(agl::vertex_2d{ agl::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
+		age::vertex_2d{ age::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
+	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
+	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
+		age::vertex_2d{ age::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{line_length + outline_thickness, bottom + outline_thickness}, color, tex_coord });
+		age::vertex_2d{ age::vector2f{line_length + outline_thickness, bottom + outline_thickness}, color, tex_coord });
 }
 
-void add_glyph_quad(std::vector<agl::vertex_2d>& vertices,
-	agl::vector2f position,
-	const agl::color& color,
-	const agl::font::glyph& glyph,
+void add_glyph_quad(std::vector<age::vertex_2d>& vertices,
+	age::vector2f position,
+	const age::color& color,
+	const age::font::glyph& glyph,
 	float italic_shear,
 	float pixel_size)
 {
@@ -47,25 +47,25 @@ void add_glyph_quad(std::vector<agl::vertex_2d>& vertices,
 	float v2 = glyph.render_texture_rect.top + glyph.render_texture_rect.height + pixel_size;
 
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{position.x + left - italic_shear * top, position.y + top}, color, agl::vector2f{u1, v1} });
+		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * top, position.y + top}, color, age::vector2f{u1, v1} });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{position.x + right - italic_shear * top, position.y + top}, color, agl::vector2f{u2, v1} });
+		age::vertex_2d{ age::vector2f{position.x + right - italic_shear * top, position.y + top}, color, age::vector2f{u2, v1} });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{position.x + left - italic_shear * bottom, position.y + bottom}, color, agl::vector2f{u1, v2} });
+		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * bottom, position.y + bottom}, color, age::vector2f{u1, v2} });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{position.x + left - italic_shear * bottom, position.y + bottom}, color, agl::vector2f{u1, v2} });
+		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * bottom, position.y + bottom}, color, age::vector2f{u1, v2} });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{position.x + right - italic_shear * top, position.y + top}, color, agl::vector2f{u2, v1} });
+		age::vertex_2d{ age::vector2f{position.x + right - italic_shear * top, position.y + top}, color, age::vector2f{u2, v1} });
 	vertices.emplace_back(
-		agl::vertex_2d{ agl::vector2f{position.x + right - italic_shear * bottom, position.y + bottom}, color, agl::vector2f{u2, v2} });
+		age::vertex_2d{ age::vector2f{position.x + right - italic_shear * bottom, position.y + bottom}, color, age::vector2f{u2, v2} });
 }
 
-namespace agl
+namespace age
 {
 	text::text()
 		: m_string{}
 		, m_font{ nullptr }
-		, m_character_size{ 0 }
+		, m_character_size{ 30 }
 		, m_letter_spacing_factor{ 1.0f }
 		, m_line_spacing_factor{ 1.0f }
 		, m_style{ text_styles::regular }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "matrix4.h"
-#include "vector2.h"
+#include "../algebra/matrix4.h"
+#include "../algebra/vector2.h"
 #include "rect.h"
 
-namespace agl
+namespace age
 {
 	class view_2d
 	{

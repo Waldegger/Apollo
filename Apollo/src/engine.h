@@ -8,7 +8,7 @@
 #include "graphics/program_layout.h"
 #include "utility/utility.h"
 
-namespace agl
+namespace age
 {
 	namespace window_flags
 	{

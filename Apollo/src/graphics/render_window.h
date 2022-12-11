@@ -6,10 +6,10 @@
 #include <functional>
 #include <type_traits>
 
-#include "vector2.h"
+#include "../algebra/vector2.h"
 #include "../utility/utility.h"
 
-namespace agl
+namespace age
 {
 	class render_window
 		: public render_target

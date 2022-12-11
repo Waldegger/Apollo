@@ -7,9 +7,9 @@
 #include "vector2.h"
 #include "vector3.h"
 #include "quaternion.h"
-#include "rect.h"
+#include "../graphics/rect.h"
 
-namespace agl
+namespace age
 {
 	template<typename T>
 	class matrix4

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace agl
+namespace age
 {
 	struct blend_mode
 	{

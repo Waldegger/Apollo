@@ -6,7 +6,7 @@
 #include "texture.h"
 #include "drawable.h"
 
-namespace agl
+namespace age
 {
 	constexpr inline uint32_t factor_to_GL_constant(blend_mode::factor factor)
 	{
@@ -93,7 +93,7 @@ namespace agl
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, indices);
 	}
 
-	void render_target::draw(const agl::vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states)
+	void render_target::draw(const vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states)
 	{
 		if (!vertices || !num_vertices)
 			return;
@@ -112,7 +112,7 @@ namespace agl
 		apply_blend_mode(blend_mode::blend_alpha);
 	}
 
-	void render_target::prepare_draw(const agl::vertex_2d vertices[], const render_states& states)
+	void render_target::prepare_draw(const vertex_2d vertices[], const render_states& states)
 	{
 		auto& layout = states.get_program_layout();
 		auto& program = layout.get_program();
@@ -127,9 +127,9 @@ namespace agl
 
 		states.get_texture().bind();
 
-		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].position);
-		glVertexAttribPointer(A_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(agl::vertex_2d), &vertices[0].color);
-		glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(agl::vertex_2d), &vertices[0].tex_coords);
+		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].position);
+		glVertexAttribPointer(A_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), &vertices[0].color);
+		glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].tex_coords);
 
 		apply_blend_mode(states.get_blend_mode());
 	}

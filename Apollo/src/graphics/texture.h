@@ -3,13 +3,13 @@
 #include <string_view>
 #include <istream>
 
-#include "vector2.h"
+#include "../algebra/vector2.h"
 #include "rect.h"
 #include "image.h"
 #include "render_window.h"
 #include "../utility/utility.h"
 
-namespace agl
+namespace age
 {
 	class texture
 	{

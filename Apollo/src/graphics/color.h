@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace agl
+namespace age
 {
 	struct color
 	{

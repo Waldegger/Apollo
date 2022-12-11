@@ -1,6 +1,6 @@
 #pragma once
 
-namespace agl
+namespace age
 {
 	class view_3d
 	{

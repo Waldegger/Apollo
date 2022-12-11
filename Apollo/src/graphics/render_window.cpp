@@ -9,7 +9,7 @@
 #include <string_view>
 #include <stdexcept>
 
-namespace agl
+namespace age
 {
 	render_window::render_window()
 		: m_clear_flags{ GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT }

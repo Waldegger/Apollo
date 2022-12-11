@@ -1,9 +1,9 @@
 #pragma once
 
-#include "vector2.h"
+#include "../algebra/vector2.h"
 #include "color.h"
 
-namespace agl
+namespace age
 {
 	struct vertex_2d
 	{

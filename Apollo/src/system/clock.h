@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace agl
+namespace age
 {
 	class clock
 	{

@@ -11,7 +11,7 @@
 #include "rect.h"
 #include "vertex_2d.h"
 
-namespace agl
+namespace age
 {
 	namespace text_styles
 	{

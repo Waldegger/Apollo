@@ -11,7 +11,7 @@
 #include "rect.h"
 #include "texture.h"
 
-namespace agl
+namespace age
 {
 	class font
 	{

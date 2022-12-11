@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace agl
+namespace age
 {
 	view_2d::view_2d()
 	{

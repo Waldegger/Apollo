@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-namespace agl
+namespace age
 {
 	class vertex_array_object
 	{

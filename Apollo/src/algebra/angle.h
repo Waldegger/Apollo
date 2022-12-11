@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <cassert>
 
-namespace agl
+namespace age
 {
 	class angle
 	{

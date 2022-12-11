@@ -1,6 +1,6 @@
 #include "view_3d.h"
 
-namespace agl
+namespace age
 {
 
 }

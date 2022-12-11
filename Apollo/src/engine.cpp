@@ -10,7 +10,7 @@
 
 #include "graphics/render_states.h"
 
-namespace agl
+namespace age
 {
 	engine::engine()
 		: m_initializer{ SDL_INIT_VIDEO }

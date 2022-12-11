@@ -3,7 +3,7 @@
 #include <utility>
 #include <functional>
 
-namespace agl
+namespace age
 {
 	template <typename T, auto fn>
 	struct deleter

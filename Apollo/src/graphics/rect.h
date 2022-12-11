@@ -3,9 +3,9 @@
 #include <optional>
 #include <algorithm>
 
-#include "vector2.h"
+#include "../algebra/vector2.h"
 
-namespace agl
+namespace age
 {
 	template<typename T>
 	struct rect

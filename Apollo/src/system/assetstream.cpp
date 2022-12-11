@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 #if defined(ANDROID) || defined(__ANDROID__)
-namespace agl
+namespace age
 {
 	asset_streambuf::asset_streambuf()
 	{

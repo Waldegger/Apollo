@@ -4,10 +4,10 @@
 #include <string_view>
 #include <istream>
 
-#include "vector2.h"
+#include "../algebra/vector2.h"
 #include "color.h"
 
-namespace agl
+namespace age
 {
 	class image
 	{

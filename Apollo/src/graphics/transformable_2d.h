@@ -1,10 +1,10 @@
 #pragma once
 
-#include "vector2.h"
-#include "matrix4.h"
-#include "angle.h"
+#include "../algebra/vector2.h"
+#include "../algebra/matrix4.h"
+#include "../algebra/angle.h"
 
-namespace agl
+namespace age
 {
 	class transformable_2d
 	{

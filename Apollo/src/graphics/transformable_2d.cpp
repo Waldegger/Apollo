@@ -1,6 +1,6 @@
 #include "transformable_2d.h"
 
-namespace agl
+namespace age
 {
 	transformable_2d::transformable_2d()
 		: m_origin{ 0.0f, 0.0f }

@@ -4,15 +4,17 @@
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "graphics/render_states.h"
 #include "graphics/image.h"
 #include "graphics/texture.h"
 #include "system/assetstream.h"
+#include "sound/audio_device.h"
 
 void test_app::on_create()
 {
-    agl::image test_image;
+    age::image test_image;
     test_image.load("./test_data/test.png");
 
     std::ifstream fs{ "./test_data/test.frag" };
@@ -21,7 +23,7 @@ void test_app::on_create()
     if (fs)
         buffer << fs.rdbuf();
    
-    auto shader1 = agl::shader{ agl::shader::shader_type::fragment };
+    auto shader1 = age::shader{ age::shader::shader_type::fragment };
     shader1.compile(buffer.str());
 
     m_background_program.attach_shader(*engine::get_default_vertex_shader());
@@ -42,17 +44,25 @@ void test_app::on_create()
     
     m_test_texture.load("./test_data/test.png");
 
-    m_rect_matrix.translate(agl::vector2f{ 0.5f, -1.5f });
+    m_rect_matrix.translate(age::vector2f{ 0.5f, -1.5f });
 
     uint32_t text_size = 64;
-    m_test_font.load("./test_data/ethnocentric rg.ttf");
+    m_test_font.load("./test_data/comic.ttf");
     m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 some special chars !\"§$%/()=? and don't forget about Zonk or zuzu! Yolo ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", text_size, false, 0.0f);
     auto font_image = m_test_font.get_texture(text_size).copy_to_image();
     font_image.save("./test_data/font_texture.png");
 
+    m_test_text.set_character_size(64);
     m_test_text.set_font(m_test_font);
-    m_test_text.set_string(U"Apollo flies way higher than the moon!");
-    m_test_text.set_scale(agl::vector2f{ (1.0f / static_cast<float>(window_size.x)) * 20.0f, (1.0f / static_cast<float>(window_size.y)) * 20.0f });
+    m_test_text.set_string(U"Apollo flies way\nhigher\nthan the moon!");
+    m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
+    m_test_text.set_position(age::vector2f{ -0.9f, 0.0f });
+
+    auto device_list = age::audio_device::get_device_names();
+    for (auto& d : device_list)
+        std::cout << d;
+
+    age::audio_device::init();
 
     m_clock.start();
 }
@@ -101,14 +111,14 @@ void test_app::on_update()
 
     if (m_key_left)
     {
-        agl::vector2f dir{ -1.0f, 0.0f };
+        age::vector2f dir{ -1.0f, 0.0f };
         dir *= m_delta_time;
         m_rect_matrix.translate(dir);
     }
 
     if (m_key_right)
     {
-        agl::vector2f dir{ 1.0f, 0.0f };
+        age::vector2f dir{ 1.0f, 0.0f };
         dir *= m_delta_time;
         m_rect_matrix.translate(dir);
     }
@@ -117,9 +127,9 @@ void test_app::on_update()
     get_render_window().clear();
 
     //Draw Stuff
-    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ m_background_program_layout, m_test_texture, agl::matrix4f::get_identity() });
-    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), agl::render_states{ *engine::get_default_program_layout(), m_test_texture, m_rect_matrix});
-    get_render_window().draw(m_test_text, agl::render_states{});
+    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, age::matrix4f::get_identity() });
+    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ *engine::get_default_program_layout(), m_test_texture, m_rect_matrix});
+    get_render_window().draw(m_test_text, age::render_states{});
 
     //Update screen
     get_render_window().display();

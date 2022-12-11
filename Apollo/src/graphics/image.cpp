@@ -50,7 +50,7 @@ namespace
 		std::copy(source, source + size, std::back_inserter(*dest));
 	}
 
-	void load_image_from_stream(std::istream& stream, std::vector<uint8_t>& pixels, agl::vector2u& size)
+	void load_image_from_stream(std::istream& stream, std::vector<uint8_t>& pixels, age::vector2u& size)
 	{
 		pixels.clear();
 
@@ -70,7 +70,7 @@ namespace
 		if (tmp_ptr)
 		{
 			//unique_ptr takes care of freeing memory
-			std::unique_ptr<unsigned char, agl::deleter<unsigned char, stbi_image_free>> ptr{ tmp_ptr };
+			std::unique_ptr<unsigned char, age::deleter<unsigned char, stbi_image_free>> ptr{ tmp_ptr };
 
 			// Assign the image properties
 			size.x = static_cast<unsigned int>(width);
@@ -93,7 +93,7 @@ namespace
 		}
 	}
 
-	void load_image_from_memory(const void* data, std::size_t data_size, std::vector<std::uint8_t>& pixels, agl::vector2u& size)
+	void load_image_from_memory(const void* data, std::size_t data_size, std::vector<std::uint8_t>& pixels, age::vector2u& size)
 	{
 		// Check input parameters
 		if (data && data_size)
@@ -111,7 +111,7 @@ namespace
 			if (tmp_ptr)
 			{
 				//unique_ptr takes care of freeing memory
-				std::unique_ptr<unsigned char, agl::deleter<unsigned char, stbi_image_free>> ptr{ tmp_ptr };
+				std::unique_ptr<unsigned char, age::deleter<unsigned char, stbi_image_free>> ptr{ tmp_ptr };
 
 				// Assign the image properties
 				size.x = static_cast<unsigned int>(width);
@@ -143,7 +143,7 @@ namespace
 } // namespace
 
 
-namespace agl
+namespace age
 {
 	void image::create(const vector2u& size, const color& the_color)
 	{

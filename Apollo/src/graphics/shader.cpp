@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-namespace agl
+namespace age
 {
 	shader::shader(shader_type type)
 		: m_type{ type }

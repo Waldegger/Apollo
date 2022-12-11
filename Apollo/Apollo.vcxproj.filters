@@ -31,6 +31,18 @@
     <Filter Include="Quelldateien\utility">
       <UniqueIdentifier>{b643eb5e-ddcd-492f-851c-a9858b0c5171}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\sound">
+      <UniqueIdentifier>{c4d81b0e-9ca5-477b-9c8d-d1923db89c65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\sound">
+      <UniqueIdentifier>{7ed1f6d4-1a7e-4483-8f7e-60e74bf3be41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\algebra">
+      <UniqueIdentifier>{037e7114-522a-406d-831f-c024311ae1ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\algebra">
+      <UniqueIdentifier>{b673ec68-7117-430d-9a9d-db2a06cbea2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -99,6 +111,24 @@
     <ClCompile Include="src\graphics\transformable_2d.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\sound\audio_device.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\listener.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\music.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\sound.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\sound_buffer.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\sound_source.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -107,12 +137,6 @@
     <ClInclude Include="src\utility\utility.h">
       <Filter>Headerdateien\utility</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\matrix4.h">
-      <Filter>Headerdateien\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\quaternion.h">
-      <Filter>Headerdateien\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\graphics\render_window.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
@@ -120,12 +144,6 @@
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\shader_program.h">
-      <Filter>Headerdateien\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\vector2.h">
-      <Filter>Headerdateien\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\vector3.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\vertex_array_object.h">
@@ -193,6 +211,39 @@
     </ClInclude>
     <ClInclude Include="src\graphics\angle.h">
       <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\audio_device.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\listener.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\music.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\sound.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\sound_buffer.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\sound_source.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algebra\angle.h">
+      <Filter>Headerdateien\algebra</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algebra\matrix4.h">
+      <Filter>Headerdateien\algebra</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algebra\quaternion.h">
+      <Filter>Headerdateien\algebra</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algebra\vector2.h">
+      <Filter>Headerdateien\algebra</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algebra\vector3.h">
+      <Filter>Headerdateien\algebra</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

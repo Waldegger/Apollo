@@ -1,6 +1,6 @@
 #include "blend_mode.h"
 
-namespace agl
+namespace age
 {
 	blend_mode::blend_mode(factor source_factor, factor destination_factor, equation blend_equation)
 		: color_src_factor{ source_factor }

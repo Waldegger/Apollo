@@ -1,11 +1,11 @@
 #pragma once
 
-#include "matrix4.h"
+#include "../algebra/matrix4.h"
 #include "blend_mode.h"
 #include "program_layout.h"
 #include "../engine.h"
 
-namespace agl
+namespace age
 {
 	class texture;
 	class shader_program;

@@ -5,7 +5,7 @@
 
 #include "shader_program.h"
 
-namespace agl
+namespace age
 {
 	class program_layout
 	{

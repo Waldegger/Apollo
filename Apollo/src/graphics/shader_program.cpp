@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace agl
+namespace age
 {
 	shader_program::shader_program()
 		: m_handle{ glCreateProgram() }

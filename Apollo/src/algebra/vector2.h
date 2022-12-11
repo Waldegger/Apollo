@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace agl
+namespace age
 {
 	template<
 		typename T,

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <cassert>
 
-namespace agl
+namespace age
 {
 	texture::texture()
 		: m_handle{ gen_handle() }

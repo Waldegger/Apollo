@@ -1,6 +1,6 @@
 #pragma once
 
-namespace agl
+namespace age
 {
 	class render_target;
 	class render_states;

@@ -4,7 +4,7 @@
 
 #include "../utility/utility.h"
 
-namespace agl
+namespace age
 {
 	class vertex_buffer_object
 	{

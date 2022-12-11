@@ -4,10 +4,10 @@
 #include <string_view>
 
 #include "shader.h"
-#include "matrix4.h"
+#include "../algebra/matrix4.h"
 #include "../utility/utility.h"
 
-namespace agl
+namespace age
 {
 	class shader_program
 	{

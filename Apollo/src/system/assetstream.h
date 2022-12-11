@@ -7,7 +7,7 @@
 #include <array>
 
 #include "../utility/utility.h"
-namespace agl
+namespace age
 {
 	class asset_streambuf
 		: public std::streambuf
@@ -48,7 +48,7 @@ namespace agl
 
 #else
 #include <fstream>
-namespace agl
+namespace age
 {
 	using assetistream = std::ifstream;
 }

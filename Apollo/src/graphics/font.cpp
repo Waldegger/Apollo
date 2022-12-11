@@ -52,7 +52,7 @@ inline uint64_t combine(float outline_thickness, bool bold, std::uint32_t index)
 		(static_cast<std::uint64_t>(bold) << 31) | index;
 }
 
-namespace agl
+namespace age
 {
 	class font::font_handles
 	{
