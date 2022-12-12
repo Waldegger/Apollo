@@ -277,11 +277,6 @@ namespace age
 		};
 	}
 
-	using matrix4u = matrix4<uint32_t>;
-	using matrix4i = matrix4<int32_t>;
-	using matrix4f = matrix4<float>;
-	using matrix4d = matrix4<double>;
-
 	template<typename T>
 	constexpr matrix4<T>::matrix4()
 	{
@@ -379,4 +374,9 @@ namespace age
 
 		return rect<T>(vector2<T>{ left, top }, vector2<T>{ right - left, bottom - top });
 	}
+
+	using matrix4u = matrix4<uint32_t>;
+	using matrix4i = matrix4<int32_t>;
+	using matrix4f = matrix4<float>;
+	using matrix4d = matrix4<double>;
 }

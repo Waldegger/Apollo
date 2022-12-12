@@ -43,6 +43,11 @@ namespace age
 	private:
 		inline static constexpr uint32_t MAX_SOURCES = 255;
 
+		inline static float m_listener_volume = 1.0f;
+		inline static vector3f m_listener_position{ 0.0f, 0.0f, 0.0f };
+		inline static vector3f m_listener_direction{ 0.0f, 0.0f, -1.0f };
+		inline static vector3f m_listener_up_vector{ 0.0f, 1.0f, 0.0f };
+
 		audio_device();
 		audio_device(const audio_device& other) = delete;
 		audio_device(audio_device&& other) = delete;

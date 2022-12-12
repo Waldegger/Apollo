@@ -10,11 +10,6 @@
 
 namespace age
 {
-	static float listener_volume = 1.0f;
-	static vector3f listener_position	{ 0.0f, 0.0f, 0.0f };
-	static vector3f listener_direction	{ 0.0f, 0.0f, -1.0f };
-	static vector3f listener_up_vector	{ 0.0f, 1.0f, 0.0f };
-
 	audio_device::audio_device()
 		: m_device{ nullptr }
 		, m_context{ nullptr }
@@ -110,46 +105,61 @@ namespace age
 
 	void audio_device::set_listener_volume(float value)
 	{
-		//ToDo: Implement me
+		m_listener_volume = value;
+		alListenerf(AL_GAIN, m_listener_volume);
 	}
 
 	float audio_device::get_listener_volume()
 	{
-		//ToDo: Implement me
-		return 0.0f;
+		return m_listener_volume;
 	}
 
 	void audio_device::set_listener_position(const vector3f& value)
 	{
-		//ToDo: Implement me
+		m_listener_position = value;
+		alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z);
 	}
 
 	const vector3f& audio_device::get_listener_position()
 	{
-		//ToDo: Implement me
-		return vector3f{};
+		return m_listener_position;
 	}
 
 	void audio_device::set_listener_direction(const vector3f& value)
 	{
-		//ToDo: Implement me
+		m_listener_direction = value;
+		
+		float orientation[] = { m_listener_direction.x,
+								m_listener_direction.y,
+								m_listener_direction.z,
+								m_listener_up_vector.x,
+								m_listener_up_vector.y,
+								m_listener_up_vector.z };
+
+		alListenerfv(AL_ORIENTATION, orientation);
 	}
 
 	const vector3f& audio_device::get_listener_direction()
 	{
-		//ToDo: Implement me
-		return vector3f{};
+		return m_listener_direction;
 	}
 
 	void audio_device::set_listener_up_vector(const vector3f& value)
 	{
-		//ToDo: Implement me
+		m_listener_up_vector = value;
+		float orientation[] = { m_listener_direction.x,
+								m_listener_direction.y,
+								m_listener_direction.z,
+								m_listener_up_vector.x,
+								m_listener_up_vector.y,
+								m_listener_up_vector.z };
+
+		alListenerfv(AL_ORIENTATION, orientation);
 	}
 
 	const vector3f& audio_device::get_listener_up_vector()
 	{
-		//ToDo: Implement me
-		return vector3f{};
+		return m_listener_up_vector;
 	}
 
 	void audio_device::init(const char* device_name)
@@ -185,14 +195,14 @@ namespace age
 		alcMakeContextCurrent(static_cast<ALCcontext*>(m_context));
 
 		// Apply the listener properties the user might have set
-		float orientation[] = {listener_direction.x,
-								listener_direction.y,
-								listener_direction.z,
-								listener_up_vector.x,
-								listener_up_vector.y,
-								listener_up_vector.z};
-		alListenerf(AL_GAIN, listener_volume);
-		alListener3f(AL_POSITION, listener_position.x, listener_position.y, listener_position.z);
+		float orientation[] = {m_listener_direction.x,
+								m_listener_direction.y,
+								m_listener_direction.z,
+								m_listener_up_vector.x,
+								m_listener_up_vector.y,
+								m_listener_up_vector.z};
+		alListenerf(AL_GAIN, m_listener_volume);
+		alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z);
 		alListenerfv(AL_ORIENTATION, orientation);
 	}
 
