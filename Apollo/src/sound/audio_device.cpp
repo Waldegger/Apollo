@@ -80,21 +80,14 @@ namespace age
 		auto result = std::vector<std::string_view>{};
 		result.reserve(8);
 
-		size_t index = 0;
-
-		result.push_back(device_specifier_string);
-		while (true)
 		{
-			if (device_specifier_string[index] == '\0')
+			size_t index = 0;
+			do
 			{
-				++index;
-				if (device_specifier_string[index] == '\0')
-					break;
-
 				result.push_back(&device_specifier_string[index]);
-			}
+				index = strlen(&device_specifier_string[index]) + 1;
 
-			++index;
+			} while (device_specifier_string[index] != '\0');
 		}
 
 		return result;
