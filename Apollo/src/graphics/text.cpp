@@ -79,7 +79,7 @@ namespace age
 		, m_geometry_needs_update{ false }
 	{}
 
-	text::text(const std::string_view& the_text, const font& the_font, uint32_t the_character_size)
+	text::text(std::string_view the_text, const font& the_font, uint32_t the_character_size)
 		: m_string{}
 		, m_font{ &the_font }
 		, m_character_size{ the_character_size }
@@ -101,7 +101,7 @@ namespace age
 			m_string.push_back(c);
 	}
 
-	text::text(const std::u32string_view& the_text, const font& the_font, uint32_t the_character_size)
+	text::text(std::u32string_view the_text, const font& the_font, uint32_t the_character_size)
 		: m_string{ the_text }
 		, m_font{ &the_font }
 		, m_character_size{ the_character_size }
@@ -118,7 +118,7 @@ namespace age
 		, m_geometry_needs_update{ true }
 	{}
 
-	void text::set_string(const std::string_view& value)
+	void text::set_string(std::string_view value)
 	{
 		m_tmp_convert_string.clear();
 		m_tmp_convert_string.reserve(value.size());
@@ -132,7 +132,7 @@ namespace age
 		}
 	}
 
-	void text::set_string(const std::u32string_view& value)
+	void text::set_string(std::u32string_view value)
 	{
 		if (m_string != value)
 		{

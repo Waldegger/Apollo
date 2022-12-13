@@ -34,7 +34,9 @@ namespace age
 
 	public:
 		void play();
-
+		void stop();
+		void pause();
+		
 		void set_position(const vector3f& value);
 		vector3f get_position() const;
 
@@ -66,6 +68,8 @@ namespace age
 	private:
 		void set_owning_sound(const sound* value);
 		const sound* get_owning_sound() const;
+
+		void reset_owning_sound();
 		
 		const sound* m_owning_sound;
 		const sound_buffer* m_buffer;

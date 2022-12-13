@@ -208,7 +208,7 @@ namespace age
 		}
 	}
 
-	void image::load(const std::string_view& fn)
+	void image::load(std::string_view fn)
 	{
 		assetistream is{ fn.data(), std::ios::binary };
 		load(is);

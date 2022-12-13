@@ -34,7 +34,7 @@ namespace age
 			m_attached_shaders.erase(it);
 	}
 
-	void shader_program::bind_attrib_location(uint32_t index, const std::string_view& name)
+	void shader_program::bind_attrib_location(uint32_t index, std::string_view name)
 	{
 		glBindAttribLocation(get_handle(), index, name.data());
 	}
@@ -81,7 +81,7 @@ namespace age
 		glUseProgram(0);
 	}
 
-	int32_t shader_program::get_uniform_location(const std::string_view& name) const
+	int32_t shader_program::get_uniform_location(std::string_view name) const
 	{
 		return glGetUniformLocation(get_handle(), name.data());
 	}
@@ -268,182 +268,182 @@ namespace age
 		glUniformMatrix4fv(location, static_cast<GLsizei>(size), transpose, reinterpret_cast<float*>(v));
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, float v0) const
+	void shader_program::set_uniform(std::string_view name, float v0) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, float v0, float v1) const
+	void shader_program::set_uniform(std::string_view name, float v0, float v1) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, float v0, float v1, float v2) const
+	void shader_program::set_uniform(std::string_view name, float v0, float v1, float v2) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1, v2);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, float v0, float v1, float v2, float v3) const
+	void shader_program::set_uniform(std::string_view name, float v0, float v1, float v2, float v3) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1, v2, v3);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, int32_t v0) const
+	void shader_program::set_uniform(std::string_view name, int32_t v0) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, int32_t v0, int32_t v1) const
+	void shader_program::set_uniform(std::string_view name, int32_t v0, int32_t v1) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, int32_t v0, int32_t v1, int32_t v2) const
+	void shader_program::set_uniform(std::string_view name, int32_t v0, int32_t v1, int32_t v2) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1, v2);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, int32_t v0, int32_t v1, int32_t v2, int32_t v3) const
+	void shader_program::set_uniform(std::string_view name, int32_t v0, int32_t v1, int32_t v2, int32_t v3) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1, v2, v3);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t v0) const
+	void shader_program::set_uniform(std::string_view name, uint32_t v0) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t v0, uint32_t v1) const
+	void shader_program::set_uniform(std::string_view name, uint32_t v0, uint32_t v1) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t v0, uint32_t v1, uint32_t v2) const
+	void shader_program::set_uniform(std::string_view name, uint32_t v0, uint32_t v1, uint32_t v2) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1, v2);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3) const
+	void shader_program::set_uniform(std::string_view name, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v0, v1, v2, v3);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<float, 1>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<float, 1>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<float, 2>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<float, 2>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<float, 3>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<float, 3>& v) const
 	{ 
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<float, 4>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<float, 4>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<int32_t, 1>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<int32_t, 1>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<int32_t, 2>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<int32_t, 2>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<int32_t, 3>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<int32_t, 3>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<int32_t, 4>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<int32_t, 4>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 	 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<uint32_t, 1>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 1>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<uint32_t, 2>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 2>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<uint32_t, 3>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 3>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, uint32_t count, const std::array<uint32_t, 4>& v) const
+	void shader_program::set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 4>& v) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, const matrix4f& v, bool transpose) const
+	void shader_program::set_uniform(std::string_view name, const matrix4f& v, bool transpose) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v, transpose);
 	}
 
-	void shader_program::set_uniform(const std::string_view& name, const matrix4f* v[], size_t size, bool transpose) const
+	void shader_program::set_uniform(std::string_view name, const matrix4f* v[], size_t size, bool transpose) const
 	{
 		auto loc = get_uniform_location(name);
 

@@ -17,7 +17,7 @@ namespace age
 		void create(const vector2u& size, const color& the_color = color::black);
 		void create(const vector2u& size, const uint8_t* pixels);
 
-		void load(const std::string_view& fn);
+		void load(std::string_view fn);
 		void load(const void* data, size_t size);
 		void load(std::istream& is);
 

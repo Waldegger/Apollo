@@ -13,7 +13,6 @@ namespace age
 		, m_min_distance{ 1.0f }
 		, m_attenuation{ 1.0f }
 		, m_relative_to_listener{ false }
-		, m_looping{ false }
 	{}
 
 	sound::sound(const sound& other)
@@ -24,7 +23,6 @@ namespace age
 		, m_min_distance{ other.m_min_distance }
 		, m_attenuation{ other.m_attenuation }
 		, m_relative_to_listener{ other.m_relative_to_listener }
-		, m_looping{ false }
 	{}
 
 	sound::sound(sound&& other) noexcept
@@ -35,7 +33,6 @@ namespace age
 		, m_min_distance{ other.m_min_distance }
 		, m_attenuation{ other.m_attenuation }
 		, m_relative_to_listener{ other.m_relative_to_listener }
-		, m_looping{ other.m_looping }
 	{
 		other.m_owned_source = nullptr;
 
@@ -64,7 +61,6 @@ namespace age
 		m_min_distance = other.m_min_distance;
 		m_attenuation = other.m_attenuation;
 		m_relative_to_listener = other.m_relative_to_listener;
-		m_looping = other.m_looping;
 
 		other.m_owned_source = nullptr;
 		if (m_owned_source)
@@ -78,12 +74,35 @@ namespace age
 		if (m_owned_source)
 		{
 			m_owned_source->set_owning_sound(nullptr);
+
+			auto source_looping = m_owned_source->get_looping();
+
+			//Our source is in the unavailable container. Make it available again
+			if (source_looping || m_owned_source->get_state() == sound_source::state::paused)
+			{
+				m_owned_source->stop();
+
+				if(source_looping)
+					audio_device::get().make_source_available(m_owned_source);
+			}
 		}
 	}
 
-	void sound::play() const
+	void sound::play(bool looped) const
 	{
-		if (!aquire_source())
+		if (m_owned_source)
+		{
+			auto source_looping = m_owned_source->get_looping();
+
+			if (source_looping || m_owned_source->get_state() == sound_source::state::paused)
+			{
+				m_owned_source->stop();
+				if(source_looping)
+					audio_device::get().make_source_available(m_owned_source);
+			}
+		}
+
+		if (!aquire_source(looped))
 			return;
 
 		m_owned_source->set_pitch(m_pitch);
@@ -91,17 +110,40 @@ namespace age
 		m_owned_source->set_min_distance(m_min_distance);
 		m_owned_source->set_attenuation(m_attenuation);
 		m_owned_source->set_relative_to_listener(m_relative_to_listener);
+		m_owned_source->set_looping(looped);
 		m_owned_source->play();
 	}
 
-	bool sound::aquire_source() const
+	void sound::stop()
 	{
 		if (m_owned_source)
 		{
-			return true;
-		}
+			if (m_owned_source->get_looping())
+			{
+				audio_device::get().make_source_available(m_owned_source);
+			}
 
-		m_owned_source = audio_device::get().get_free_source();
+			m_owned_source->stop();
+		}
+	}
+
+	void sound::pause()
+	{
+		if (m_owned_source)
+			m_owned_source->pause();
+	}
+
+	void sound::resume()
+	{
+		if (m_owned_source)
+			m_owned_source->play();
+	}
+
+	bool sound::aquire_source(bool permanent) const
+	{
+		reset_owned_source();
+
+		m_owned_source = audio_device::get().get_free_source(permanent);
 
 		if (m_owned_source)
 		{
@@ -228,7 +270,10 @@ namespace age
 
 	bool sound::get_looping() const
 	{
-		return m_looping;
+		if(m_owned_source)
+			return m_owned_source->get_looping();
+
+		return false;
 	}
 
 	void sound::set_owned_source(sound_source* value) const
@@ -239,5 +284,13 @@ namespace age
 	sound_source* sound::get_owned_source() const
 	{
 		return m_owned_source;
+	}
+
+	void sound::reset_owned_source() const
+	{
+		if (m_owned_source)
+		{
+			m_owned_source->set_owning_sound(nullptr);
+		}
 	}
 }

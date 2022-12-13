@@ -15,7 +15,7 @@ namespace age
 		, m_context{ nullptr }
 	{
 		m_sound_sources.reserve(MAX_SOURCES);
-		m_looping_sources.reserve(16);
+		m_unvailable_sources.reserve(MAX_SOURCES);
 	}
 
 	audio_device::~audio_device()
@@ -23,13 +23,9 @@ namespace age
 		destroy_context_and_close_device();
 	}
 
-	sound_source* audio_device::get_free_source() const
+	sound_source* audio_device::get_free_source(bool for_permanent_use) const
 	{
-		auto remove_owner_from_source = [](sound_source& source) -> void
-		{
-			if (source.get_owning_sound())
-				source.get_owning_sound()->set_owned_source(nullptr);
-		};
+		sound_source* result = nullptr;
 
 		auto deque_pop_front = [](std::deque<sound_source*>& deque) -> sound_source*
 		{
@@ -41,26 +37,37 @@ namespace age
 		for (size_t i = 0; i < m_available_sources.size(); ++i)
 		{
 			auto source = deque_pop_front(m_available_sources);
-				
+			
 			if (source->get_state() == sound_source::state::stopped)
 			{
-				remove_owner_from_source(*source);
-				return source;
-			}	
+				source->reset_owning_sound();
+
+				if (for_permanent_use)
+					m_unvailable_sources.push_back(result);
+				else
+					m_available_sources.push_back(source);
+
+				result = source;
+				break;
+			}
+
+			m_available_sources.push_back(source);
 		}
 
-		for (size_t i = 0; i < m_music_sources.size(); ++i)
+		return result;
+	}
+
+	void audio_device::make_source_available(const sound_source* value)
+	{
+		for (auto it = m_unvailable_sources.begin(); it != m_unvailable_sources.end(); ++it)
 		{
-			auto source = deque_pop_front(m_music_sources);
-		
-			if (source->get_state() == sound_source::state::stopped)
+			if (*it == value)
 			{
-				remove_owner_from_source(*source);
-				return source;
+				m_available_sources.push_back(*it);
+				m_unvailable_sources.erase(it);
+				break;
 			}
 		}
-
-		return nullptr;
 	}
 
 	audio_device& audio_device::get()
@@ -93,7 +100,7 @@ namespace age
 		get().init(nullptr);
 	}
 
-	void audio_device::init(const std::string_view& device_name)
+	void audio_device::init(std::string_view device_name)
 	{
 		get().init(device_name.data());
 	}
@@ -210,10 +217,12 @@ namespace age
 	{
 		if (m_context)
 		{
+			for (auto& source : m_sound_sources)
+				source.reset_owning_sound();
+
 			m_available_sources.clear();
+			m_unvailable_sources.clear();
 			m_sound_sources.clear();
-			m_music_sources.clear();
-			m_looping_sources.clear();
 
 			alcMakeContextCurrent(nullptr);
 			alcDestroyContext(static_cast<ALCcontext*>(m_context));

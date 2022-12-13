@@ -16,7 +16,7 @@ namespace age
 		}
 	}
 
-	void shader::compile(const std::string_view& shader_source)
+	void shader::compile(std::string_view shader_source)
 	{
 		const GLchar* data = shader_source.data();
 

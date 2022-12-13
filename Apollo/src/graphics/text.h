@@ -31,8 +31,8 @@ namespace age
 	{
 	public:
 		text();
-		text(const std::string_view& the_text, const font& the_font, uint32_t the_character_size = 30);
-		text(const std::u32string_view& the_text, const font& the_font, uint32_t the_character_size = 30);
+		text(std::string_view the_text, const font& the_font, uint32_t the_character_size = 30);
+		text(std::u32string_view the_text, const font& the_font, uint32_t the_character_size = 30);
 
 		text(const text& other);
 		text(text&& other) noexcept;
@@ -41,8 +41,8 @@ namespace age
 		text& operator = (text&& other) noexcept;
 
 	public:
-		void set_string(const std::string_view& value);
-		void set_string(const std::u32string_view& value);
+		void set_string(std::string_view value);
+		void set_string(std::u32string_view value);
 		const std::u32string& get_string() const;
 
 		void set_font(const font& the_font);

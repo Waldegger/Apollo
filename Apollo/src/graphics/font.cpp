@@ -118,7 +118,7 @@ namespace age
 
 	font& font::operator = (font&& other) noexcept = default;
 
-	void font::load(const std::string_view& fn)
+	void font::load(std::string_view fn)
 	{
 		load(std::make_unique<assetistream>(fn.data(), std::ios::binary));
 	}

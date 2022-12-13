@@ -10,6 +10,7 @@ namespace age
 	{
 	public:
 		friend class audio_device;
+		friend class sound_source;
 
 		sound();
 		sound(const sound& other);
@@ -21,9 +22,12 @@ namespace age
 		~sound();
 
 	public:
-		void play() const;
+		void play(bool looped = false) const;
+		void stop();
+		void pause();
+		void resume();
 
-		bool aquire_source() const;
+		bool aquire_source(bool permanent = false) const;
 
 		void set_position(const vector3f& value);
 		void update_position(const vector3f& value);
@@ -57,6 +61,7 @@ namespace age
 
 		void set_owned_source(sound_source* value) const;
 		sound_source* get_owned_source() const;
+		void reset_owned_source() const;
 
 		vector3f m_position;
 		mutable sound_source* m_owned_source;
@@ -66,6 +71,5 @@ namespace age
 		float m_min_distance;
 		float m_attenuation;
 		bool m_relative_to_listener;
-		bool m_looping;
 	};
 }

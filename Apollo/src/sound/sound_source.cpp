@@ -24,6 +24,16 @@ namespace age
 		alSourcePlay(m_handle);
 	}
 
+	void sound_source::stop()
+	{
+		alSourceStop(m_handle);
+	}
+
+	void sound_source::pause()
+	{
+		alSourcePause(m_handle);
+	}
+
 	void sound_source::set_position(const vector3f& value)
 	{
 		alSource3f(m_handle, AL_POSITION, value.x, value.y, value.z);
@@ -154,6 +164,14 @@ namespace age
 	const sound* sound_source::get_owning_sound() const
 	{
 		return m_owning_sound;
+	}
+
+	void sound_source::reset_owning_sound()
+	{
+		if (m_owning_sound)
+		{
+			m_owning_sound->set_owned_source(nullptr);
+		}
 	}
 
 	uint32_t sound_source::gen_handle()

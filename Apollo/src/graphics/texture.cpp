@@ -86,7 +86,7 @@ namespace age
 		m_has_mipmap = false;
 	}
 
-	void texture::load(const std::string_view& filename, const int_rect& area)
+	void texture::load(std::string_view filename, const int_rect& area)
 	{
 		image img;
 		img.load(filename);

@@ -36,7 +36,7 @@ namespace age
 		m_default_texture_ptr = nullptr;
 	}
 
-	int32_t engine::start(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
+	int32_t engine::start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
 	{
 		/*
 		SDL_WINDOW_FULLSCREEN: fullscreen window

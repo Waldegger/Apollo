@@ -129,6 +129,9 @@
     <ClCompile Include="src\sound\sound_source.cpp">
       <Filter>Quelldateien\sound</Filter>
     </ClCompile>
+    <ClCompile Include="src\sound\audio_format.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -209,9 +212,6 @@
     <ClInclude Include="src\graphics\drawable.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\angle.h">
-      <Filter>Headerdateien\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\sound\audio_device.h">
       <Filter>Headerdateien\sound</Filter>
     </ClInclude>
@@ -244,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="src\algebra\vector3.h">
       <Filter>Headerdateien\algebra</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\audio_format.h">
+      <Filter>Headerdateien\sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

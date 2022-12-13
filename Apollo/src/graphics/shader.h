@@ -22,7 +22,7 @@ namespace age
 		
 	public:
 		shader_type get_type() const { return m_type; }
-		void compile(const std::string_view& shader_source);
+		void compile(std::string_view shader_source);
 
 	protected:
 

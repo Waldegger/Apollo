@@ -22,7 +22,7 @@ namespace age
 		static std::vector<std::string_view> get_device_names();
 
 		static void init();
-		static void init(const std::string_view& device_name);
+		static void init(std::string_view device_name);
 		static void destroy();
 
 		static void set_listener_volume(float value);
@@ -37,7 +37,8 @@ namespace age
 		static void set_listener_up_vector(const vector3f& value);
 		static const vector3f& get_listener_up_vector();
 
-		sound_source* get_free_source() const;
+		sound_source* get_free_source(bool for_permanent_use = false) const;
+		void make_source_available(const sound_source* value);
 	protected:
 
 	private:
@@ -63,7 +64,6 @@ namespace age
 
 		std::vector<sound_source> m_sound_sources;
 		mutable std::deque<sound_source*> m_available_sources;
-		mutable std::deque<sound_source*> m_music_sources;
-		mutable std::vector<sound_source*> m_looping_sources;
+		mutable std::vector<sound_source*> m_unvailable_sources;
 	};
 }
