@@ -24,7 +24,7 @@ namespace age
 		
 	}
 
-	void sound_buffer::load(std::uint8_t data[], size_t size_in_bytes)
+	void sound_buffer::load(std::byte data[], size_t size_in_bytes)
 	{
 
 	}

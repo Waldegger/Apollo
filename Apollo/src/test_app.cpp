@@ -67,7 +67,8 @@ void test_app::on_create()
 
     age::assetistream is{ "./test_data/laser.wav", std::ios::binary | std::ios::ate };
     size_t file_size = is.tellg();
-    std::vector<uint8_t> file_data;
+    is.seekg(0, std::ios::beg);
+    std::vector<std::byte> file_data;
     file_data.resize(file_size);
     is.read(reinterpret_cast<char*>(&file_data[0]), file_size);
     auto format = age::audio_format::get_format(file_data.data(), file_size);

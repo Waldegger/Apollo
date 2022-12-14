@@ -179,6 +179,7 @@
     <ClCompile Include="src\sound\music.cpp" />
     <ClCompile Include="src\sound\sound.cpp" />
     <ClCompile Include="src\sound\sound_buffer.cpp" />
+    <ClCompile Include="src\sound\sound_file_wave.cpp" />
     <ClCompile Include="src\sound\sound_source.cpp" />
     <ClCompile Include="src\system\assetstream.cpp" />
     <ClCompile Include="src\system\clock.cpp" />
@@ -218,11 +219,13 @@
     <ClInclude Include="src\sound\music.h" />
     <ClInclude Include="src\sound\sound.h" />
     <ClInclude Include="src\sound\sound_buffer.h" />
+    <ClInclude Include="src\sound\sound_file_wave.h" />
     <ClInclude Include="src\sound\sound_source.h" />
     <ClInclude Include="src\system\assetstream.h" />
     <ClInclude Include="src\system\clock.h" />
     <ClInclude Include="src\system\time.h" />
     <ClInclude Include="src\test_app.h" />
+    <ClInclude Include="src\utility\endian.h" />
     <ClInclude Include="src\utility\utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

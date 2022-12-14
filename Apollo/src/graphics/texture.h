@@ -31,7 +31,7 @@ namespace age
 		void create(const vector2u& size);
 
 		void load(std::string_view filename, const int_rect& area = int_rect{});
-		void load(const void* data, std::size_t size, const int_rect& area = int_rect{});
+		void load(const std::byte data[], std::size_t size, const int_rect& area = int_rect{});
 		void load(std::istream& is, const int_rect& area = int_rect{});
 		void load(const image& img, const int_rect& area = int_rect{});
 

@@ -123,7 +123,7 @@ namespace age
 		load(std::make_unique<assetistream>(fn.data(), std::ios::binary));
 	}
 
-	void font::load(const void* data, size_t size_in_bytes)
+	void font::load(const std::byte data[], size_t size_in_bytes)
 	{
 		m_stream.reset();
 		cleanup();

@@ -214,7 +214,7 @@ namespace age
 		load(is);
 	}
 
-	void image::load(const void* data, size_t size)
+	void image::load(const std::byte data[], size_t size)
 	{
 		load_image_from_memory(data, size, m_pixels, m_size);
 	}

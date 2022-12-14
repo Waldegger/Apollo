@@ -93,7 +93,7 @@ namespace age
 		load(img, area);
 	}
 
-	void texture::load(const void* data, std::size_t size, const int_rect& area)
+	void texture::load(const std::byte data[], std::size_t size, const int_rect& area)
 	{
 		image img;
 		img.load(data, size);

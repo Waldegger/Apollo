@@ -43,7 +43,7 @@ namespace age
 		};
 
 		void load(std::string_view fn);
-		void load(const void* data, size_t size_in_bytes);
+		void load(const std::byte data[], size_t size_in_bytes);
 		void load(std::unique_ptr<std::istream> in_stream);
 		void load(std::istream& in_stream);
 
