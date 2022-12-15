@@ -5,6 +5,7 @@
 #include <memory>
 #include <functional>
 #include <type_traits>
+#include <string_view>
 
 #include "../algebra/vector2.h"
 #include "../utility/utility.h"

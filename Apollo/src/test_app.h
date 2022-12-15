@@ -9,6 +9,8 @@
 #include "graphics/font.h"
 #include "graphics/text.h"
 #include "system/clock.h"
+#include "sound/sound_buffer.h"
+#include "sound/sound.h"
 
 class test_app
 	: public age::engine
@@ -60,6 +62,9 @@ private:
 
     age::font m_test_font;
     age::text m_test_text;
+
+    age::sound_buffer m_test_buffer;
+    age::sound m_test_sound;
 
     float m_delta_time = 0.0;
     float m_elapsed_time = 0.0f;

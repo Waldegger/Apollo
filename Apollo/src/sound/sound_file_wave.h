@@ -24,8 +24,8 @@ namespace age
 				, bytes_per_sec{}
 				, block_align{}
 				, bits_per_sample{}
-				, subchunk2_id{}
-				, subchunk2_size{}
+				, data_id{}
+				, data_size{}
 			{}
 
 			/* RIFF Chunk Descriptor */
@@ -42,8 +42,8 @@ namespace age
 			uint16_t        block_align;		// 2=16-bit mono, 4=16-bit stereo
 			uint16_t        bits_per_sample;	// Number of bits per sample
 			/* "data" sub-chunk */
-			uint8_t         subchunk2_id[4];	// "data"  string
-			uint32_t        subchunk2_size;		// Sampled data length
+			uint8_t         data_id[4];			// "data"  string
+			uint32_t        data_size;			// Sampled data length
 		};
 
 	public:
@@ -52,13 +52,13 @@ namespace age
 		void load(const std::byte data[], size_t size_in_bytes);
 
 		const header& get_header() const;
-		const std::vector<uint8_t>& get_data() const;
+		const std::vector<std::byte>& get_data() const;
 
 	protected:
 
 	private:
 
 		header m_header;
-		std::vector<uint8_t> m_data;
+		std::vector<std::byte> m_data;
 	};
 }

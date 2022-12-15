@@ -24,7 +24,7 @@ namespace age
 		void load(std::istream& is);
 		void load(std::byte data[], size_t size_in_bytes);
 
-		void buffer_data(format the_format, const uint8_t data[], size_t size_in_bytes, uint32_t frequency);
+		void buffer_data(format the_format, const std::byte data[], size_t size_in_bytes, uint32_t frequency);
 
 	protected:
 

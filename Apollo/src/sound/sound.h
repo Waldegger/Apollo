@@ -5,6 +5,7 @@
 namespace age
 {
 	class sound_source;
+	class sound_buffer;
 	
 	class sound
 	{
@@ -22,8 +23,9 @@ namespace age
 		~sound();
 
 	public:
-		void play(bool looped = false) const;
-		void stop();
+		virtual void play(bool looped = false) const;
+		virtual void stop();
+
 		void pause();
 		void resume();
 
@@ -32,6 +34,9 @@ namespace age
 		void set_position(const vector3f& value);
 		void update_position(const vector3f& value);
 		const vector3f& get_position() const;
+
+		void set_buffer(const sound_buffer* value);
+		const sound_buffer* get_buffer() const;
 
 		void set_pitch(float value);
 		void update_pitch(float value);
@@ -65,6 +70,8 @@ namespace age
 
 		vector3f m_position;
 		mutable sound_source* m_owned_source;
+
+		const sound_buffer* m_buffer;
 
 		float m_pitch;
 		float m_volume;

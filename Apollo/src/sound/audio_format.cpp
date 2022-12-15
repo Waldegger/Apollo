@@ -41,7 +41,7 @@ namespace age
 				for (cursor = 0; cursor < 4; ++cursor)
 					header.RIFF[cursor] = std::to_integer<uint8_t>(data[cursor]);
 
-				header.chunk_size = convert_to_int(reinterpret_cast<const int8_t*>(&data[cursor]), 4);
+				header.chunk_size = endian::convert_to_int(reinterpret_cast<const std::byte*>(&data[cursor]), 4);
 				cursor += 4;
 
 				for (size_t i = 0; i < 4; ++i)

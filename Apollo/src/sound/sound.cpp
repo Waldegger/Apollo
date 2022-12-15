@@ -8,6 +8,7 @@ namespace age
 	sound::sound()
 		: m_position{}
 		, m_owned_source{ nullptr }
+		, m_buffer{ nullptr }
 		, m_pitch{ 1.0f }
 		, m_volume{ 1.0f }
 		, m_min_distance{ 1.0f }
@@ -18,6 +19,7 @@ namespace age
 	sound::sound(const sound& other)
 		: m_position{ other.m_position }
 		, m_owned_source{ nullptr }
+		, m_buffer{ other.m_buffer }
 		, m_pitch{ other.m_pitch }
 		, m_volume{ other.m_volume }
 		, m_min_distance{ other.m_min_distance }
@@ -28,6 +30,7 @@ namespace age
 	sound::sound(sound&& other) noexcept
 		: m_position{ other.m_position }
 		, m_owned_source{ other.m_owned_source }
+		, m_buffer{ other.m_buffer }
 		, m_pitch{ other.m_pitch }
 		, m_volume{ other.m_volume }
 		, m_min_distance{ other.m_min_distance }
@@ -43,6 +46,7 @@ namespace age
 	sound& sound::operator = (const sound& other)
 	{
 		m_position = other.m_position;
+		m_buffer = other.m_buffer;
 		m_pitch = other.m_pitch;
 		m_volume = other.m_volume;
 		m_min_distance = other.m_min_distance;
@@ -56,6 +60,7 @@ namespace age
 	{
 		m_position = other.m_position;
 		m_owned_source = other.m_owned_source;
+		m_buffer = other.m_buffer;
 		m_pitch = other.m_pitch;
 		m_volume = other.m_volume;
 		m_min_distance = other.m_min_distance;
@@ -90,21 +95,28 @@ namespace age
 
 	void sound::play(bool looped) const
 	{
+		if (!m_buffer) return;
+
 		if (m_owned_source)
 		{
-			auto source_looping = m_owned_source->get_looping();
+			if (m_owned_source->get_state() == sound_source::state::paused)
+			{
+				m_owned_source->play();
+				return;
+			}
 
-			if (source_looping || m_owned_source->get_state() == sound_source::state::paused)
+			if (m_owned_source->get_looping())
 			{
 				m_owned_source->stop();
-				if(source_looping)
-					audio_device::get().make_source_available(m_owned_source);
+				audio_device::get().make_source_available(m_owned_source);
 			}
 		}
 
 		if (!aquire_source(looped))
 			return;
 
+		m_owned_source->set_buffer(*m_buffer);
+		m_owned_source->set_position(m_position);
 		m_owned_source->set_pitch(m_pitch);
 		m_owned_source->set_volume(m_volume);
 		m_owned_source->set_min_distance(m_min_distance);
@@ -131,12 +143,6 @@ namespace age
 	{
 		if (m_owned_source)
 			m_owned_source->pause();
-	}
-
-	void sound::resume()
-	{
-		if (m_owned_source)
-			m_owned_source->play();
 	}
 
 	bool sound::aquire_source(bool permanent) const
@@ -171,6 +177,16 @@ namespace age
 	const vector3f& sound::get_position() const
 	{
 		return m_position;
+	}
+
+	void sound::set_buffer(const sound_buffer* value)
+	{
+		m_buffer = value;
+	}
+
+	const sound_buffer* sound::get_buffer() const
+	{
+		return m_buffer;
 	}
 
 	void sound::set_pitch(float value)

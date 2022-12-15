@@ -10,8 +10,9 @@
 #include "graphics/image.h"
 #include "graphics/texture.h"
 #include "system/assetstream.h"
-#include "sound/audio_device.h"
+
 #include "sound/audio_format.h"
+#include "sound/sound_buffer.h"
 
 void test_app::on_create()
 {
@@ -59,19 +60,9 @@ void test_app::on_create()
     m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
     m_test_text.set_position(age::vector2f{ -0.9f, 0.0f });
 
-    auto device_list = age::audio_device::get_device_names();
-    for (auto& d : device_list)
-        std::cout << d;
-
-    age::audio_device::init();
-
-    age::assetistream is{ "./test_data/laser.wav", std::ios::binary | std::ios::ate };
-    size_t file_size = is.tellg();
-    is.seekg(0, std::ios::beg);
-    std::vector<std::byte> file_data;
-    file_data.resize(file_size);
-    is.read(reinterpret_cast<char*>(&file_data[0]), file_size);
-    auto format = age::audio_format::get_format(file_data.data(), file_size);
+    age::assetistream is{ "./test_data/laser.wav", std::ios::binary };
+    m_test_buffer.load(is);
+    m_test_sound.set_buffer(&m_test_buffer);
 
     m_clock.start();
 }
@@ -103,11 +94,28 @@ void test_app::on_update()
         case SDL_KEYUP:
             switch (e.key.keysym.sym)
             {
-            case SDLK_LEFT:
-                m_key_left = false;
+                case SDLK_LEFT:
+                    m_key_left = false;
                 break;
-            case SDLK_RIGHT:
-                m_key_right = false;
+                case SDLK_RIGHT:
+                    m_key_right = false;
+                break;
+                case SDLK_s:
+                    m_test_sound.play();
+                break;
+                case SDLK_a:
+                {
+                    age::vector3f sound_pos = m_test_sound.get_position();
+                    sound_pos.x -= 1.0f;
+                    m_test_sound.update_position(sound_pos);
+                }
+                break;
+                case SDLK_d:
+                {
+                    age::vector3f sound_pos = m_test_sound.get_position();
+                    sound_pos.x += 1.0f;
+                    m_test_sound.update_position(sound_pos);
+                }
                 break;
             }
             break;
