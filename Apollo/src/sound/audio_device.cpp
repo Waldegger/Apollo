@@ -40,7 +40,7 @@ namespace age
 			
 			if (source->get_state() == sound_source::state::stopped)
 			{
-				source->reset_owning_sound();
+				source->detach_sound();
 
 				if (for_permanent_use)
 					m_unvailable_sources.push_back(result);
@@ -218,7 +218,7 @@ namespace age
 		if (m_context)
 		{
 			for (auto& source : m_sound_sources)
-				source.reset_owning_sound();
+				source.detach_sound();
 
 			m_available_sources.clear();
 			m_unvailable_sources.clear();

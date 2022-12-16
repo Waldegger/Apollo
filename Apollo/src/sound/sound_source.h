@@ -5,14 +5,15 @@
 
 namespace age
 {
-	class sound;
+	class sound_interface;
 	class sound_buffer;
-
+	
 	class sound_source
 	{
 	public:
 		friend class audio_device;
 		friend class sound;
+		friend class sound_interface;
 
 		enum class state
 		{
@@ -59,21 +60,22 @@ namespace age
 		bool get_looping() const;
 
 		void set_buffer(const sound_buffer& value);
-		const sound_buffer* get_buffer() const;
+		void queue_buffer(const sound_buffer& value);
 
+		void clear_buffers();
+		
 		state get_state() const;
 
 	protected:
 
 	private:
-		void set_owning_sound(const sound* value);
-		const sound* get_owning_sound() const;
+		void set_attached_sound(const sound_interface* value);
+		const sound_interface* get_attached_sound() const;
 
-		void reset_owning_sound();
+		void detach_sound();
 		
-		const sound* m_owning_sound;
-		const sound_buffer* m_buffer;
-
+		const sound_interface* m_attached_sound;
+		
 		static uint32_t gen_handle();
 		static void delete_handle(uint32_t handle);
 		unique_handle<uint32_t, delete_handle> m_handle;

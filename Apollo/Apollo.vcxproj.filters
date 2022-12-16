@@ -135,6 +135,9 @@
     <ClCompile Include="src\sound\sound_file_wave.cpp">
       <Filter>Quelldateien\sound</Filter>
     </ClCompile>
+    <ClCompile Include="src\sound\sound_interface.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="src\utility\endian.h">
       <Filter>Headerdateien\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\sound_interface.h">
+      <Filter>Headerdateien\sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

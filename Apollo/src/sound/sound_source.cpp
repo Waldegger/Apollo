@@ -2,20 +2,18 @@
 
 #include <AL/al.h>
 
-#include "sound.h"
+#include "sound_interface.h"
 #include "sound_buffer.h"
 
 namespace age
 {
 	sound_source::sound_source()
-		: m_owning_sound{ nullptr }
-		, m_buffer{ nullptr }
+		: m_attached_sound{ nullptr }
 		, m_handle{ gen_handle() }
 	{}
 
 	sound_source::sound_source(uint32_t handle)
-		: m_owning_sound{ nullptr }
-		, m_buffer{ nullptr }
+		: m_attached_sound{ nullptr }
 		, m_handle{ handle }
 	{}
 
@@ -128,12 +126,11 @@ namespace age
 	void sound_source::set_buffer(const sound_buffer& value)
 	{
 		alSourcei(m_handle, AL_BUFFER, value.get_handle());
-		m_buffer = &value;
 	}
 
-	const sound_buffer* sound_source::get_buffer() const
+	void sound_source::clear_buffers()
 	{
-		return m_buffer;
+		alSourcei(m_handle, AL_BUFFER, AL_NONE);
 	}
 
 	sound_source::state sound_source::get_state() const
@@ -156,21 +153,22 @@ namespace age
 		}
 	}
 
-	void sound_source::set_owning_sound(const sound* value)
+	void sound_source::set_attached_sound(const sound_interface* value)
 	{
-		m_owning_sound = value;
+		m_attached_sound = value;
 	}
 
-	const sound* sound_source::get_owning_sound() const
+	const sound_interface* sound_source::get_attached_sound() const
 	{
-		return m_owning_sound;
+		return m_attached_sound;
 	}
 
-	void sound_source::reset_owning_sound()
+	void sound_source::detach_sound()
 	{
-		if (m_owning_sound)
+		if (m_attached_sound)
 		{
-			m_owning_sound->set_owned_source(nullptr);
+			m_attached_sound->attach_source(nullptr);
+			m_attached_sound = nullptr;
 		}
 	}
 
