@@ -22,20 +22,54 @@ namespace age
 		if (source)
 		{
 			update_source(*source, false);
-		}
 
+			switch (source->get_state())
+			{
+				case sound_source::state::stopped:
+				{
+					m_background_worker.add_job([this, looped]() -> void { buffer_play_and_stream(looped); });
+				}
+				break;
+
+				case sound_source::state::paused:
+				{
+
+				}
+				break;
+
+				default:
+				{
+					//playing when the source is currently playing. What shall happen? Start new?
+				}
+				break;
+			}
+		}
 	}
 
 	void music::stop()
 	{
 		if (auto current_attached_source = get_attached_source())
 		{
-			if(current_attached_source->get_state() == sound_source::state::playing || current_attached_source->get_state() == sound_source::state::paused)
-				current_attached_source->stop();
+			std::scoped_lock<std::mutex> lock{ m_source_state_mutex };
 
+			if(current_attached_source->get_state() != sound_source::state::stopped)
+				current_attached_source->stop();
+			
 			current_attached_source->clear_buffers();
 			audio_device::get().make_source_available(current_attached_source);
 			detach_source();
+		}
+	}
+
+	void music::pause()
+	{
+		auto current_attached_source = get_attached_source();
+
+		if (current_attached_source)
+		{
+			std::scoped_lock<std::mutex> lock{ m_source_state_mutex };
+
+			current_attached_source->pause();
 		}
 	}
 
@@ -57,5 +91,10 @@ namespace age
 	void music::open(std::byte data[], size_t size)
 	{
 		m_istream.reset();
+	}
+
+	void music::buffer_play_and_stream(bool looped)
+	{
+
 	}
 }

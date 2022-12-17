@@ -7,9 +7,13 @@
 
 namespace age
 {
+	class sound_queue_buffer;
+
 	class sound_buffer
 	{
 	public:
+		friend class sound_queue_buffer;
+
 		enum class format : uint32_t
 		{
 			mono_8,
@@ -32,6 +36,8 @@ namespace age
 		friend class sound_source;
 
 		inline uint32_t get_handle() const { return m_handle; }
+
+		static int32_t format_to_AL_enum(format the_format);
 
 		static uint32_t gen_handle();
 		static void delete_handle(uint32_t handle);

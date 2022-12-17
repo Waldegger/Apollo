@@ -138,6 +138,12 @@
     <ClCompile Include="src\sound\sound_interface.cpp">
       <Filter>Quelldateien\sound</Filter>
     </ClCompile>
+    <ClCompile Include="src\sound\sound_queue_buffer.cpp">
+      <Filter>Quelldateien\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system\background_worker.cpp">
+      <Filter>Quelldateien\system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -262,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="src\sound\sound_interface.h">
       <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\sound_queue_buffer.h">
+      <Filter>Headerdateien\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system\background_worker.h">
+      <Filter>Headerdateien\system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

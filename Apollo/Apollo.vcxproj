@@ -181,8 +181,10 @@
     <ClCompile Include="src\sound\sound_buffer.cpp" />
     <ClCompile Include="src\sound\sound_file_wave.cpp" />
     <ClCompile Include="src\sound\sound_interface.cpp" />
+    <ClCompile Include="src\sound\sound_queue_buffer.cpp" />
     <ClCompile Include="src\sound\sound_source.cpp" />
     <ClCompile Include="src\system\assetstream.cpp" />
+    <ClCompile Include="src\system\background_worker.cpp" />
     <ClCompile Include="src\system\clock.cpp" />
     <ClCompile Include="src\test_app.cpp" />
     <ClCompile Include="src\utility\utility.cpp" />
@@ -222,8 +224,10 @@
     <ClInclude Include="src\sound\sound_buffer.h" />
     <ClInclude Include="src\sound\sound_file_wave.h" />
     <ClInclude Include="src\sound\sound_interface.h" />
+    <ClInclude Include="src\sound\sound_queue_buffer.h" />
     <ClInclude Include="src\sound\sound_source.h" />
     <ClInclude Include="src\system\assetstream.h" />
+    <ClInclude Include="src\system\background_worker.h" />
     <ClInclude Include="src\system\clock.h" />
     <ClInclude Include="src\system\time.h" />
     <ClInclude Include="src\test_app.h" />

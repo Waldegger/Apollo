@@ -25,8 +25,7 @@ namespace age
 	public:
 		virtual void play(bool looped = false) = 0;
 		virtual void stop() = 0;
-
-		void pause();
+		virtual void pause() = 0;
 
 		void update_source(sound_source& source, bool looped) const;
 

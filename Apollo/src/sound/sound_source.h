@@ -2,6 +2,7 @@
 
 #include "../algebra/vector3.h"
 #include "../utility/utility.h"
+#include "sound_queue_buffer.h"
 
 namespace age
 {
@@ -26,10 +27,10 @@ namespace age
 		sound_source(uint32_t handle);
 
 		sound_source(const sound_source& other) = delete;
-		sound_source(sound_source&& other) = default;
+		sound_source(sound_source&& other) noexcept = default;
 
 		sound_source& operator = (const sound_source& other) = delete;
-		sound_source& operator = (sound_source&& other) = default;
+		sound_source& operator = (sound_source&& other) noexcept = default;
 
 		~sound_source() = default;
 
@@ -60,7 +61,11 @@ namespace age
 		bool get_looping() const;
 
 		void set_buffer(const sound_buffer& value);
-		void queue_buffer(const sound_buffer& value);
+
+		void queue_buffer(sound_queue_buffer value);
+		uint32_t get_num_queued_buffers() const;
+		uint32_t get_num_processed_buffers() const;
+		sound_queue_buffer unqueue_buffer();
 
 		void clear_buffers();
 		

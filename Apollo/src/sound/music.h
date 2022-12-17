@@ -4,7 +4,13 @@
 
 #include <string_view>
 #include <istream>
+#include <array>
 #include <memory>
+#include <mutex>
+#include <condition_variable>
+
+#include "sound_buffer.h"
+#include "../system/background_worker.h"
 
 namespace age
 {
@@ -13,16 +19,17 @@ namespace age
 	{
 	public:
 		music() = default;
-		music(const music& other) = default;
-		music(music&& other) = default;
+		music(const music& other) = delete;
+		music(music&& other) noexcept = default;
 
-		music& operator = (const music& other) = default;
-		music& operator = (music&& other) = default;
+		music& operator = (const music& other) = delete;
+		music& operator = (music&& other) noexcept = default;
 
 		virtual ~music() override;
 	public:
 		virtual void play(bool looped = false) override;
 		virtual void stop() override;
+		virtual void pause() override;
 
 		void open(std::string_view fn);
 		void open(std::istream& is);
@@ -31,6 +38,15 @@ namespace age
 	protected:
 
 	private:
+		inline static constexpr size_t NUM_BUFFERS = 4;
+
+		void buffer_play_and_stream(bool looped = false);
+
+		mutable std::mutex m_source_state_mutex;
+
+		std::array<sound_buffer, NUM_BUFFERS> m_buffers;
+
+		background_worker m_background_worker;
 		std::unique_ptr<std::istream> m_istream;
 	};
 }

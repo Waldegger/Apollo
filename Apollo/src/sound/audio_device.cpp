@@ -27,16 +27,16 @@ namespace age
 	{
 		sound_source* result = nullptr;
 
-		auto deque_pop_front = [](std::deque<sound_source*>& deque) -> sound_source*
+		auto queue_pop_front = [](std::queue<sound_source*>& deque) -> sound_source*
 		{
 			auto result = deque.front();
-			deque.pop_front();
+			deque.pop();
 			return result;
 		};
 
 		for (size_t i = 0; i < m_available_sources.size(); ++i)
 		{
-			auto source = deque_pop_front(m_available_sources);
+			auto source = queue_pop_front(m_available_sources);
 			
 			if (source->get_state() == sound_source::state::stopped)
 			{
@@ -45,13 +45,13 @@ namespace age
 				if (for_permanent_use)
 					m_unvailable_sources.push_back(result);
 				else
-					m_available_sources.push_back(source);
+					m_available_sources.push(source);
 
 				result = source;
 				break;
 			}
 
-			m_available_sources.push_back(source);
+			m_available_sources.push(source);
 		}
 
 		return result;
@@ -63,7 +63,7 @@ namespace age
 		{
 			if (*it == value)
 			{
-				m_available_sources.push_back(*it);
+				m_available_sources.push(*it);
 				m_unvailable_sources.erase(it);
 				break;
 			}
@@ -220,7 +220,7 @@ namespace age
 			for (auto& source : m_sound_sources)
 				source.detach_sound();
 
-			m_available_sources.clear();
+			while(!m_available_sources.empty()) m_available_sources.pop();
 			m_unvailable_sources.clear();
 			m_sound_sources.clear();
 
@@ -241,6 +241,6 @@ namespace age
 			m_sound_sources.push_back(sound_source{});
 
 		for (auto& source : m_sound_sources)
-			m_available_sources.push_back(&source);
+			m_available_sources.push(&source);
 	}
 }

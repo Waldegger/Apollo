@@ -128,6 +128,40 @@ namespace age
 		alSourcei(m_handle, AL_BUFFER, value.get_handle());
 	}
 
+	void sound_source::queue_buffer(sound_queue_buffer value)
+	{
+		ALuint handle = value.get_handle();
+
+		alSourceQueueBuffers(m_handle, 1, &handle);
+	}
+
+	uint32_t sound_source::get_num_queued_buffers() const
+	{
+		ALint result = 0;
+
+		alGetSourcei(m_handle, AL_BUFFERS_QUEUED, &result);
+
+		return static_cast<uint32_t>(result);
+	}
+
+	uint32_t sound_source::get_num_processed_buffers() const
+	{
+		ALint result = 0;
+
+		alGetSourcei(m_handle, AL_BUFFERS_PROCESSED, &result);
+
+		return static_cast<uint32_t>(result);
+	}
+
+	sound_queue_buffer sound_source::unqueue_buffer()
+	{
+		ALuint handle = 0;
+
+		alSourceUnqueueBuffers(m_handle, 1, &handle);
+
+		return sound_queue_buffer{ handle };
+	}
+
 	void sound_source::clear_buffers()
 	{
 		alSourcei(m_handle, AL_BUFFER, AL_NONE);

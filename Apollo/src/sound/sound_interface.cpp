@@ -82,12 +82,6 @@ namespace age
 		}
 	}
 
-	void sound_interface::pause()
-	{
-		if (m_attached_source)
-			m_attached_source->pause();
-	}
-
 	void sound_interface::update_source(sound_source& source, bool looped) const
 	{
 		source.set_position(m_position);

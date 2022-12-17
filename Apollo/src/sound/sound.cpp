@@ -72,6 +72,14 @@ namespace age
 		}
 	}
 
+	void sound::pause()
+	{
+		auto current_attached_source = get_attached_source();
+
+		if (current_attached_source)
+			current_attached_source->pause();
+	}
+
 	void sound::set_buffer(const sound_buffer* value)
 	{
 		m_buffer = value;

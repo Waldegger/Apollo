@@ -63,10 +63,13 @@ namespace age
 
 	void sound_buffer::buffer_data(format the_format, const std::byte data[], size_t size_in_bytes, uint32_t frequency)
 	{
-		std::array<ALenum, 4> format_names{ AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8, AL_FORMAT_STEREO16 };
-		ALenum format = format_names[static_cast<std::underlying_type_t<decltype(the_format)>>(the_format)];
+		alBufferData(m_handle, format_to_AL_enum(the_format), data, static_cast<ALsizei>(size_in_bytes), frequency);
+	}
 
-		alBufferData(m_handle, format, data, static_cast<ALsizei>(size_in_bytes), frequency);
+	int32_t sound_buffer::format_to_AL_enum(format the_format)
+	{
+		std::array<ALenum, 4> format_names{ AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8, AL_FORMAT_STEREO16 };
+		return format_names[static_cast<std::underlying_type_t<decltype(the_format)>>(the_format)];
 	}
 
 	uint32_t sound_buffer::gen_handle()

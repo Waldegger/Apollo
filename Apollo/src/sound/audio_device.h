@@ -2,7 +2,7 @@
 
 #include <array>
 #include <vector>
-#include <deque>
+#include <queue>
 #include <string_view>
 
 #include "sound_source.h"
@@ -63,7 +63,7 @@ namespace age
 		void* m_context;
 
 		std::vector<sound_source> m_sound_sources;
-		mutable std::deque<sound_source*> m_available_sources;
+		mutable std::queue<sound_source*> m_available_sources;
 		mutable std::vector<sound_source*> m_unvailable_sources;
 	};
 }
