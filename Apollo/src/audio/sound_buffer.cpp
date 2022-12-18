@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <stdexcept>
 
+#include "audio_device.h"
 #include "audio_format.h"
 #include "sound_file_wave.h"
 #include "../system/assetstream.h"
@@ -74,7 +75,13 @@ namespace age
 
 	uint32_t sound_buffer::gen_handle()
 	{
-		//ToDo:: Maybe init sound device here if it has not already happened
+		m_num_buffers++;
+
+		if (m_num_buffers == 1)
+		{
+			if (!audio_device::get().is_initialised())
+				audio_device::get().init();
+		}
 
 		ALuint name = 0;
 		alGenBuffers(1, &name);
@@ -84,6 +91,15 @@ namespace age
 
 	void sound_buffer::delete_handle(uint32_t handle)
 	{
+		m_num_buffers--;
+
+		if (!m_num_buffers)
+		{
+			if (audio_device::get().is_initialised())
+				audio_device::get().destroy();
+
+		}
+
 		ALuint name = handle;
 
 		alDeleteBuffers(1, &name);

@@ -9,8 +9,8 @@
 #include "graphics/font.h"
 #include "graphics/text.h"
 #include "system/clock.h"
-#include "sound/sound_buffer.h"
-#include "sound/sound.h"
+#include "audio/sound_buffer.h"
+#include "audio/sound.h"
 
 class test_app
 	: public age::engine

@@ -13,6 +13,7 @@ namespace age
 	audio_device::audio_device()
 		: m_device{ nullptr }
 		, m_context{ nullptr }
+		, m_is_initialised{ false }
 	{
 		m_sound_sources.reserve(MAX_SOURCES);
 		m_unvailable_sources.reserve(MAX_SOURCES);
@@ -33,6 +34,8 @@ namespace age
 			deque.pop();
 			return result;
 		};
+
+		std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
 
 		for (size_t i = 0; i < m_available_sources.size(); ++i)
 		{
@@ -59,6 +62,8 @@ namespace age
 
 	void audio_device::make_source_available(const sound_source* value)
 	{
+		std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
+
 		for (auto it = m_unvailable_sources.begin(); it != m_unvailable_sources.end(); ++it)
 		{
 			if (*it == value)
@@ -68,6 +73,11 @@ namespace age
 				break;
 			}
 		}
+	}
+
+	bool audio_device::is_initialised() const
+	{
+		return m_is_initialised;
 	}
 
 	audio_device& audio_device::get()
@@ -174,6 +184,8 @@ namespace age
 		destroy_context_and_close_device();
 		open_device_and_create_context(device_name);
 		setup_sources();
+
+		m_is_initialised = true;
 	}
 
 	void audio_device::open_device_and_create_context(const char* device_name)
@@ -220,8 +232,13 @@ namespace age
 			for (auto& source : m_sound_sources)
 				source.detach_sound();
 
-			while(!m_available_sources.empty()) m_available_sources.pop();
-			m_unvailable_sources.clear();
+			{
+				std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
+
+				while (!m_available_sources.empty()) m_available_sources.pop();
+				m_unvailable_sources.clear();
+			}
+			
 			m_sound_sources.clear();
 
 			alcMakeContextCurrent(nullptr);
@@ -240,6 +257,7 @@ namespace age
 		for (uint32_t i = 0; i < MAX_SOURCES; ++i)
 			m_sound_sources.push_back(sound_source{});
 
+		std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
 		for (auto& source : m_sound_sources)
 			m_available_sources.push(&source);
 	}

@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include <string_view>
+#include <mutex>
 
 #include "sound_source.h"
 #include "../algebra/vector3.h"
@@ -39,6 +40,8 @@ namespace age
 
 		sound_source* get_free_source(bool for_permanent_use = false) const;
 		void make_source_available(const sound_source* value);
+
+		bool is_initialised() const;
 	protected:
 
 	private:
@@ -65,5 +68,8 @@ namespace age
 		std::vector<sound_source> m_sound_sources;
 		mutable std::queue<sound_source*> m_available_sources;
 		mutable std::vector<sound_source*> m_unvailable_sources;
+		mutable std::mutex m_source_queue_mutex;
+
+		bool m_is_initialised;
 	};
 }

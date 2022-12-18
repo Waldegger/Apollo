@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "test_app.h"
-#include "sound/audio_device.h"
 
 int main(int argc, char* argv[])
 {
@@ -10,7 +9,6 @@ int main(int argc, char* argv[])
     
     try
     {
-        age::audio_device::init();
         test_app app;
 
         return app.start("Apollo goes outer space", 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);

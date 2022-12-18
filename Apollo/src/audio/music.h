@@ -18,7 +18,7 @@ namespace age
 		: public sound_interface
 	{
 	public:
-		music() = default;
+		music();
 		music(const music& other) = delete;
 		music(music&& other) noexcept = default;
 
@@ -39,6 +39,7 @@ namespace age
 
 	private:
 		inline static constexpr size_t NUM_BUFFERS = 4;
+		inline static constexpr size_t BUFFER_SAMPLES = 8192;
 
 		void buffer_play_and_stream(bool looped = false);
 

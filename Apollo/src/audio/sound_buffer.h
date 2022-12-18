@@ -2,6 +2,7 @@
 
 #include <string_view>
 #include <istream>
+#include <atomic>
 
 #include "../utility/utility.h"
 
@@ -34,6 +35,7 @@ namespace age
 
 	private:
 		friend class sound_source;
+		inline static std::atomic<size_t> m_num_buffers{};
 
 		inline uint32_t get_handle() const { return m_handle; }
 

@@ -5,6 +5,11 @@
 
 namespace age
 {
+	music::music()
+	{
+		set_relative_to_listener(true);
+	}
+
 	music::~music()
 	{
 		stop();

@@ -31,17 +31,17 @@
     <Filter Include="Quelldateien\utility">
       <UniqueIdentifier>{b643eb5e-ddcd-492f-851c-a9858b0c5171}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\sound">
-      <UniqueIdentifier>{c4d81b0e-9ca5-477b-9c8d-d1923db89c65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Quelldateien\sound">
-      <UniqueIdentifier>{7ed1f6d4-1a7e-4483-8f7e-60e74bf3be41}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\algebra">
       <UniqueIdentifier>{037e7114-522a-406d-831f-c024311ae1ce}</UniqueIdentifier>
     </Filter>
     <Filter Include="Quelldateien\algebra">
       <UniqueIdentifier>{b673ec68-7117-430d-9a9d-db2a06cbea2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\audio">
+      <UniqueIdentifier>{c4d81b0e-9ca5-477b-9c8d-d1923db89c65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\audio">
+      <UniqueIdentifier>{7ed1f6d4-1a7e-4483-8f7e-60e74bf3be41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,37 +111,43 @@
     <ClCompile Include="src\graphics\transformable_2d.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\sound\audio_device.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\listener.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\music.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\sound.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\sound_buffer.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\sound_source.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\audio_format.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\sound_file_wave.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\sound_interface.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sound\sound_queue_buffer.cpp">
-      <Filter>Quelldateien\sound</Filter>
-    </ClCompile>
     <ClCompile Include="src\system\background_worker.cpp">
+      <Filter>Quelldateien\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\audio_device.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\audio_format.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\listener.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\music.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_buffer.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_file_wave.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_interface.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_queue_buffer.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_source.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_file_ogg.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system\memstream.cpp">
       <Filter>Quelldateien\system</Filter>
     </ClCompile>
   </ItemGroup>
@@ -224,24 +230,6 @@
     <ClInclude Include="src\graphics\drawable.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\sound\audio_device.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\listener.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\music.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\sound.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\sound_buffer.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\sound_source.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
     <ClInclude Include="src\algebra\angle.h">
       <Filter>Headerdateien\algebra</Filter>
     </ClInclude>
@@ -257,22 +245,49 @@
     <ClInclude Include="src\algebra\vector3.h">
       <Filter>Headerdateien\algebra</Filter>
     </ClInclude>
-    <ClInclude Include="src\sound\audio_format.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\sound_file_wave.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
     <ClInclude Include="src\utility\endian.h">
       <Filter>Headerdateien\utility</Filter>
     </ClInclude>
-    <ClInclude Include="src\sound\sound_interface.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sound\sound_queue_buffer.h">
-      <Filter>Headerdateien\sound</Filter>
-    </ClInclude>
     <ClInclude Include="src\system\background_worker.h">
+      <Filter>Headerdateien\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\audio_device.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\audio_format.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\listener.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\music.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_buffer.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_file_wave.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_interface.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_queue_buffer.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_source.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_file_ogg.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system\platform.h">
+      <Filter>Headerdateien\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system\memstream.h">
       <Filter>Headerdateien\system</Filter>
     </ClInclude>
   </ItemGroup>

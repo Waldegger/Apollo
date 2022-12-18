@@ -10,7 +10,7 @@ namespace age
 		
 	}
 
-	asset_streambuf::asset_streambuf(const std::string_view& fn)
+	asset_streambuf::asset_streambuf(std::string_view fn)
 	{
 		open(fn);
 	}
@@ -18,10 +18,11 @@ namespace age
 	asset_streambuf::~asset_streambuf()
 	{
 		sync();
-		//(asset);
+		//Close the asset
+		AAssetManager_close(asset);
 	}
 
-	void asset_streambuf::open(const std::string_view& fn)
+	void asset_streambuf::open(std::string_view fn)
 	{
 		/*
 		auto activity = SDL_AndroidGetActivity();
@@ -53,13 +54,22 @@ namespace age
 		return traits_type::eof();
 	}
 
+	std::streambuf::pos_type seekoff(off_type off, std::ios_base::seekdir dir, std::ios_base::openmode which)
+	{
+
+	}
+
+	std::streambuf::pos_type seekpos(std::strambuf::pos_type pos, std::ios_base::openmode which)
+	{
+
+	}
 
 	//ToDo: Check if can pass in the streambuf as a membervariable. If this doesnt work it needs to be done via the heap
 	assetistream::assetistream()
 		: std::istream{ &m_streambuf }
 	{}
 
-	assetistream::assetistream(const std::string_view& fn)
+	assetistream::assetistream(std::string_view fn)
 		: std::istream{ &m_streambuf }
 		, m_streambuf{ fn }
 	{}

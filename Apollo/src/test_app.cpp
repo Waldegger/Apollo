@@ -10,9 +10,10 @@
 #include "graphics/image.h"
 #include "graphics/texture.h"
 #include "system/assetstream.h"
+#include "system/memstream.h"
 
-#include "sound/audio_format.h"
-#include "sound/sound_buffer.h"
+#include "audio/audio_format.h"
+#include "audio/sound_buffer.h"
 
 void test_app::on_create()
 {
@@ -60,8 +61,27 @@ void test_app::on_create()
     m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
     m_test_text.set_position(age::vector2f{ -0.9f, 0.0f });
 
+
+    //Testing memstream
+ 
+    age::assetistream is{ "./test_data/laser.wav", std::ios::binary | std::ios::ate };
+    size_t file_size = is.tellg();
+    is.seekg(0);
+    std::vector<std::byte> file_data{ file_size };
+    is.read(reinterpret_cast<char*>(&file_data[0]), file_size);
+
+    age::memistream ms{ &file_data[0], file_data.size() };
+
+    m_test_buffer.load(ms);
+    
+
+    //Testing assetstream
+    /*
     age::assetistream is{ "./test_data/laser.wav", std::ios::binary };
     m_test_buffer.load(is);
+    */
+
+
     m_test_sound.set_buffer(&m_test_buffer);
 
     m_clock.start();
