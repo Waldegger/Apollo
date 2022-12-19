@@ -25,9 +25,6 @@ namespace age
 
 	private:
 		std::byte* m_data;
-		size_t m_size;
-
-		std::streambuf::pos_type m_pos;
 	};
 
 	class memistream
