@@ -41,6 +41,8 @@ namespace age
 		inline static constexpr size_t NUM_BUFFERS = 4;
 		inline static constexpr size_t BUFFER_SAMPLES = 8192;
 
+		void open_stream(std::istream& is);
+
 		void buffer_play_and_stream(bool looped = false);
 
 		mutable std::mutex m_source_state_mutex;

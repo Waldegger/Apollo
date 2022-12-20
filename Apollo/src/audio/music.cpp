@@ -2,6 +2,7 @@
 
 #include "audio_device.h"
 #include "../system/assetstream.h"
+#include "../system/memstream.h"
 
 namespace age
 {
@@ -81,21 +82,34 @@ namespace age
 	void music::open(std::string_view fn)
 	{
 		m_istream = std::make_unique<assetistream>(fn.data());
+
+		open_from_stream(*m_istream);
 	}
 
 	void music::open(std::istream& is)
 	{
 		m_istream.reset();
+
+		open_from_stream(is);
 	}
 
 	void music::open(std::unique_ptr<std::istream> is)
 	{
 		m_istream = std::move(is);
+
+		open_from_stream(*m_istream);
 	}
 
 	void music::open(std::byte data[], size_t size)
 	{
-		m_istream.reset();
+		m_istream = std::make_unique<memistream>(data, size);
+
+		open_from_stream(*m_istream);
+	}
+
+	void music::open_from_stream(std::istream& is)
+	{
+
 	}
 
 	void music::buffer_play_and_stream(bool looped)
