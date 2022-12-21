@@ -11,6 +11,7 @@
 #include "system/clock.h"
 #include "audio/sound_buffer.h"
 #include "audio/sound.h"
+#include "audio/music.h"
 
 class test_app
 	: public age::engine
@@ -65,6 +66,8 @@ private:
 
     age::sound_buffer m_test_buffer;
     age::sound m_test_sound;
+
+    age::music m_test_music;
 
     float m_delta_time = 0.0;
     float m_elapsed_time = 0.0f;

@@ -84,6 +84,8 @@ void test_app::on_create()
 
     m_test_sound.set_buffer(&m_test_buffer);
 
+    m_test_music.open("./test_data/track1.ogg");
+
     m_clock.start();
 }
 

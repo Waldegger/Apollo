@@ -43,6 +43,12 @@
     <Filter Include="Quelldateien\audio">
       <UniqueIdentifier>{7ed1f6d4-1a7e-4483-8f7e-60e74bf3be41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\audio\priv">
+      <UniqueIdentifier>{357c0617-735e-487c-aa71-007f757935e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\audio\priv">
+      <UniqueIdentifier>{a396f93f-4796-4da9-805e-e9508285ebfa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -144,11 +150,17 @@
     <ClCompile Include="src\audio\sound_source.cpp">
       <Filter>Quelldateien\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\audio\sound_file_ogg.cpp">
-      <Filter>Quelldateien\audio</Filter>
-    </ClCompile>
     <ClCompile Include="src\system\memstream.cpp">
       <Filter>Quelldateien\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_stream_factory.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\sound_stream.cpp">
+      <Filter>Quelldateien\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\priv\ogg_stream.cpp">
+      <Filter>Quelldateien\audio\priv</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,14 +293,20 @@
     <ClInclude Include="src\audio\sound_source.h">
       <Filter>Headerdateien\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\audio\sound_file_ogg.h">
-      <Filter>Headerdateien\audio</Filter>
-    </ClInclude>
     <ClInclude Include="src\system\platform.h">
       <Filter>Headerdateien\system</Filter>
     </ClInclude>
     <ClInclude Include="src\system\memstream.h">
       <Filter>Headerdateien\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_stream.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\sound_stream_factory.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\priv\ogg_stream.h">
+      <Filter>Headerdateien\audio\priv</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

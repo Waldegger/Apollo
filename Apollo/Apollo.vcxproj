@@ -159,9 +159,11 @@
     <ClCompile Include="src\audio\audio_format.cpp" />
     <ClCompile Include="src\audio\listener.cpp" />
     <ClCompile Include="src\audio\music.cpp" />
+    <ClCompile Include="src\audio\priv\ogg_stream.cpp" />
     <ClCompile Include="src\audio\sound.cpp" />
     <ClCompile Include="src\audio\sound_buffer.cpp" />
-    <ClCompile Include="src\audio\sound_file_ogg.cpp" />
+    <ClCompile Include="src\audio\sound_stream_factory.cpp" />
+    <ClCompile Include="src\audio\sound_stream.cpp" />
     <ClCompile Include="src\audio\sound_file_wave.cpp" />
     <ClCompile Include="src\audio\sound_interface.cpp" />
     <ClCompile Include="src\audio\sound_queue_buffer.cpp" />
@@ -201,9 +203,11 @@
     <ClInclude Include="src\audio\audio_format.h" />
     <ClInclude Include="src\audio\listener.h" />
     <ClInclude Include="src\audio\music.h" />
+    <ClInclude Include="src\audio\priv\ogg_stream.h" />
     <ClInclude Include="src\audio\sound.h" />
     <ClInclude Include="src\audio\sound_buffer.h" />
-    <ClInclude Include="src\audio\sound_file_ogg.h" />
+    <ClInclude Include="src\audio\sound_stream_factory.h" />
+    <ClInclude Include="src\audio\sound_stream.h" />
     <ClInclude Include="src\audio\sound_file_wave.h" />
     <ClInclude Include="src\audio\sound_interface.h" />
     <ClInclude Include="src\audio\sound_queue_buffer.h" />
