@@ -46,7 +46,7 @@ namespace age
 				source->detach_sound();
 
 				if (for_permanent_use)
-					m_unvailable_sources.push_back(result);
+					m_unvailable_sources.push_back(source);
 				else
 					m_available_sources.push(source);
 

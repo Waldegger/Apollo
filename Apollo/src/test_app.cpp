@@ -84,7 +84,9 @@ void test_app::on_create()
 
     m_test_sound.set_buffer(&m_test_buffer);
 
-    m_test_music.open("./test_data/track1.ogg");
+    m_test_music.open("./test_data/menu.ogg");
+    m_test_music.set_volume(0.25f);
+    m_test_music.play(true);
 
     m_clock.start();
 }
@@ -137,6 +139,40 @@ void test_app::on_update()
                     age::vector3f sound_pos = m_test_sound.get_position();
                     sound_pos.x += 1.0f;
                     m_test_sound.update_position(sound_pos);
+                }
+                break;
+                case SDLK_p:
+                {
+                    switch (m_test_music.get_state())
+                    {
+                        case age::sound_source::state::playing:
+                        {
+                            m_test_music.pause();
+                        }
+                        break;
+                        case age::sound_source::state::paused:
+                        {
+                            m_test_music.play(true);
+                        }
+                        break;
+                    }
+                }
+                break;
+                case SDLK_t:
+                {
+                    m_test_music.stop();
+                }   
+                break;
+                case SDLK_r:
+                {
+                    m_test_music.play();
+                }
+                break;
+                case SDLK_c:
+                {
+                    m_test_music.open("./test_data/track1.ogg");
+                    m_test_music.set_volume(1.0f);
+                    m_test_music.play(true);
                 }
                 break;
             }

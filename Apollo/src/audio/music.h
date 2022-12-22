@@ -11,6 +11,7 @@
 #include <condition_variable>
 
 #include "sound_buffer.h"
+#include "sound_source.h"
 #include "sound_stream.h"
 #include "../system/background_worker.h"
 
@@ -37,19 +38,21 @@ namespace age
 		void open(std::istream& is);
 		void open(std::unique_ptr<std::istream> is);
 		void open(std::byte data[], size_t size);
+
+		sound_source::state get_state() const;
 	protected:
 
 	private:
 		inline static constexpr size_t NUM_BUFFERS = 4;
+		//inline static constexpr size_t BUFFER_SAMPLES = 65536;
 		inline static constexpr size_t BUFFER_SAMPLES = 8192;
 
 		void open_from_stream(std::istream& is);
 
 		void buffer_play_and_stream(bool looped = false);
 
-		mutable std::mutex m_source_state_mutex;
+		mutable std::mutex m_source_mutex;
 
-		std::mutex m_buffer_mutex;
 		std::condition_variable m_buffer_cv;
 
 		std::array<sound_buffer, NUM_BUFFERS> m_buffers;
@@ -60,5 +63,7 @@ namespace age
 		background_worker m_background_worker;
 		std::unique_ptr<std::istream> m_istream;
 		std::unique_ptr<sound_stream> m_sound_stream;
+
+		std::atomic<sound_source::state> m_state;
 	};
 }

@@ -7,7 +7,7 @@ background_worker::background_worker()
 background_worker::~background_worker()
 {
 	{
-		std::lock_guard<std::mutex> lock{ m_queue_mutex };
+		std::scoped_lock<std::mutex> lock{ m_queue_mutex };
 		m_exit = true;
 		m_queue_pending.notify_one();
 	}
@@ -17,14 +17,14 @@ background_worker::~background_worker()
 
 void background_worker::add_job(const std::function<void()>& value)
 {
-	std::lock_guard<std::mutex> lock{ m_queue_mutex };
+	std::scoped_lock<std::mutex> lock{ m_queue_mutex };
 	m_job_queue.push(value);
 	m_queue_pending.notify_one();
 }
 
 size_t background_worker::get_num_pending_jobs() const
 {
-	std::unique_lock<std::mutex> lock{ m_queue_mutex };
+	std::scoped_lock<std::mutex> lock{ m_queue_mutex };
 
 	return m_job_queue.size();
 }

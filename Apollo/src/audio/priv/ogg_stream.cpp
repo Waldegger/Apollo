@@ -5,7 +5,11 @@
 size_t read(void* ptr, size_t size, size_t nmemb, void* data)
 {
 	std::istream* stream = static_cast<std::istream*>(data);
-	return static_cast<size_t>(stream->read(reinterpret_cast<char*>(ptr), size * nmemb).gcount());
+	size_t bytes_to_read = size * nmemb;
+
+	auto result = static_cast<size_t>(stream->read(reinterpret_cast<char*>(ptr), bytes_to_read).gcount());
+
+	return result;
 }
 
 int seek(void* data, ogg_int64_t offset, int whence)
@@ -23,7 +27,12 @@ int seek(void* data, ogg_int64_t offset, int whence)
 		stream->seekg(-offset, std::ios_base::end);
 		break;
     }
-	return stream->tellg();
+
+	auto eof = stream->eof();
+	auto fail = stream->fail();
+	auto pos = stream->tellg();
+
+	return static_cast<int>(stream->tellg());
 }
 
 long tell(void* data)
@@ -66,6 +75,7 @@ namespace age
 		result.sample_count = ov_pcm_total(&m_vorbis_file, -1) * v_info->channels;
 
 		m_channel_count = result.channel_count;
+		m_istream = &is;
 
 		return result;
 	}
@@ -92,5 +102,13 @@ namespace age
 		}
 
 		return count;
+	}
+
+	void ogg_stream::on_reset()
+	{
+		if (!m_istream) return;
+
+		m_istream->clear();
+		seek(0);
 	}
 }

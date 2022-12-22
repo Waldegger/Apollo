@@ -26,10 +26,13 @@ namespace age
 		virtual info on_open(std::istream& is) override;
 		virtual void on_seek(uint64_t sample_offset) override;
 		virtual size_t on_read(std::byte samples[], size_t max_count) override;
+		virtual void on_reset() override;
 
 	private:
 
 		OggVorbis_File m_vorbis_file;
 		uint32_t m_channel_count{};
+
+		std::istream* m_istream{};
 	};
 }

@@ -11,8 +11,9 @@
 namespace age
 {
 	music::music()
+		: m_state{ sound_source::state::stopped }
 	{
-		m_samples_buffer.reserve(BUFFER_SAMPLES);
+		m_samples_buffer.resize(BUFFER_SAMPLES);
 		set_relative_to_listener(true);
 	}
 
@@ -25,28 +26,32 @@ namespace age
 	{
 		if (!m_sound_stream_info.sample_count) return;
 
-		auto source = get_attached_source();
-		if (!source)
+		std::scoped_lock<std::mutex> source_lock{ m_source_mutex };
+		auto current_attached_source = get_attached_source();
+		if (!current_attached_source)
 		{
-			source = audio_device::get().get_free_source(true);
-			attach_source(source);
+			current_attached_source = audio_device::get().get_free_source(true);
+			attach_source(current_attached_source);
 		}
 
-		if (source)
+		if (current_attached_source)
 		{
-			update_source(*source, false);
+			update_source(*current_attached_source, false);
 
-			switch (source->get_state())
+			switch (m_state)
 			{
 				case sound_source::state::stopped:
 				{
+					m_state = sound_source::state::playing;
 					m_background_worker.add_job([this, looped]() -> void { buffer_play_and_stream(looped); });
 				}
 				break;
 
 				case sound_source::state::paused:
 				{
-			
+					m_state = sound_source::state::playing;
+					m_buffer_cv.notify_one();
+					current_attached_source->play();
 				}
 				break;
 
@@ -61,9 +66,12 @@ namespace age
 
 	void music::stop()
 	{
+		std::scoped_lock<std::mutex> lock{ m_source_mutex };
+
 		if (auto current_attached_source = get_attached_source())
 		{
-			std::scoped_lock<std::mutex> lock{ m_source_state_mutex };
+			m_state = sound_source::state::stopped;
+			m_buffer_cv.notify_one();
 
 			if(current_attached_source->get_state() != sound_source::state::stopped)
 				current_attached_source->stop();
@@ -76,12 +84,13 @@ namespace age
 
 	void music::pause()
 	{
+		std::scoped_lock<std::mutex> lock{ m_source_mutex };
+
 		auto current_attached_source = get_attached_source();
 
 		if (current_attached_source)
 		{
-			std::scoped_lock<std::mutex> lock{ m_source_state_mutex };
-
+			m_state = sound_source::state::paused;
 			current_attached_source->pause();
 		}
 	}
@@ -114,8 +123,15 @@ namespace age
 		open_from_stream(*m_istream);
 	}
 
+	sound_source::state music::get_state() const
+	{
+		return m_state;
+	}
+
 	void music::open_from_stream(std::istream& is)
 	{
+		stop();
+
 		m_sound_stream_info = sound_stream::info{};
 		m_sound_stream = sound_stream_factory::create_from_stream(is);
 
@@ -131,49 +147,97 @@ namespace age
 	{
 		sound_buffer::format format = m_sound_stream_info.channel_count == 1 ? sound_buffer::format::mono_16 : sound_buffer::format::stereo_16;
 
-		auto current_attached_source = get_attached_source();
-
-		//first fill the buffers
-		size_t filled_buffers = 0;
-		for (auto& buffer : m_buffers)
 		{
-			size_t bytes_read = m_sound_stream->read(&m_samples_buffer[0], m_samples_buffer.size());
+			std::scoped_lock<std::mutex> source_lock{ m_source_mutex };
 
-			if (!bytes_read) break;
-			buffer.buffer_data(format, &m_samples_buffer[0], bytes_read, m_sound_stream_info.sample_rate);
+			auto current_attached_source = get_attached_source();
+			if (!current_attached_source) return;
 
-			current_attached_source->queue_buffer(buffer);
+			m_sound_stream->reset();
 
-			++filled_buffers;
+			//first fill the buffers
+			size_t filled_buffers = 0;
+			for (auto& buffer : m_buffers)
+			{
+				size_t bytes_read = m_sound_stream->read(&m_samples_buffer[0], m_samples_buffer.size());
+
+				if (!bytes_read) break;
+				buffer.buffer_data(format, &m_samples_buffer[0], bytes_read, m_sound_stream_info.sample_rate);
+
+				current_attached_source->queue_buffer(buffer);
+
+				++filled_buffers;
+			}
+
+			//no buffers filled, no music to play
+			if (!filled_buffers) return;
+
+			current_attached_source->play();
 		}
 
-		//no buffers filled, no music to play
-		if (!filled_buffers) return;
-
-		current_attached_source->play();
-
+		std::mutex wait_mutex;
 		while (true)
 		{
 			//For the waiting, mulitply the pitch into the amount of miliseconds to wait
-			std::unique_lock<std::mutex> wait_lock{ m_buffer_mutex };
-			m_buffer_cv.wait_for(wait_lock, std::chrono::milliseconds{ 250 }, []() -> bool { return true; });
+			std::unique_lock<std::mutex> wait_lock{ wait_mutex };
+			m_buffer_cv.wait_for(wait_lock, std::chrono::milliseconds{ 50 }, [this]() -> bool { return m_state == sound_source::state::stopped; });
+			m_buffer_cv.wait(wait_lock, [this]() -> bool { return m_state != sound_source::state::paused; });
+
+			std::scoped_lock<std::mutex> source_lock{ m_source_mutex };
+			auto current_attached_source = get_attached_source();
+
+			if (m_state == sound_source::state::stopped || !current_attached_source) return;
 
 			uint32_t processed_buffers = current_attached_source->get_num_processed_buffers();
-
+			
 			while (processed_buffers)
 			{
 				--processed_buffers;
 				size_t bytes_read = m_sound_stream->read(&m_samples_buffer[0], m_samples_buffer.size());
 
-				//When there are no bytes read the stream has finished. For now we just exit the function.
+				//When there are less bytes read than requested, the stream has finished.
 				//When looped the file actually needs to be read again from the beginning and the buffer can be filled a bit more
-				if (!bytes_read) return;
+				if (bytes_read < m_samples_buffer.size())
+				{
+					if (!looped)
+					{
+						goto finalize;
+					}
+
+					m_sound_stream->reset();
+					size_t difference = m_samples_buffer.size() - bytes_read;
+					bytes_read += m_sound_stream->read(&m_samples_buffer[bytes_read], difference);
+				}
 
 				auto processed_buffer = current_attached_source->unqueue_buffer();
 
 				processed_buffer.buffer_data(format, &m_samples_buffer[0], bytes_read, m_sound_stream_info.sample_rate);
 
 				current_attached_source->queue_buffer(processed_buffer);
+			}
+
+			//If there should have been a buffer underrun, just resume playing the source
+			if (current_attached_source->get_state() == sound_source::state::stopped)
+				current_attached_source->play();
+		}
+
+		finalize:
+		while (true)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds{ 100 });
+			std::scoped_lock<std::mutex> source_lock{ m_source_mutex };
+
+			auto current_attached_source = get_attached_source();
+			if (!current_attached_source) return;
+
+			if (current_attached_source->get_state() == sound_source::state::stopped)
+			{
+				m_state = sound_source::state::stopped;
+
+				audio_device::get().make_source_available(current_attached_source);
+				detach_source();
+
+				return;
 			}
 		}
 	}
