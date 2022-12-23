@@ -162,6 +162,15 @@
     <ClCompile Include="src\audio\priv\ogg_stream.cpp">
       <Filter>Quelldateien\audio\priv</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\circle_shape.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\rectangle_shape.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\shape_2d.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -307,6 +316,15 @@
     </ClInclude>
     <ClInclude Include="src\audio\priv\ogg_stream.h">
       <Filter>Headerdateien\audio\priv</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\circle_shape.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\rectangle_shape.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\shape_2d.h">
+      <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
