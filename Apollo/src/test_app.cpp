@@ -61,6 +61,9 @@ void test_app::on_create()
     m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
     m_test_text.set_position(age::vector2f{ -0.9f, 0.0f });
 
+    m_fps_text.set_font(m_test_font);
+    m_fps_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
+    m_fps_text.set_position(age::vector2f{ -0.9f, 0.9f });
 
     //Testing memstream
  
@@ -181,6 +184,11 @@ void test_app::on_update()
     }
 
     m_delta_time = static_cast<float>(m_clock.restart());
+
+    m_fps_stringstream.str(U"");
+    m_fps_stringstream << "fps: " << 1.0f / m_delta_time;
+    m_fps_text.set_string(m_fps_stringstream.str());
+
     m_elapsed_time += m_delta_time;
     m_background_program.set_uniform(m_background_program_time_location, m_elapsed_time);
 
@@ -205,6 +213,7 @@ void test_app::on_update()
     get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, age::matrix4f::get_identity() });
     get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ *engine::get_default_program_layout(), m_test_texture, m_rect_matrix});
     get_render_window().draw(m_test_text, age::render_states{});
+    get_render_window().draw(m_fps_text, age::render_states{});
 
     //Update screen
     get_render_window().display();

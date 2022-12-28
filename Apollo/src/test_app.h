@@ -1,6 +1,9 @@
 #pragma once
 
 #include "engine.h"
+
+#include <sstream>
+
 #include "graphics/shader_program.h"
 #include "graphics/vertex_2d.h"
 #include "algebra/matrix4.h"
@@ -63,6 +66,10 @@ private:
 
     age::font m_test_font;
     age::text m_test_text;
+    age::text m_fps_text;
+
+    std::basic_stringstream<char32_t> m_fps_stringstream;
+    std::u32string m_fps_string;
 
     age::sound_buffer m_test_buffer;
     age::sound m_test_sound;

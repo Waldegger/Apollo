@@ -95,10 +95,7 @@ namespace age
 		, m_outline_vertices{}
 		, m_geometry_needs_update{ true }
 	{
-		//ToDo: Thats probably not the way to convert a string to unicode. Find the proper way to do it
-		m_string.reserve(the_text.size());
-		for (auto c : the_text)
-			m_string.push_back(c);
+		set_string(the_text);
 	}
 
 	text::text(std::u32string_view the_text, const font& the_font, uint32_t the_character_size)
@@ -120,16 +117,12 @@ namespace age
 
 	void text::set_string(std::string_view value)
 	{
-		m_tmp_convert_string.clear();
-		m_tmp_convert_string.reserve(value.size());
-		for (auto& c : value)
-			m_tmp_convert_string.push_back(c);
-
-		if (m_tmp_convert_string != m_string)
-		{
-			m_string = m_tmp_convert_string;
-			m_geometry_needs_update = true;
-		}
+		/*
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter;
+		m_tmp_convert_string = converter.from_bytes(value.data());
+		
+		set_string(converter.from_bytes(value.data()));
+		*/
 	}
 
 	void text::set_string(std::u32string_view value)
