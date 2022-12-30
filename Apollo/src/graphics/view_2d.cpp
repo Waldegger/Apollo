@@ -70,8 +70,8 @@ namespace age
 
 	void view_2d::reset(const float_rect& rectangle)
 	{
-		m_center.x = rectangle.left + rectangle.width / 2.f;
-		m_center.y = rectangle.top + rectangle.height / 2.f;
+		m_center.x = rectangle.left + rectangle.width / 2.0f;
+		m_center.y = rectangle.top + rectangle.height / 2.0f;
 		m_size.x = rectangle.width;
 		m_size.y = rectangle.height;
 		m_rotation = 0.0f;
@@ -108,16 +108,16 @@ namespace age
 			float ty = m_center.x * sine - m_center.y * cosine + m_center.y;
 
 			// Projection components
-			float a = 2.f / m_size.x;
-			float b = -2.f / m_size.y;
+			float a = 2.0f / m_size.x;
+			float b = -2.0f / m_size.y;
 			float c = -a * m_center.x;
 			float d = -b * m_center.y;
 
 			// Rebuild the projection matrix
 			m_transform = matrix4f(a * cosine, a * sine, a * tx + c,
 				-b * sine, b * cosine, b * ty + d,
-				0.f, 0.f, 1.f);
-			
+				0.0f, 0.0f, 1.0f);
+
 			m_transform_updated = true;
 		}
 

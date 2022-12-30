@@ -47,7 +47,7 @@ void test_app::on_create()
     
     m_test_texture.load("./test_data/test.png");
 
-    m_rect_matrix.translate(age::vector2f{ 0.5f, -1.5f });
+    m_rect_matrix.translate(age::vector2f{ 0.5f, 1.5f });
 
     uint32_t text_size = 64;
     m_test_font.load("./test_data/comic.ttf");
@@ -59,11 +59,14 @@ void test_app::on_create()
     m_test_text.set_font(m_test_font);
     m_test_text.set_string(U"Apollo flies way\nhigher\nthan the moon!");
     m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
-    m_test_text.set_position(age::vector2f{ -0.9f, 0.0f });
+    m_test_text.set_position(age::vector2f{ 0.0f, 0.75f });
 
     m_fps_text.set_font(m_test_font);
     m_fps_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
-    m_fps_text.set_position(age::vector2f{ -0.9f, 0.9f });
+    m_fps_text.set_position(age::vector2f{ 0.05f, 0.05f });
+
+    m_test_rectangle_shape.set_scale(age::vector2f{ 1.0f, 1.0f });
+    m_test_rectangle_shape.set_position(age::vector2f{ 0.0f, 1.0f });
 
     //Testing memstream
  
@@ -209,11 +212,16 @@ void test_app::on_update()
     //Clear screen
     get_render_window().clear();
 
+    age::matrix4f background_matrix;
+    //background_matrix.translate(age::vector2f{ 0.0f, 0.0f });
+    //background_matrix.scale(age::vector2f{ 0.75f, 0.75f });
+    
     //Draw Stuff
-    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, age::matrix4f::get_identity() });
+    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, background_matrix });
     get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ *engine::get_default_program_layout(), m_test_texture, m_rect_matrix});
     get_render_window().draw(m_test_text, age::render_states{});
     get_render_window().draw(m_fps_text, age::render_states{});
+    get_render_window().draw(m_test_rectangle_shape, age::render_states{});
 
     //Update screen
     get_render_window().display();

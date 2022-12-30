@@ -2,7 +2,7 @@
 
 #include "../sound_stream.h"
 
-#include <vorbis/vorbisfile.h>
+#include <vorbisfile.h>
 
 namespace age
 {

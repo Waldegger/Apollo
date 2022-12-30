@@ -11,6 +11,7 @@
 #include "graphics/view_2d.h"
 #include "graphics/font.h"
 #include "graphics/text.h"
+#include "graphics/rectangle_shape.h"
 #include "system/clock.h"
 #include "audio/sound_buffer.h"
 #include "audio/sound.h"
@@ -67,6 +68,8 @@ private:
     age::font m_test_font;
     age::text m_test_text;
     age::text m_fps_text;
+
+    age::rectangle_shape m_test_rectangle_shape{ age::vector2f{0.25f, 0.25f} };
 
     std::basic_stringstream<char32_t> m_fps_stringstream;
     std::u32string m_fps_string;

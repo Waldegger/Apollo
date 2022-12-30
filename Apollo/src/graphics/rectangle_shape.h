@@ -30,6 +30,12 @@ namespace age
 		void set_outline_thickness(float value);
 		float get_outline_thickness() const;
 
+		void set_fill_color(const color& value);
+		const color& get_fill_color() const;
+
+		void set_outline_color(const color& value);
+		const color& get_outline_color() const;
+
 		inline const std::array<vertex_2d, 4>& get_vertices() const { return m_vertices; }
 		inline const std::array<uint32_t, 6>& get_indices() const { return m_indices; }
 

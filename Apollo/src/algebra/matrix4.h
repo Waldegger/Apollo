@@ -251,8 +251,8 @@ namespace age
 	template<typename T>
 	constexpr matrix4<T> operator * (const matrix4<T>& lhs, const matrix4<T>& rhs)
 	{
-		auto& a = lhs;
-		auto& b = rhs;
+		auto& a = rhs;
+		auto& b = lhs;
 
 		return matrix4<T>
 		{ 
@@ -302,7 +302,7 @@ namespace age
 	}
 
 	template<typename T>
-	constexpr matrix4<T>& operator *= (const matrix4<T>& lhs, const matrix4<T>& rhs)
+	constexpr matrix4<T>& operator *= (matrix4<T>& lhs, const matrix4<T>& rhs)
 	{
 		return lhs.combine(rhs);
 	}

@@ -65,7 +65,7 @@ namespace age
 		const float_rect& viewport = view.get_viewport();
 
 		return int_rect({ static_cast<int>(0.5f + width * viewport.left), static_cast<int>(0.5f + height * viewport.top) },
-			{ static_cast<int>(0.5f + width * viewport.width), static_cast<int>(0.5f + height * viewport.height) });
+						{ static_cast<int>(0.5f + width * viewport.width), static_cast<int>(0.5f + height * viewport.height) });
 	}
 
 	void render_target::apply_view(const view_2d& value)
@@ -119,6 +119,7 @@ namespace age
 
 		program.bind();
 
+		//Correct order is: projection * view * model
 		if (layout.get_mvp_matrix_location() >= 0)
 			program.set_uniform(layout.get_mvp_matrix_location(), m_projection_matrix * states.get_transform());
 

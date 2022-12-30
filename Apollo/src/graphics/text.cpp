@@ -321,7 +321,7 @@ namespace age
 			ensure_geometry_is_updated();
 
 			render_states states_copy = states;
-			states_copy.set_transform(states_copy.get_transform() * get_transform());
+			states_copy.get_transform() *= get_transform();
 			states_copy.set_texture(m_font->get_texture(m_character_size));
 
 			if (m_outline_thickness != 0.0f)
