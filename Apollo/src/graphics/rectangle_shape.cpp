@@ -13,6 +13,7 @@ namespace age
 						vertex_2d{ vector2f{0.0f, size.y}, vector2f{0.0f, 1.0f} } }
 		, m_indices{ 0, 1, 2, 2, 3, 0 }
 		, m_outline_indices{ 0, 1, 2, 2, 3, 0, 1, 4, 5, 5, 2, 1, 4, 6, 7, 7, 5, 4, 6, 0, 3, 3, 7, 6 }
+		, m_size{ size }
 		, m_texture{ engine::get_default_texture() }
 		, m_outline_thickness{ 0.0f }
 	{
@@ -34,17 +35,15 @@ namespace age
 
 	void rectangle_shape::set_size(const vector2f& value)
 	{
-		m_vertices[1].position.x = value.x;
-		m_vertices[2].position = value;
-		m_vertices[3].position.y = value.y;
+		m_size = value;
 
-		//ToDo: Update outline
+		update_vertices();
 		update_outline();
 	}
 
 	const vector2f& rectangle_shape::get_size() const
 	{
-		return m_vertices[2].position;
+		return m_size;
 	}
 
 	void rectangle_shape::set_texture(const texture& value, bool reset_texture_rect)
@@ -82,12 +81,34 @@ namespace age
 	void rectangle_shape::set_outline_thickness(float value)
 	{
 		m_outline_thickness = value;
+
+		update_vertices();
 		update_outline();
 	}
 
 	float rectangle_shape::get_outline_thickness() const
 	{
 		return m_outline_thickness;
+	}
+
+	void rectangle_shape::set_fill_color(const color& value)
+	{
+		for (auto& v : m_vertices) v.color = value;
+	}
+
+	const color& rectangle_shape::get_fill_color() const
+	{
+		return m_vertices[0].color;
+	}
+
+	void rectangle_shape::set_outline_color(const color& value)
+	{
+		for (auto& v : m_outline_vertices) v.color = value;
+	}
+
+	const color& rectangle_shape::get_outline_color() const
+	{
+		return m_outline_vertices[0].color;
 	}
 
 	void rectangle_shape::draw(render_target& target, const render_states& states) const
@@ -110,6 +131,16 @@ namespace age
 	shape_2d::vertex_data rectangle_shape::on_get_vertex_data() const
 	{
 		return shape_2d::vertex_data{ m_vertices.data(), m_vertices.size(), m_indices.data(), m_indices.size() };
+	}
+
+	void rectangle_shape::update_vertices()
+	{
+		vector2f size_without_outline{ m_size.x - 2.0f * m_outline_thickness, m_size.y - 2.0f * m_outline_thickness };
+
+		m_vertices[0].position = vector2f{ m_outline_thickness, m_outline_thickness };
+		m_vertices[1].position = vector2f{ size_without_outline.x + m_outline_thickness, m_outline_thickness };
+		m_vertices[2].position = vector2f{ size_without_outline.x + m_outline_thickness, size_without_outline.y + m_outline_thickness };
+		m_vertices[3].position = vector2f{ m_outline_thickness, size_without_outline.y + m_outline_thickness };
 	}
 
 	void rectangle_shape::update_outline()
@@ -137,6 +168,11 @@ namespace age
 
 	void rectangle_shape::update_tex_coords()
 	{
+		auto texture_size = m_texture->get_size();
 
+		m_vertices[0].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
+		m_vertices[1].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
+		m_vertices[2].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
+		m_vertices[3].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
 	}
 }

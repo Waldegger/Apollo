@@ -48,6 +48,7 @@ namespace age
 		virtual void draw(render_target& target, const render_states& states) const override;
 		virtual vertex_data on_get_vertex_data() const override;
 
+		void update_vertices();
 		void update_outline();
 		void update_tex_coords();
 
@@ -58,6 +59,7 @@ namespace age
 		std::array<uint32_t, 24> m_outline_indices;
 
 		uint_rect m_texture_rect;
+		vector2f m_size;
 
 		const texture* m_texture;
 

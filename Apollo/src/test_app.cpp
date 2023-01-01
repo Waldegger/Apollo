@@ -67,6 +67,12 @@ void test_app::on_create()
 
     m_test_rectangle_shape.set_scale(age::vector2f{ 1.0f, 1.0f });
     m_test_rectangle_shape.set_position(age::vector2f{ 0.0f, 1.0f });
+    m_test_rectangle_shape.set_outline_thickness(0.025f);
+    m_test_rectangle_shape.set_outline_color(age::color::magenta);
+
+    m_test_circle_shape.set_position(age::vector2f{ 0.25f, 0.25f });
+    m_test_circle_shape.set_outline_thickness(0.025f);
+    m_test_circle_shape.set_outline_color(age::color::magenta);
 
     //Testing memstream
  
@@ -222,6 +228,7 @@ void test_app::on_update()
     get_render_window().draw(m_test_text, age::render_states{});
     get_render_window().draw(m_fps_text, age::render_states{});
     get_render_window().draw(m_test_rectangle_shape, age::render_states{});
+    get_render_window().draw(m_test_circle_shape, age::render_states{});
 
     //Update screen
     get_render_window().display();
