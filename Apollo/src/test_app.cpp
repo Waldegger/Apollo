@@ -73,6 +73,7 @@ void test_app::on_create()
     m_test_circle_shape.set_position(age::vector2f{ 0.25f, 0.25f });
     m_test_circle_shape.set_outline_thickness(0.025f);
     m_test_circle_shape.set_outline_color(age::color::magenta);
+    m_test_circle_shape.set_resolution(6);
 
     //Testing memstream
  

@@ -42,6 +42,7 @@ namespace age
 		void gen_outline_vertices();
 		void update_fill_color();
 		void update_outline_color();
+		void scale_for_outline();
 
 		std::vector<vertex_2d> m_vertices;
 		std::vector<uint32_t> m_indices;

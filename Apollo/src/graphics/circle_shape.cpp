@@ -4,6 +4,8 @@
 
 #include "render_states.h"
 
+static constexpr float PI = 3.141592654f;
+
 namespace age
 {
 	circle_shape::circle_shape(float radius, uint32_t resolution)
@@ -11,6 +13,7 @@ namespace age
 		, m_resolution{ resolution }
 		, m_radius{ radius }
 		, m_outline_thickness{ 0.0f }
+		, m_fill_color{ color::white }
 	{
 		if (resolution < 3)
 			throw std::runtime_error{ "Failure creating circle: The resolution must be 3 or higher" };
@@ -30,6 +33,12 @@ namespace age
 		m_resolution = value;
 
 		gen_vertices();
+
+		if (m_outline_thickness)
+		{
+			scale_for_outline();
+			gen_outline_vertices();
+		}
 
 		update_fill_color();
 		update_outline_color();
@@ -56,8 +65,12 @@ namespace age
 	{
 		if (m_outline_thickness == value) return;
 
+		if (value >= m_radius)
+			throw std::runtime_error{ "Failure setting outline_thickness: The outline thickness must be smaller than the radius" };
+
 		m_outline_thickness = value;
 
+		scale_for_outline();
 		if (m_outline_thickness)
 		{
 			gen_outline_vertices();
@@ -118,8 +131,6 @@ namespace age
 
 	void circle_shape::gen_vertices()
 	{
-		static constexpr float PI = 3.141592654f;
-
 		m_vertices.clear();
 		m_indices.clear();
 
@@ -157,15 +168,11 @@ namespace age
 		for (uint32_t i = 0; i < m_resolution; ++i)
 		{
 			vertex_2d& v = m_vertices[i + 1];
-			vector2f direction = (m_vertices[i + 1].position - m_vertices[0].position) / m_radius;
 
-			vector2f new_pos = m_vertices[0].position + direction * aspect;
-
-			m_outline_vertices.emplace_back(new_pos);
+			float angle = static_cast<float>(i) * 2.0f * PI / static_cast<float>(m_resolution);
+			m_outline_vertices.emplace_back(vector2f{ cos(angle) * m_radius + m_radius, sin(angle) * m_radius + m_radius });
 			m_outline_vertices.push_back(v);
-
-			v.position = new_pos;
-
+			
 			uint32_t index = i * 2;
 			m_outline_indices.push_back(index);
 			m_outline_indices.push_back(index + 1);
@@ -183,11 +190,24 @@ namespace age
 
 	void circle_shape::update_fill_color()
 	{
-		for (auto& v : m_vertices)  v.color = m_fill_color;
+		for (auto& v : m_vertices) v.color = m_fill_color;
 	}
 
 	void circle_shape::update_outline_color()
 	{
 		for (auto& v : m_outline_vertices) v.color = m_outline_color;
+	}
+
+	void circle_shape::scale_for_outline()
+	{
+		float inner_radius = m_radius - m_outline_thickness;
+
+		for (uint32_t i = 0; i < m_resolution; ++i)
+		{
+			float angle = static_cast<float>(i) * 2.0f * PI / static_cast<float>(m_resolution);
+
+			auto index = i + 1;
+			m_vertices[index].position = vector2f{ cos(angle) * inner_radius + m_radius, sin(angle) * inner_radius + m_radius };
+		}
 	}
 }
