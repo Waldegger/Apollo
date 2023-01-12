@@ -19,6 +19,10 @@ namespace age
 			: m_program_layout{ &program_layout }
 		{}
 
+		render_states(const matrix4f& the_transform)
+			: m_transform{ the_transform }
+		{}
+
 		render_states(const program_layout& program_layout, const matrix4f& the_transform)
 			: m_program_layout{ &program_layout }
 			, m_transform{ the_transform }
@@ -58,6 +62,8 @@ namespace age
 		inline const matrix4f& get_transform() const { return m_transform; }
 		inline matrix4f& get_transform() { return m_transform; }
 
+		inline static const render_states& get_default();
+
 	protected:
 
 	private:
@@ -67,4 +73,10 @@ namespace age
 		blend_mode m_blend_mode = blend_mode::blend_alpha;
 		matrix4f m_transform;
 	};
+
+	const render_states& render_states::get_default()
+	{
+		render_states result;
+		return result;
+	}
 }
