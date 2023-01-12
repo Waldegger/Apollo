@@ -7,7 +7,7 @@ namespace age
 	namespace listener
 	{
 		void set_volume(float value);
-		float ge_volume();
+		float get_volume();
 
 		void set_position(const vector3f& value);
 		const vector3f& get_position();
