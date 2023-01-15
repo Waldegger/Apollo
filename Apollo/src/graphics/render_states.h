@@ -76,7 +76,7 @@ namespace age
 
 	const render_states& render_states::get_default()
 	{
-		render_states result;
+		static render_states result;
 		return result;
 	}
 }

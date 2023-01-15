@@ -77,6 +77,13 @@ namespace age
 
 		// Set the projection matrix
 		m_projection_matrix = value.get_transform();
+
+		m_view_size = value.get_size();
+	}
+
+	const vector2f& render_target::get_view_size() const
+	{
+		return m_view_size;
 	}
 
 	void render_target::draw(const drawable& drawable_object, const render_states& states)

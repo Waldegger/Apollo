@@ -67,6 +67,25 @@ namespace age
 		alBufferData(m_handle, format_to_AL_enum(the_format), data, static_cast<ALsizei>(size_in_bytes), frequency);
 	}
 
+	float sound_buffer::get_duration() const
+	{
+		ALint size_in_bytes;
+		ALint channels;
+		ALint bits;
+		ALint frequency;
+
+		ALuint handle = get_handle();
+
+		alGetBufferi(handle, AL_SIZE, &size_in_bytes);
+		alGetBufferi(handle, AL_CHANNELS, &channels);
+		alGetBufferi(handle, AL_BITS, &bits);
+		alGetBufferi(handle, AL_FREQUENCY, &frequency);
+
+		auto length_in_samples = size_in_bytes * 8 / (channels * bits);
+
+		return static_cast<float>(length_in_samples) / static_cast<float>(frequency);
+	}
+
 	int32_t sound_buffer::format_to_AL_enum(format the_format)
 	{
 		std::array<ALenum, 4> format_names{ AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8, AL_FORMAT_STEREO16 };

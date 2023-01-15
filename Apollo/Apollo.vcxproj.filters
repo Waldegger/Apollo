@@ -171,6 +171,9 @@
     <ClCompile Include="src\graphics\shape_2d.cpp">
       <Filter>Quelldateien\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\sprite.cpp">
+      <Filter>Quelldateien\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\system\assetstream.h">
@@ -324,6 +327,9 @@
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\shape_2d.h">
+      <Filter>Headerdateien\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\sprite.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
   </ItemGroup>

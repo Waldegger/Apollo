@@ -37,6 +37,18 @@ namespace age
 	};
 
 	template<typename T>
+	constexpr bool operator == (const vector2<T>& lhs, const vector2<T>& rhs)
+	{
+		return lhs.x == rhs.x && lhs.y == rhs.y;
+	}
+
+	template<typename T>
+	constexpr bool operator != (const vector2<T>& lhs, const vector2<T>& rhs)
+	{
+		return lhs.x != rhs.x || lhs.y != rhs.y;
+	}
+
+	template<typename T>
 	constexpr vector2<T> operator + (const vector2<T>& lhs, const vector2<T>& rhs)
 	{
 		return vector2<T>{ lhs.x + rhs.x, lhs.y + rhs.y };
@@ -49,6 +61,12 @@ namespace age
 		lhs.y += rhs.y;
 
 		return lhs;
+	}
+
+	template<typename T>
+	constexpr vector2<T> operator - (const vector2<T>& v)
+	{
+		return vector2<T>{ -v.x, -v.y };
 	}
 
 	template<typename T>
@@ -65,6 +83,13 @@ namespace age
 
 		return lhs;
 	}
+
+	template<typename T>
+	constexpr vector2<T> operator * (T factor, const vector2<T>& lhs)
+	{
+		return lhs * factor;
+	}
+
 
 	template<typename T>
 	constexpr vector2<T> operator * (const vector2<T>& lhs, T factor)

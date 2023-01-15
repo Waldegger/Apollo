@@ -32,12 +32,13 @@ namespace age
 		render_target& operator = (const render_target& other) = default;
 		render_target& operator = (render_target&& other) = default;
 
+	public:
 		int_rect get_viewport(const view_2d& view) const;
 
 		virtual vector2u get_size() const = 0;
 
-	public:
 		void apply_view(const view_2d& view);
+		const vector2f& get_view_size() const;
 
 		void draw(const drawable& drawbable_object, const render_states& states);
 		void draw(const vertex_2d vertices[], const uint32_t indices[], size_t num_indices, const render_states& states);
@@ -60,6 +61,7 @@ namespace age
 		void prepare_draw(const vertex_2d vertices[], const render_states& states);
 		void apply_blend_mode(const blend_mode& mode);
 
+		vector2f m_view_size;
 		matrix4f m_projection_matrix;
 		states_cache m_states_cache;
 	};

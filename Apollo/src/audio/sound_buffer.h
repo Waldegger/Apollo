@@ -30,6 +30,7 @@ namespace age
 		void load(std::byte data[], size_t size_in_bytes);
 
 		void buffer_data(format the_format, const std::byte data[], size_t size_in_bytes, uint32_t frequency);
+		float get_duration() const;
 
 	protected:
 
