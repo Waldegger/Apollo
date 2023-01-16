@@ -35,6 +35,9 @@ namespace age
 	public:
 		int_rect get_viewport(const view_2d& view) const;
 
+		vector2f map_pixel_to_coords(const vector2i& point) const;
+		vector2i map_coords_to_pixel(const vector2f& coord) const;
+		
 		virtual vector2u get_size() const = 0;
 
 		void apply_view(const view_2d& view);
@@ -61,8 +64,14 @@ namespace age
 		void prepare_draw(const vertex_2d vertices[], const render_states& states);
 		void apply_blend_mode(const blend_mode& mode);
 
+		const matrix4f& get_inverse_projection() const;
+
 		vector2f m_view_size;
+		int_rect m_viewport;
 		matrix4f m_projection_matrix;
+		mutable matrix4f m_projection_matrix_inverse;
 		states_cache m_states_cache;
+
+		mutable bool m_projection_needs_update;
 	};
 }

@@ -57,7 +57,7 @@ void test_app::on_create()
 
     m_test_text.set_character_size(64);
     m_test_text.set_font(m_test_font);
-    m_test_text.set_string(U"Apollo flies way\nhigher\nthan the moon!");
+    m_test_text.set_string("Apollo flies way\nhigher\nthan the moon!");
     m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
     m_test_text.set_position(age::vector2f{ 0.0f, 0.75f });
 
@@ -106,93 +106,6 @@ void test_app::on_create()
 
 void test_app::on_update()
 {
-    SDL_Event e;
-
-    while (SDL_PollEvent(&e))
-    {
-        switch (e.type)
-        {
-        case SDL_QUIT:
-            stop(0);
-            break;
-
-        case SDL_KEYDOWN:
-            switch (e.key.keysym.sym)
-            {
-            case SDLK_LEFT:
-                m_key_left = true;
-                break;
-            case SDLK_RIGHT:
-                m_key_right = true;
-                break;
-            }
-            break;
-
-        case SDL_KEYUP:
-            switch (e.key.keysym.sym)
-            {
-                case SDLK_LEFT:
-                    m_key_left = false;
-                break;
-                case SDLK_RIGHT:
-                    m_key_right = false;
-                break;
-                case SDLK_s:
-                    m_test_sound.play();
-                break;
-                case SDLK_a:
-                {
-                    age::vector3f sound_pos = m_test_sound.get_position();
-                    sound_pos.x -= 1.0f;
-                    m_test_sound.update_position(sound_pos);
-                }
-                break;
-                case SDLK_d:
-                {
-                    age::vector3f sound_pos = m_test_sound.get_position();
-                    sound_pos.x += 1.0f;
-                    m_test_sound.update_position(sound_pos);
-                }
-                break;
-                case SDLK_p:
-                {
-                    switch (m_test_music.get_state())
-                    {
-                        case age::sound_source::state::playing:
-                        {
-                            m_test_music.pause();
-                        }
-                        break;
-                        case age::sound_source::state::paused:
-                        {
-                            m_test_music.play(true);
-                        }
-                        break;
-                    }
-                }
-                break;
-                case SDLK_t:
-                {
-                    m_test_music.stop();
-                }   
-                break;
-                case SDLK_r:
-                {
-                    m_test_music.play();
-                }
-                break;
-                case SDLK_c:
-                {
-                    m_test_music.open("./test_data/track1.ogg");
-                    m_test_music.set_volume(1.0f);
-                    m_test_music.play(true);
-                }
-                break;
-            }
-            break;
-        }
-    }
-
     m_delta_time = static_cast<float>(m_clock.restart());
 
     m_fps_stringstream.str(U"");
@@ -238,4 +151,102 @@ void test_app::on_update()
 void test_app::on_destroy()
 {
 
+}
+
+void test_app::on_process_event(SDL_Event& e)
+{
+    switch (e.type)
+    {
+        case SDL_QUIT:
+        {
+            stop(0);
+        }
+        break;
+
+        case SDL_WINDOWEVENT:
+            switch (e.window.event)
+            {
+                case SDL_WINDOWEVENT_SIZE_CHANGED:
+                {
+                    std::cout << "window size changed to: " << e.window.data1 << ", " << e.window.data2 << '\n';
+                    break;
+                }
+            }
+        break;
+
+    case SDL_KEYDOWN:
+        switch (e.key.keysym.sym)
+        {
+            case SDLK_LEFT:
+                m_key_left = true;
+                break;
+            case SDLK_RIGHT:
+                m_key_right = true;
+                break;
+        }
+        break;
+
+    case SDL_KEYUP:
+        switch (e.key.keysym.sym)
+        {
+            case SDLK_LEFT:
+                m_key_left = false;
+                break;
+            case SDLK_RIGHT:
+                m_key_right = false;
+                break;
+            case SDLK_s:
+                m_test_sound.play();
+                break;
+            case SDLK_a:
+            {
+                age::vector3f sound_pos = m_test_sound.get_position();
+                sound_pos.x -= 1.0f;
+                m_test_sound.update_position(sound_pos);
+            }
+            break;
+            case SDLK_d:
+            {
+                age::vector3f sound_pos = m_test_sound.get_position();
+                sound_pos.x += 1.0f;
+                m_test_sound.update_position(sound_pos);
+            }
+            break;
+            case SDLK_p:
+            {
+                switch (m_test_music.get_state())
+                {
+                case age::sound_source::state::playing:
+                {
+                    m_test_music.pause();
+                }
+                break;
+                case age::sound_source::state::paused:
+                {
+                    m_test_music.play(true);
+                }
+                break;
+                }
+            }
+            break;
+            case SDLK_t:
+            {
+                m_test_music.stop();
+            }
+            break;
+            case SDLK_r:
+            {
+                m_test_music.play();
+            }
+            break;
+            case SDLK_c:
+            {
+                m_test_music.open("./test_data/track1.ogg");
+                m_test_music.set_volume(1.0f);
+                m_test_music.play(true);
+            }
+            break;
+        }
+        break;
+    }
 }

@@ -15,6 +15,9 @@ namespace age
 	engine::engine()
 		: m_initializer{ SDL_INIT_VIDEO }
 		, m_default_program_layout{ m_default_shader_program }
+		, m_exit_code{ 0 }
+		, m_running{ false }
+		, m_started{ false }
 	{
 		static bool engine_instanced;
 
@@ -53,6 +56,14 @@ namespace age
 		SDL_WINDOW_ALLOW_HIGHDPI: window should be created in high-DPI mode if supported (>= SDL 2.0.1)
 		*/
 
+		if (m_started)
+		{
+			throw std::runtime_error{ "Engine is already running. Stop first before start again" };
+		}
+
+		m_started = true;
+		m_running = true;
+
 		uint32_t sdl_flags = SDL_WINDOW_OPENGL;
 		std::array<uint32_t, 8> own_flags{
 			static_cast<uint32_t>(window_flags::fullscreen),
@@ -88,14 +99,19 @@ namespace age
 
 		//Put main loop here
 		//----
+		SDL_Event e;
 		while (m_running)
 		{
+			while (SDL_PollEvent(&e))
+				on_process_event(e);
+			
 			update();
 		}
 		//----
 
 		destroy();
 
+		m_started = false;
 		return m_exit_code;
 	}
 
@@ -179,5 +195,10 @@ namespace age
 	void engine::destroy()
 	{
 		on_destroy();
+	}
+
+	void engine::on_process_event(SDL_Event& e)
+	{
+
 	}
 }

@@ -8,6 +8,8 @@
 #include "graphics/program_layout.h"
 #include "utility/utility.h"
 
+union SDL_Event;
+
 namespace age
 {
 	namespace window_flags
@@ -51,11 +53,13 @@ namespace age
 		inline static const texture* get_default_texture() { return m_default_texture_ptr; }
 
 	protected:
+
+	private:
 		virtual void on_create() = 0;
 		virtual void on_update() = 0;
 		virtual void on_destroy() = 0;
+		virtual void on_process_event(SDL_Event& e);
 
-	private:
 		static int32_t init_lib(uint32_t flags);
 		static void quit_lib();
 
@@ -79,7 +83,8 @@ namespace age
 		program_layout m_default_program_layout;
 		texture m_default_texture;
 		
-		int32_t m_exit_code = 0;
-		bool m_running = true;
+		int32_t m_exit_code;
+		bool m_running;
+		bool m_started;
 	};
 }

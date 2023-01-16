@@ -52,10 +52,9 @@ namespace age
 	}
 
 	render_target::render_target()
-	{
-		
-	}
-
+		: m_projection_needs_update{ true }
+	{}
+	
 	int_rect render_target::get_viewport(const view_2d& view) const
 	{
 		auto size = get_size();
@@ -68,17 +67,43 @@ namespace age
 						{ static_cast<int>(0.5f + width * viewport.width), static_cast<int>(0.5f + height * viewport.height) });
 	}
 
+	vector2f render_target::map_pixel_to_coords(const vector2i& point) const
+	{
+		vector2f normalized;
+
+		float_rect viewport = float_rect{ m_viewport };
+		normalized.x = -1.f + 2.f * (static_cast<float>(point.x) - viewport.left) / viewport.width;
+		normalized.y = 1.f - 2.f * (static_cast<float>(point.y) - viewport.top) / viewport.height;
+
+		return get_inverse_projection().transform_point(normalized);
+	}
+
+	vector2i render_target::map_coords_to_pixel(const vector2f& point) const
+	{
+		vector2f normalized = m_projection_matrix.transform_point(point);
+
+		// Then convert to viewport coordinates
+		vector2i  pixel;
+		float_rect viewport = float_rect(m_viewport);
+		pixel.x = static_cast<int>((normalized.x + 1.f) / 2.f * viewport.width + viewport.left);
+		pixel.y = static_cast<int>((-normalized.y + 1.f) / 2.f * viewport.height + viewport.top);
+
+		return pixel;
+	}
+
 	void render_target::apply_view(const view_2d& value)
 	{
 		// Set the viewport
-		int_rect viewport = get_viewport(value);
-		int     top = static_cast<int>(get_size().y) - (viewport.top + viewport.height);
-		glViewport(viewport.left, top, viewport.width, viewport.height);
+		m_viewport = get_viewport(value);
+		int     top = static_cast<int>(get_size().y) - (m_viewport.top + m_viewport.height);
+		glViewport(m_viewport.left, top, m_viewport.width, m_viewport.height);
 
 		// Set the projection matrix
 		m_projection_matrix = value.get_transform();
 
 		m_view_size = value.get_size();
+
+		m_projection_needs_update = true;
 	}
 
 	const vector2f& render_target::get_view_size() const
@@ -156,5 +181,16 @@ namespace age
 
 			m_states_cache.last_blend_mode = mode;
 		}
+	}
+
+	const matrix4f& render_target::get_inverse_projection() const
+	{
+		if (m_projection_needs_update)
+		{
+			m_projection_matrix_inverse = m_projection_matrix.get_inverse();
+			m_projection_needs_update = false;
+		}
+
+		return m_projection_matrix_inverse;
 	}
 }

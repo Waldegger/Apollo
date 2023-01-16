@@ -26,11 +26,14 @@ public:
 public:
 
 protected:
-	virtual void on_create() override;
-	virtual void on_update() override;
-	virtual void on_destroy() override;
+	
 
 private:
+    virtual void on_create() override;
+    virtual void on_update() override;
+    virtual void on_destroy() override;
+    virtual void on_process_event(SDL_Event& e) override;
+
     static constexpr uint32_t A_POSITION_INDEX = 0;
     static constexpr uint32_t A_COLOR_INDEX = 1;
     static constexpr uint32_t A_TEX_COORDS_INDEX = 2;

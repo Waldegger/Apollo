@@ -70,8 +70,8 @@ namespace age
 
 	void view_2d::reset(const float_rect& rectangle)
 	{
-		m_center.x = rectangle.left + rectangle.width / 2.0f;
-		m_center.y = rectangle.top + rectangle.height / 2.0f;
+		m_center.x = rectangle.left + rectangle.width * 0.5f;
+		m_center.y = rectangle.top + rectangle.height * 0.5f;
 		m_size.x = rectangle.width;
 		m_size.y = rectangle.height;
 		m_rotation = 0.0f;

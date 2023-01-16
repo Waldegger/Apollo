@@ -80,7 +80,7 @@ namespace age
 	{}
 
 	text::text(std::string_view the_text, const font& the_font, uint32_t the_character_size)
-		: m_string{}
+		: m_string{ the_text.begin(), the_text.end() }
 		, m_font{ &the_font }
 		, m_character_size{ the_character_size }
 		, m_letter_spacing_factor{ 1.0f }
@@ -94,9 +94,7 @@ namespace age
 		, m_vertices{}
 		, m_outline_vertices{}
 		, m_geometry_needs_update{ true }
-	{
-		set_string(the_text);
-	}
+	{}
 
 	text::text(std::u32string_view the_text, const font& the_font, uint32_t the_character_size)
 		: m_string{ the_text }
@@ -117,12 +115,7 @@ namespace age
 
 	void text::set_string(std::string_view value)
 	{
-		/*
-		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter;
-		m_tmp_convert_string = converter.from_bytes(value.data());
-		
-		set_string(converter.from_bytes(value.data()));
-		*/
+		m_string.assign(value.begin(), value.end());
 	}
 
 	void text::set_string(std::u32string_view value)
