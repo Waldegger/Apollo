@@ -5,6 +5,10 @@
 
 namespace age
 {
+	sound::sound()
+		: m_buffer{ nullptr }
+	{}
+
 	sound::~sound()
 	{
 		auto current_attached_source = get_attached_source();

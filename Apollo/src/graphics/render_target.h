@@ -36,7 +36,7 @@ namespace age
 		int_rect get_viewport(const view_2d& view) const;
 
 		vector2f map_pixel_to_coords(const vector2i& point) const;
-		vector2i map_coords_to_pixel(const vector2f& coord) const;
+		vector2i map_coords_to_pixel(const vector2f& point) const;
 		
 		virtual vector2u get_size() const = 0;
 

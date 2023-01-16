@@ -15,7 +15,7 @@ namespace age
 		friend class audio_device;
 		friend class sound_source;
 
-		sound() = default;
+		sound();
 		sound(const sound& other) = default;
 		sound(sound&& other) noexcept = default;
 
