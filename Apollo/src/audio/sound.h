@@ -29,6 +29,8 @@ namespace age
 		virtual void stop() override;
 		virtual void pause() override;
 
+		sound_state get_state() const;
+
 		void set_buffer(const sound_buffer* value);
 		const sound_buffer* get_buffer() const;
 

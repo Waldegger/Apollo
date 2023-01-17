@@ -41,7 +41,7 @@ namespace age
 		{
 			auto source = queue_pop_front(m_available_sources);
 			
-			if (source->get_state() == sound_source::state::stopped)
+			if (source->get_state() == sound_state::stopped)
 			{
 				source->detach_sound();
 

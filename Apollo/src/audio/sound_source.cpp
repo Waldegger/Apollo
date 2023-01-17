@@ -167,7 +167,7 @@ namespace age
 		alSourcei(m_handle, AL_BUFFER, AL_NONE);
 	}
 
-	sound_source::state sound_source::get_state() const
+	sound_state sound_source::get_state() const
 	{
 		ALint state = AL_INITIAL;
 
@@ -176,14 +176,14 @@ namespace age
 		switch (state)
 		{
 		case AL_PLAYING:
-			return state::playing;
+			return sound_state::playing;
 		case AL_PAUSED:
-			return state::paused;
+			return sound_state::paused;
 		case AL_STOPPED:
 		case AL_INITIAL:
-			return state::stopped;
+			return sound_state::stopped;
 		default:
-			return state::stopped;
+			return sound_state::stopped;
 		}
 	}
 

@@ -8,6 +8,13 @@ namespace age
 {
 	class sound_interface;
 	class sound_buffer;
+
+	enum class sound_state
+	{
+		playing,
+		paused,
+		stopped
+	};
 	
 	class sound_source
 	{
@@ -15,13 +22,6 @@ namespace age
 		friend class audio_device;
 		friend class sound;
 		friend class sound_interface;
-
-		enum class state
-		{
-			playing,
-			paused,
-			stopped
-		};
 
 		sound_source();
 		sound_source(uint32_t handle);
@@ -69,7 +69,7 @@ namespace age
 
 		void clear_buffers();
 		
-		state get_state() const;
+		sound_state get_state() const;
 
 	protected:
 

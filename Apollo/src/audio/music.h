@@ -39,7 +39,7 @@ namespace age
 		void open(std::unique_ptr<std::istream> is);
 		void open(std::byte data[], size_t size);
 
-		sound_source::state get_state() const;
+		sound_state get_state() const;
 	protected:
 
 	private:
@@ -64,6 +64,6 @@ namespace age
 		std::unique_ptr<std::istream> m_istream;
 		std::unique_ptr<sound_stream> m_sound_stream;
 
-		std::atomic<sound_source::state> m_state;
+		std::atomic<sound_state> m_state;
 	};
 }

@@ -42,7 +42,7 @@ namespace age
 	public:
 	
 		int32_t start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags);
-		void stop(int32_t exit_code);
+		void stop(int32_t exit_code = EXIT_SUCCESS);
 
 		inline const render_window& get_render_window() const { return m_render_window; }
 		inline render_window& get_render_window() { return m_render_window; }

@@ -20,7 +20,7 @@ namespace age
 			auto source_looping = current_attached_source->get_looping();
 
 			//Our source is in the unavailable container. Make it available again
-			if (source_looping || current_attached_source->get_state() == sound_source::state::paused)
+			if (source_looping || current_attached_source->get_state() == sound_state::paused)
 			{
 				current_attached_source->stop();
 
@@ -37,7 +37,7 @@ namespace age
 		auto current_attached_source = get_attached_source();
 		if (current_attached_source)
 		{
-			if (current_attached_source->get_state() == sound_source::state::paused)
+			if (current_attached_source->get_state() == sound_state::paused)
 			{
 				current_attached_source->play();
 				return;
@@ -82,6 +82,16 @@ namespace age
 
 		if (current_attached_source)
 			current_attached_source->pause();
+	}
+
+	sound_state sound::get_state() const
+	{
+		auto current_attached_source = get_attached_source();
+
+		if (current_attached_source)
+			return current_attached_source->get_state();
+
+		return sound_state::stopped;
 	}
 
 	void sound::set_buffer(const sound_buffer* value)

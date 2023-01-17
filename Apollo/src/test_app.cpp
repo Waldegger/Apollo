@@ -216,12 +216,12 @@ void test_app::on_process_event(SDL_Event& e)
             {
                 switch (m_test_music.get_state())
                 {
-                case age::sound_source::state::playing:
+                case age::sound_state::playing:
                 {
                     m_test_music.pause();
                 }
                 break;
-                case age::sound_source::state::paused:
+                case age::sound_state::paused:
                 {
                     m_test_music.play(true);
                 }

@@ -4,37 +4,66 @@
 
 namespace age
 {
-	template<
-		typename T,
-		typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+	template<typename T>
 	struct vector2
 	{
-		constexpr vector2()
-		{}
+		constexpr vector2();
+		constexpr vector2(T x, T y);
+		
+		template<typename U>
+		constexpr vector2(const vector2<U>& other);
 
-		constexpr vector2(T x, T y)
-			: x{ x }
-			, y{ y }
-		{}
-
-		inline constexpr T length2() { return x * x + y * y; }
-		inline constexpr T length()
-		{
-			constexpr T l2 = length2();
-			if constexpr (l2 == static_cast<T>(0) || l2 == static_cast<T>(1))
-				return l2;
-
-			return sqrt(l2);
-		}
-
-		inline constexpr bool is_equal_to(const vector2<T>& other) const
-		{
-			return x == other.x && y == other.y;
-		}
-
+		inline constexpr T length2() const;
+		inline constexpr T length() const;
+		
+		inline constexpr bool is_equal_to(const vector2<T>& other) const;
+	
 		T x{};
 		T y{};
 	};
+
+	template<typename T>
+	constexpr vector2<T>::vector2()
+	{
+		static_assert(std::is_arithmetic_v<T>, "Type needs to be arithmetic");
+	}
+
+	template<typename T>
+	constexpr vector2<T>::vector2(T x, T y)
+		: x{ x }
+		, y{ y }
+	{
+		static_assert(std::is_arithmetic_v<T>, "Type needs to be arithmetic");
+	}
+
+	template<typename T>
+	template<typename U>
+	constexpr vector2<T>::vector2(const vector2<U>& other)
+		: x{ static_cast<T>(other.x) }
+		, y{ static_cast<T>(other.y) }
+	{}
+
+	template<typename T>
+	constexpr T vector2<T>::length2() const
+	{
+		return x * x + y * y;
+	}
+
+	template<typename T>
+	constexpr T vector2<T>::length() const
+	{
+		constexpr T l2 = length2();
+		if constexpr (l2 == static_cast<T>(0) || l2 == static_cast<T>(1))
+			return l2;
+
+		return sqrt(l2);
+	}
+
+	template<typename T>
+	constexpr bool vector2<T>::is_equal_to(const vector2<T>& other) const
+	{
+		return x == other.x && y == other.y;
+	}
 
 	template<typename T>
 	constexpr bool operator == (const vector2<T>& lhs, const vector2<T>& rhs)
