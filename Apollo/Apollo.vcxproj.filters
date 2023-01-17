@@ -332,5 +332,8 @@
     <ClInclude Include="src\graphics\sprite.h">
       <Filter>Headerdateien\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\audio\sound_state.h">
+      <Filter>Headerdateien\audio</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

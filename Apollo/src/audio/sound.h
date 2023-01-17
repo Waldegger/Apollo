@@ -1,6 +1,7 @@
 #pragma once
 #include "sound_interface.h"
 
+#include "sound_state.h"
 #include "../algebra/vector3.h"
 
 namespace age

@@ -3,19 +3,13 @@
 #include "../algebra/vector3.h"
 #include "../utility/utility.h"
 #include "sound_queue_buffer.h"
+#include "sound_state.h"
 
 namespace age
 {
 	class sound_interface;
 	class sound_buffer;
 
-	enum class sound_state
-	{
-		playing,
-		paused,
-		stopped
-	};
-	
 	class sound_source
 	{
 	public:
