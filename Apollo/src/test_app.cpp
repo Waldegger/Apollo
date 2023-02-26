@@ -14,6 +14,7 @@
 
 #include "audio/audio_format.h"
 #include "audio/sound_buffer.h"
+#include "audio/audio_device.h"
 
 void test_app::on_create()
 {
@@ -246,6 +247,10 @@ void test_app::on_process_event(SDL_Event& e)
                 m_test_music.play(true);
             }
             break;
+            case SDLK_x:
+            {
+                age::audio_device::get().stop_all_sounds();
+            }
         }
         break;
     }

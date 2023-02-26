@@ -56,7 +56,7 @@ namespace age
 		bool get_looping() const;
 
 	protected:
-		void attach_source(sound_source* value) const;
+		void attach_source(sound_source* value);
 		sound_source* get_attached_source() const;
 		void detach_source() const;
 

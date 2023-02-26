@@ -187,12 +187,12 @@ namespace age
 		}
 	}
 
-	void sound_source::set_attached_sound(const sound_interface* value)
+	void sound_source::set_attached_sound(sound_interface* value)
 	{
 		m_attached_sound = value;
 	}
 
-	const sound_interface* sound_source::get_attached_sound() const
+	sound_interface* sound_source::get_attached_sound() const
 	{
 		return m_attached_sound;
 	}

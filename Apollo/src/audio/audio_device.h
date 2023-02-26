@@ -41,6 +41,8 @@ namespace age
 		sound_source* get_free_source(bool for_permanent_use = false) const;
 		void make_source_available(const sound_source* value);
 
+		void stop_all_sounds();
+
 		bool is_initialised() const;
 	protected:
 

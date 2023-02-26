@@ -68,12 +68,12 @@ namespace age
 	protected:
 
 	private:
-		void set_attached_sound(const sound_interface* value);
-		const sound_interface* get_attached_sound() const;
+		void set_attached_sound(sound_interface* value);
+		sound_interface* get_attached_sound() const;
 
 		void detach_sound();
 		
-		const sound_interface* m_attached_sound;
+		sound_interface* m_attached_sound;
 		
 		static uint32_t gen_handle();
 		static void delete_handle(uint32_t handle);

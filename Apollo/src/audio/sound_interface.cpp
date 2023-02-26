@@ -215,7 +215,7 @@ namespace age
 		return false;
 	}
 
-	void sound_interface::attach_source(sound_source* value) const
+	void sound_interface::attach_source(sound_source* value)
 	{
 		if (m_attached_source == value) return;
 

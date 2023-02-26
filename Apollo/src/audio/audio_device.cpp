@@ -75,6 +75,15 @@ namespace age
 		}
 	}
 
+	void audio_device::stop_all_sounds()
+	{
+		for (auto& source : m_sound_sources)
+		{
+			if (auto sound = source.get_attached_sound())
+				sound->stop();
+		}
+	}
+
 	bool audio_device::is_initialised() const
 	{
 		return m_is_initialised;
