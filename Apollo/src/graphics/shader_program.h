@@ -25,6 +25,7 @@ namespace age
 		void release();
 
 		int32_t get_uniform_location(std::string_view name) const;
+		uint32_t get_uniform_block_index(std::string_view name) const;
 
 		void set_uniform(int32_t location, float v0) const;
 		void set_uniform(int32_t location, float v0, float v1) const;

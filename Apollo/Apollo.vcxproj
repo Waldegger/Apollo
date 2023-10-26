@@ -185,6 +185,7 @@
     <ClCompile Include="src\graphics\text.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\transformable_2d.cpp" />
+    <ClCompile Include="src\graphics\uniform_buffer_object.cpp" />
     <ClCompile Include="src\graphics\vertex_array_object.cpp" />
     <ClCompile Include="src\graphics\vertex_buffer_object.cpp" />
     <ClCompile Include="src\graphics\view_2d.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="src\graphics\text.h" />
     <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\transformable_2d.h" />
+    <ClInclude Include="src\graphics\uniform_buffer_object.h" />
     <ClInclude Include="src\graphics\vertex_2d.h" />
     <ClInclude Include="src\graphics\vertex_array_object.h" />
     <ClInclude Include="src\graphics\vertex_buffer_object.h" />

@@ -6,6 +6,7 @@
 #include "graphics/texture.h"
 #include "graphics/shader_program.h"
 #include "graphics/program_layout.h"
+#include "graphics/uniform_buffer_object.h"
 #include "utility/utility.h"
 
 union SDL_Event;
@@ -79,6 +80,7 @@ namespace age
 
 		shader m_default_vertex_shader{ shader::shader_type::vertex };
 		shader m_default_fragment_shader{ shader::shader_type::fragment };
+		uniform_buffer_object m_default_buffer_object;
 		shader_program m_default_shader_program;
 		program_layout m_default_program_layout;
 		texture m_default_texture;

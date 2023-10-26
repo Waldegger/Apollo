@@ -86,6 +86,11 @@ namespace age
 		return glGetUniformLocation(get_handle(), name.data());
 	}
 
+	uint32_t shader_program::get_uniform_block_index(std::string_view name) const
+	{
+		return glGetUniformBlockIndex(get_handle(), name.data());
+	}
+
 	void shader_program::set_uniform(int32_t location, float v0) const
 	{
 		bind();
@@ -450,7 +455,7 @@ namespace age
 		set_uniform(loc, v, size, transpose);
 	}
 
-	void shader_program::delete_handle(GLuint handle)
+	void shader_program::delete_handle(uint32_t handle)
 	{
 		glDeleteProgram(handle);
 	}

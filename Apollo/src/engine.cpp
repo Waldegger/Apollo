@@ -134,7 +134,8 @@ namespace age
 
 	void engine::init_defaults()
 	{
-		const char* vertex_shader_source =
+		std::string_view vertex_shader_source =
+			"precision mediump float;\n"
 			"uniform mat4 u_mvp_matrix;\n"
 			"attribute vec2 a_position;\n"
 			"attribute vec4 a_color;\n"
@@ -148,7 +149,7 @@ namespace age
 			"   v_tex_coords = a_tex_coords;\n"
 			"}";
 
-		const char* fragment_shader_source =
+		std::string_view fragment_shader_source =
 			"precision mediump float;\n"
 			"uniform sampler2D u_texture;\n"
 			"varying vec4 v_color;\n"
@@ -156,7 +157,7 @@ namespace age
 			"void main()\n"
 			"{\n"
 			"    vec4 texel = texture2D(u_texture, v_tex_coords);\n"
-			"    if(texel.a == 0.0) discard;"
+			"    if(texel.a == 0.0) discard;\n"
 			"    gl_FragColor = v_color * texel;\n"
 			"}";
 
