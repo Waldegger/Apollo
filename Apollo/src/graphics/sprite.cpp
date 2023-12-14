@@ -6,7 +6,7 @@
 namespace age
 {
 	sprite::sprite()
-		: m_texture{ engine::get_default_texture() }
+		: m_texture{ &engine::get_instance()->get_default_texture() }
 	{
 		update_vertices();
 	}

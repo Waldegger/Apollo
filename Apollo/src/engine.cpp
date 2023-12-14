@@ -28,15 +28,13 @@ namespace age
 
 		init_defaults();
 
+		m_instance = this;
 		engine_instanced = true;
 	}
 
 	engine::~engine()
 	{
-		m_default_vertex_shader_ptr = nullptr;
-		m_default_fragment_shader_ptr = nullptr;
-		m_default_program_layout_ptr = nullptr;
-		m_default_texture_ptr = nullptr;
+		m_instance = nullptr;
 	}
 
 	int32_t engine::start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
@@ -134,6 +132,11 @@ namespace age
 
 	void engine::init_defaults()
 	{
+		m_vp_m_ubo.buffer_data(sizeof(age::matrix4f), reinterpret_cast<const void*>(&age::matrix4f::get_identity().get_data()));
+		m_model_m_ubo.buffer_data(sizeof(age::matrix4f), reinterpret_cast<const void*>(&age::matrix4f::get_identity().get_data()));
+		m_texture_m_ubo.buffer_data(sizeof(age::matrix4f), reinterpret_cast<const void*>(&age::matrix4f::get_identity().get_data()));
+		m_viewport_ubo.buffer_data(sizeof(uint32_t) * 2, reinterpret_cast<const void*>(&std::array<uint32_t, 2>{0, 0}[0] ));
+
 		std::string_view vertex_shader_source =
 			"precision mediump float;\n"
 			"uniform mat4 u_mvp_matrix;\n"
@@ -176,11 +179,6 @@ namespace age
 
 		m_default_texture.create(vector2u{ 1, 1 });
 		m_default_texture.update(std::array<uint8_t, 4>{255, 255, 255, 255}.data());
-
-		m_default_vertex_shader_ptr = &m_default_vertex_shader;
-		m_default_fragment_shader_ptr = &m_default_fragment_shader;
-		m_default_program_layout_ptr = &m_default_program_layout;
-		m_default_texture_ptr = &m_default_texture;
 	}
 
 	void engine::create()

@@ -30,7 +30,7 @@ void test_app::on_create()
     auto shader1 = age::shader{ age::shader::shader_type::fragment };
     shader1.compile(buffer.str());
 
-    m_background_program.attach_shader(*engine::get_default_vertex_shader());
+    m_background_program.attach_shader(engine::get_instance()->get_default_vertex_shader());
     m_background_program.attach_shader(shader1);
 
     m_background_program.bind_attrib_location(A_POSITION_INDEX, "a_position");
@@ -139,7 +139,7 @@ void test_app::on_update()
     
     //Draw Stuff
     get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, background_matrix });
-    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ *engine::get_default_program_layout(), m_test_texture, m_rect_matrix});
+    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ engine::get_instance()->get_default_program_layout(), m_test_texture, m_rect_matrix});
     get_render_window().draw(m_test_text, age::render_states{});
     get_render_window().draw(m_fps_text, age::render_states{});
     get_render_window().draw(m_test_rectangle_shape, age::render_states{});

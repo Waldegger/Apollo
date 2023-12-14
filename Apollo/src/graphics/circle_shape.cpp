@@ -9,7 +9,7 @@ static constexpr float PI = 3.141592654f;
 namespace age
 {
 	circle_shape::circle_shape(float radius, uint32_t resolution)
-		: m_texture{ engine::get_default_texture() }
+		: m_texture{ &engine::get_instance()->get_default_texture() }
 		, m_resolution{ resolution }
 		, m_radius{ radius }
 		, m_outline_thickness{ 0.0f }
@@ -119,7 +119,7 @@ namespace age
 
 		if (m_outline_thickness != 0.0f)
 		{
-			states_copy.set_texture(*engine::get_default_texture());
+			states_copy.set_texture(engine::get_instance()->get_default_texture());
 			target.draw(m_outline_vertices.data(), m_outline_indices.data(), m_outline_indices.size(), states_copy);
 		}
 	}

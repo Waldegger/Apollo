@@ -14,7 +14,7 @@ namespace age
 		, m_indices{ 0, 1, 2, 2, 3, 0 }
 		, m_outline_indices{ 0, 1, 2, 2, 3, 0, 1, 4, 5, 5, 2, 1, 4, 6, 7, 7, 5, 4, 6, 0, 3, 3, 7, 6 }
 		, m_size{ size }
-		, m_texture{ engine::get_default_texture() }
+		, m_texture{ &engine::get_instance()->get_default_texture() }
 		, m_outline_thickness{ 0.0f }
 	{
 		/*
@@ -123,7 +123,7 @@ namespace age
 
 		if (m_outline_thickness != 0.0f)
 		{
-			states_copy.set_texture(*engine::get_default_texture());
+			states_copy.set_texture(engine::get_instance()->get_default_texture());
 			target.draw(m_outline_vertices.data(), m_outline_indices.data(), m_outline_indices.size(), states_copy);
 		}
 	}

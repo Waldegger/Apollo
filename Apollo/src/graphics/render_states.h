@@ -67,8 +67,8 @@ namespace age
 	protected:
 
 	private:
-		const texture* m_texture = engine::get_default_texture();
-		const program_layout* m_program_layout = engine::get_default_program_layout();
+		const texture* m_texture = &engine::get_instance()->get_default_texture();
+		const program_layout* m_program_layout = &engine::get_instance()->get_default_program_layout();
 
 		blend_mode m_blend_mode = blend_mode::blend_alpha;
 		matrix4f m_transform;

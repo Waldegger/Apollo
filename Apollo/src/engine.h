@@ -48,10 +48,16 @@ namespace age
 		inline const render_window& get_render_window() const { return m_render_window; }
 		inline render_window& get_render_window() { return m_render_window; }
 
-		inline static const shader* get_default_vertex_shader() { return m_default_vertex_shader_ptr; }
-		inline static const shader* get_default_fragment_shader() { return m_default_fragment_shader_ptr; }
-		inline static const program_layout* get_default_program_layout() { return m_default_program_layout_ptr; }
-		inline static const texture* get_default_texture() { return m_default_texture_ptr; }
+		inline const uniform_buffer_object& get_vp_m_ubo() const{ return m_vp_m_ubo; }
+		inline const uniform_buffer_object& get_model_m_ubo() const { return m_model_m_ubo; }
+		inline const uniform_buffer_object& get_texture_m_ubo() const { return m_texture_m_ubo; }
+		inline const uniform_buffer_object& get_viewport_uniform_buffer_object() const { return m_viewport_ubo; }
+		inline const shader& get_default_vertex_shader() const { return m_default_vertex_shader; }
+		inline const shader& get_default_fragment_shader() const { return m_default_fragment_shader; }
+		inline const program_layout& get_default_program_layout() const { return m_default_program_layout; }
+		inline const texture& get_default_texture() const { return m_default_texture; }
+
+		inline static engine* get_instance() { return m_instance; }
 
 	protected:
 
@@ -64,23 +70,23 @@ namespace age
 		static int32_t init_lib(uint32_t flags);
 		static void quit_lib();
 
-		inline static const shader* m_default_vertex_shader_ptr;
-		inline static const shader* m_default_fragment_shader_ptr;
-		inline static const program_layout* m_default_program_layout_ptr;
-		inline static const texture* m_default_texture_ptr;
-
 		void init_defaults();
 
 		void create();
 		void update();
 		void destroy();
 
+		inline static engine* m_instance = nullptr;
+
 		initializer<init_lib, quit_lib, uint32_t> m_initializer;
 		render_window m_render_window;
 
+		uniform_buffer_object m_vp_m_ubo;
+		uniform_buffer_object m_model_m_ubo;
+		uniform_buffer_object m_texture_m_ubo;
+		uniform_buffer_object m_viewport_ubo;
 		shader m_default_vertex_shader{ shader::shader_type::vertex };
 		shader m_default_fragment_shader{ shader::shader_type::fragment };
-		uniform_buffer_object m_default_buffer_object;
 		shader_program m_default_shader_program;
 		program_layout m_default_program_layout;
 		texture m_default_texture;
