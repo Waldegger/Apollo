@@ -26,9 +26,9 @@ namespace age
 			throw std::runtime_error{ "Only one instance of engine is allowed!" };
 		}
 
+		m_instance = this;
 		init_defaults();
 
-		m_instance = this;
 		engine_instanced = true;
 	}
 
@@ -132,14 +132,21 @@ namespace age
 
 	void engine::init_defaults()
 	{
-		m_vp_m_ubo.buffer_data(sizeof(age::matrix4f), reinterpret_cast<const void*>(&age::matrix4f::get_identity().get_data()));
-		m_model_m_ubo.buffer_data(sizeof(age::matrix4f), reinterpret_cast<const void*>(&age::matrix4f::get_identity().get_data()));
-		m_texture_m_ubo.buffer_data(sizeof(age::matrix4f), reinterpret_cast<const void*>(&age::matrix4f::get_identity().get_data()));
+		m_vp_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity().get_data());
+		m_model_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity().get_data());
+		m_texture_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity().get_data());
+		m_texture_matrix_ubo.bind_buffer_base(1);
 		m_viewport_ubo.buffer_data(sizeof(uint32_t) * 2, reinterpret_cast<const void*>(&std::array<uint32_t, 2>{0, 0}[0] ));
 
 		std::string_view vertex_shader_source =
+			"#version 330 core\n"
 			"precision mediump float;\n"
+			"layout(std140) uniform tex_matrices\n"
+			"{\n"
+			"	mat4 tex_m;"
+			"};\n"
 			"uniform mat4 u_mvp_matrix;\n"
+			"uniform mat4 u_test_mat;"
 			"attribute vec2 a_position;\n"
 			"attribute vec4 a_color;\n"
 			"attribute vec2 a_tex_coords;\n"
@@ -149,10 +156,12 @@ namespace age
 			"{\n"
 			"   gl_Position = u_mvp_matrix * vec4(a_position, 0.0, 1.0);\n"
 			"   v_color = a_color;\n"
-			"   v_tex_coords = a_tex_coords;\n"
+			"	vec4 t_coords = tex_m * vec4(a_tex_coords, 0.0, 1.0);\n"
+			"   v_tex_coords = t_coords.xy;\n"
 			"}";
 
 		std::string_view fragment_shader_source =
+			"#version 330 core\n"
 			"precision mediump float;\n"
 			"uniform sampler2D u_texture;\n"
 			"varying vec4 v_color;\n"
@@ -177,8 +186,14 @@ namespace age
 		m_default_program_layout.mvp_matrix_name("u_mvp_matrix");
 		m_default_program_layout.texture_name("u_texture");
 
+		m_default_shader_program.set_uniform("u_texture", 0);
+		m_default_shader_program.set_uniform_block_binding("tex_matrices", 1);
+
 		m_default_texture.create(vector2u{ 1, 1 });
 		m_default_texture.update(std::array<uint8_t, 4>{255, 255, 255, 255}.data());
+
+		//Only for testing purpose here
+		m_default_shader_program.set_uniform("u_test_mat", age::matrix4f::get_identity());
 	}
 
 	void engine::create()

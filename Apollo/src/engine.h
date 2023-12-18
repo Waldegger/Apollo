@@ -3,6 +3,8 @@
 #include <string_view>
 
 #include "graphics/render_window.h"
+#include "graphics/vertex_array_object.h"
+#include "graphics/vertex_buffer_object.h"
 #include "graphics/texture.h"
 #include "graphics/shader_program.h"
 #include "graphics/program_layout.h"
@@ -48,10 +50,15 @@ namespace age
 		inline const render_window& get_render_window() const { return m_render_window; }
 		inline render_window& get_render_window() { return m_render_window; }
 
-		inline const uniform_buffer_object& get_vp_m_ubo() const{ return m_vp_m_ubo; }
-		inline const uniform_buffer_object& get_model_m_ubo() const { return m_model_m_ubo; }
-		inline const uniform_buffer_object& get_texture_m_ubo() const { return m_texture_m_ubo; }
+		inline const uniform_buffer_object& get_vp_matrix_ubo() const{ return m_vp_matrix_ubo; }
+		inline const uniform_buffer_object& get_model_matrix_ubo() const { return m_model_matrix_ubo; }
+		inline const uniform_buffer_object& get_texture_matrix_ubo() const { return m_texture_matrix_ubo; }
 		inline const uniform_buffer_object& get_viewport_uniform_buffer_object() const { return m_viewport_ubo; }
+		inline uniform_buffer_object& get_vp_matrix_ubo() { return m_vp_matrix_ubo; }
+		inline uniform_buffer_object& get_model_matrix_ubo() { return m_model_matrix_ubo; }
+		inline uniform_buffer_object& get_texture_matrix_ubo() { return m_texture_matrix_ubo; }
+		inline uniform_buffer_object& get_viewport_uniform_buffer_object() { return m_viewport_ubo; }
+
 		inline const shader& get_default_vertex_shader() const { return m_default_vertex_shader; }
 		inline const shader& get_default_fragment_shader() const { return m_default_fragment_shader; }
 		inline const program_layout& get_default_program_layout() const { return m_default_program_layout; }
@@ -81,9 +88,11 @@ namespace age
 		initializer<init_lib, quit_lib, uint32_t> m_initializer;
 		render_window m_render_window;
 
-		uniform_buffer_object m_vp_m_ubo;
-		uniform_buffer_object m_model_m_ubo;
-		uniform_buffer_object m_texture_m_ubo;
+		vertex_array_object m_vertex_array_object;
+		//vertex_buffer_object m_vertex_buffer_object;
+		uniform_buffer_object m_vp_matrix_ubo;
+		uniform_buffer_object m_model_matrix_ubo;
+		uniform_buffer_object m_texture_matrix_ubo;
 		uniform_buffer_object m_viewport_ubo;
 		shader m_default_vertex_shader{ shader::shader_type::vertex };
 		shader m_default_fragment_shader{ shader::shader_type::fragment };

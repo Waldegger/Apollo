@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cassert>
 
+#include "../engine.h"
+
 namespace age
 {
 	texture::texture()
@@ -30,6 +32,11 @@ namespace age
 		if (handle != m_current_bound_texture)
 		{
 			glBindTexture(GL_TEXTURE_2D, handle);
+
+			const age::vector2u& size = get_size();
+			matrix4f tex_matrix = matrix4f::get_identity();
+			tex_matrix.scale({ 1.0f / static_cast<float>(size.x), 1.0f / static_cast<float>(size.y) });
+			age::engine::get_instance()->get_texture_matrix_ubo().buffer_data(sizeof(age::matrix4f), &tex_matrix.get_data());
 
 			m_current_bound_texture = handle;
 		}

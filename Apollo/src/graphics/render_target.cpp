@@ -155,9 +155,6 @@ namespace age
 		if (layout.get_mvp_matrix_location() >= 0)
 			program.set_uniform(layout.get_mvp_matrix_location(), m_projection_matrix * states.get_transform());
 
-		if (layout.get_texture_location() >= 0)
-			program.set_uniform(layout.get_texture_location(), 0);
-
 		states.get_texture().bind();
 
 		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].position);

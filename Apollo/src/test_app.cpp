@@ -110,7 +110,7 @@ void test_app::on_update()
     m_delta_time = static_cast<float>(m_clock.restart());
 
     m_fps_stringstream.str(U"");
-    m_fps_stringstream << "fps: " << 1.0f / m_delta_time;
+    m_fps_stringstream << U"fps: " << 1.0f / m_delta_time;
     m_fps_text.set_string(m_fps_stringstream.str());
 
     m_elapsed_time += m_delta_time;

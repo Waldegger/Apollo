@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 
 #include <stdexcept>
+#include <SDL2/SDL.h>
 
 namespace age
 {
@@ -33,6 +34,17 @@ namespace age
 			glGetShaderInfoLog(m_handle, logSize, NULL, infoLog);
 			throw std::runtime_error{ std::string{ "ERROR::SHADER::COMPILATION_FAILED\n" } + infoLog };
 		};
+
+		GLint log_length;
+		glGetShaderiv(m_handle, GL_INFO_LOG_LENGTH, &log_length);
+		if (log_length)
+		{
+			static constexpr size_t logSize = 512;
+			char infoLog[logSize];
+
+			glGetShaderInfoLog(m_handle, logSize, NULL, infoLog);
+			SDL_Log(infoLog);
+		}
 	}
 
 	uint32_t shader::convert_type(shader_type type_to_convert)

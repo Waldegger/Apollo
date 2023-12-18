@@ -1,7 +1,7 @@
 //CBS
 //Parallax scrolling fractal galaxy.
 //Inspired by JoshP's Simplicity shader: https://www.shadertoy.com/view/lslGWr
-//#version 330 core
+#version 330 core
 
 uniform vec2      iResolution;           // viewport resolution (in pixels)
 uniform float     iTime;                 // shader playback time (in seconds)

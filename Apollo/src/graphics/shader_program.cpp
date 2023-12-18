@@ -88,7 +88,18 @@ namespace age
 
 	uint32_t shader_program::get_uniform_block_index(std::string_view name) const
 	{
-		return glGetUniformBlockIndex(get_handle(), name.data());
+		GLuint ubo_index = glGetUniformBlockIndex(get_handle(), name.data());
+		return ubo_index;
+	}
+
+	void shader_program::set_uniform_block_binding(uint32_t index, uint32_t binding)
+	{
+		glUniformBlockBinding(get_handle(), index, binding);
+	}
+
+	void shader_program::set_uniform_block_binding(std::string_view name, uint32_t binding)
+	{
+		glUniformBlockBinding(get_handle(), get_uniform_block_index(name), binding);
 	}
 
 	void shader_program::set_uniform(int32_t location, float v0) const
