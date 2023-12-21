@@ -136,10 +136,6 @@ namespace age
 
 	void render_target::init()
 	{
-		glEnableVertexAttribArray(engine::get_a_position_index());
-		glEnableVertexAttribArray(engine::get_a_color_index());
-		glEnableVertexAttribArray(engine::get_a_tex_coords_index());
-
 		glEnable(GL_BLEND);
 		apply_blend_mode(blend_mode::blend_alpha);
 	}
