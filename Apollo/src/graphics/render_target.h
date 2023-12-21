@@ -3,6 +3,8 @@
 #include "blend_mode.h"
 #include "vertex_2d.h"
 #include "view_2d.h"
+#include "vertex_array_object.h"
+#include "vertex_buffer_object.h"
 
 namespace age
 {
@@ -48,10 +50,6 @@ namespace age
 		void draw(const vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states);
 
 	protected:
-		static constexpr uint32_t A_POSITION_INDEX = 0;
-		static constexpr uint32_t A_COLOR_INDEX = 1;
-		static constexpr uint32_t A_TEX_COORDS_INDEX = 2;
-
 		void init();
 
 	private:

@@ -136,11 +136,11 @@ namespace age
 
 	void render_target::init()
 	{
-		glEnableVertexAttribArray(A_POSITION_INDEX);
-		glEnableVertexAttribArray(A_COLOR_INDEX);
-		glEnableVertexAttribArray(A_TEX_COORDS_INDEX);
-		glEnable(GL_BLEND);
+		glEnableVertexAttribArray(engine::get_a_position_index());
+		glEnableVertexAttribArray(engine::get_a_color_index());
+		glEnableVertexAttribArray(engine::get_a_tex_coords_index());
 
+		glEnable(GL_BLEND);
 		apply_blend_mode(blend_mode::blend_alpha);
 	}
 
@@ -157,9 +157,9 @@ namespace age
 
 		states.get_texture().bind();
 
-		glVertexAttribPointer(A_POSITION_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].position);
-		glVertexAttribPointer(A_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), &vertices[0].color);
-		glVertexAttribPointer(A_TEX_COORDS_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].tex_coords);
+		glVertexAttribPointer(engine::get_a_position_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].position);
+		glVertexAttribPointer(engine::get_a_color_index(), 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), &vertices[0].color);
+		glVertexAttribPointer(engine::get_a_tex_coords_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].tex_coords);
 
 		apply_blend_mode(states.get_blend_mode());
 	}

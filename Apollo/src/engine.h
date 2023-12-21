@@ -9,6 +9,8 @@
 #include "graphics/shader_program.h"
 #include "graphics/program_layout.h"
 #include "graphics/uniform_buffer_object.h"
+#include "graphics/vertex_array_object.h"
+#include "graphics/vertex_buffer_object.h"
 #include "utility/utility.h"
 
 union SDL_Event;
@@ -50,6 +52,10 @@ namespace age
 		inline const render_window& get_render_window() const { return m_render_window; }
 		inline render_window& get_render_window() { return m_render_window; }
 
+		inline const vertex_array_object& get_default_vertex_array_object() const { return m_default_vertex_array_object; }
+		inline const vertex_buffer_object& get_default_vertex_buffer_object() const { return m_default_vertex_buffer_object; }
+		inline const vertex_buffer_object& get_default_element_buffer_object() const { return m_default_element_buffer_object; }
+
 		inline const uniform_buffer_object& get_vp_matrix_ubo() const{ return m_vp_matrix_ubo; }
 		inline const uniform_buffer_object& get_model_matrix_ubo() const { return m_model_matrix_ubo; }
 		inline const uniform_buffer_object& get_texture_matrix_ubo() const { return m_texture_matrix_ubo; }
@@ -65,6 +71,10 @@ namespace age
 		inline const texture& get_default_texture() const { return m_default_texture; }
 
 		inline static engine* get_instance() { return m_instance; }
+
+		inline static constexpr uint32_t get_a_position_index() { return 0; }
+		inline static constexpr uint32_t get_a_color_index() { return 1; }
+		inline static constexpr uint32_t get_a_tex_coords_index() { return 2; }
 
 	protected:
 
@@ -88,8 +98,10 @@ namespace age
 		initializer<init_lib, quit_lib, uint32_t> m_initializer;
 		render_window m_render_window;
 
-		vertex_array_object m_vertex_array_object;
-		//vertex_buffer_object m_vertex_buffer_object;
+		vertex_array_object m_default_vertex_array_object;
+		vertex_buffer_object m_default_vertex_buffer_object{ vertex_buffer_object::target::array };
+		vertex_buffer_object m_default_element_buffer_object{ vertex_buffer_object::target::element_array };
+
 		uniform_buffer_object m_vp_matrix_ubo;
 		uniform_buffer_object m_model_matrix_ubo;
 		uniform_buffer_object m_texture_matrix_ubo;

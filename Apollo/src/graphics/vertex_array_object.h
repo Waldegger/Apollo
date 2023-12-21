@@ -9,8 +9,8 @@ namespace age
 	public:
 		vertex_array_object();
 	public:
-		void bind();
-		void release();
+		void bind() const;
+		void release() const;
 
 	protected:
 

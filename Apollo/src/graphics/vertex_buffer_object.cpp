@@ -11,7 +11,7 @@ namespace age
 		, m_target{ target }
 	{}
 
-	void vertex_buffer_object::bind()
+	void vertex_buffer_object::bind() const
 	{
 		auto handle = get_handle();
 

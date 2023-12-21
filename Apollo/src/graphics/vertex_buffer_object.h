@@ -26,7 +26,7 @@ namespace age
 		inline void set_target(target value) noexcept { m_target = value; }
 		inline target get_target() const noexcept{ return m_target; }
 
-		void bind();
+		void bind() const;
 		
 		void buffer_data(void* data, size_t size_in_bytes, usage usage);
 		void update_data(void* data, size_t size_in_bytes, usage usage);

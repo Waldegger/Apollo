@@ -8,7 +8,7 @@ namespace age
 		: m_handle(create_handle())
 	{}
 
-	void vertex_array_object::bind()
+	void vertex_array_object::bind() const
 	{
 		auto handle = get_handle();
 
@@ -20,7 +20,7 @@ namespace age
 		}
 	}
 
-	void vertex_array_object::release()
+	void vertex_array_object::release() const
 	{
 		auto handle = get_handle();
 

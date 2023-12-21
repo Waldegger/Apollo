@@ -4,11 +4,10 @@
 #define GL_GLEXT_PROTOTYPES 1
 
 #include <SDL2/SDL.h>
+#include <GL/glew.h>
 
 #include <stdexcept>
 #include <array>
-
-#include "graphics/render_states.h"
 
 namespace age
 {
@@ -178,9 +177,9 @@ namespace age
 
 		m_default_shader_program.attach_shader(m_default_vertex_shader);
 		m_default_shader_program.attach_shader(m_default_fragment_shader);
-		m_default_shader_program.bind_attrib_location(render_target::A_POSITION_INDEX, "a_position");
-		m_default_shader_program.bind_attrib_location(render_target::A_COLOR_INDEX, "a_color");
-		m_default_shader_program.bind_attrib_location(render_target::A_TEX_COORDS_INDEX, "a_tex_coords");
+		m_default_shader_program.bind_attrib_location(get_a_position_index(), "a_position");
+		m_default_shader_program.bind_attrib_location(get_a_color_index(), "a_color");
+		m_default_shader_program.bind_attrib_location(get_a_tex_coords_index(), "a_tex_coords");
 		m_default_shader_program.link();
 
 		m_default_program_layout.mvp_matrix_name("u_mvp_matrix");
@@ -194,6 +193,16 @@ namespace age
 
 		//Only for testing purpose here
 		m_default_shader_program.set_uniform("u_test_mat", age::matrix4f::get_identity());
+
+		m_default_vertex_array_object.bind();
+		m_default_vertex_buffer_object.bind();
+		m_default_element_buffer_object.bind();
+
+		glEnableVertexAttribArray(get_a_position_index());
+		glEnableVertexAttribArray(get_a_color_index());
+		glEnableVertexAttribArray(get_a_tex_coords_index());
+		
+		m_default_vertex_array_object.release();
 	}
 
 	void engine::create()
