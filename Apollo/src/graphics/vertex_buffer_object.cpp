@@ -23,29 +23,31 @@ namespace age
 		}
 	}
 
-	void vertex_buffer_object::buffer_data(void* data, size_t size_in_bytes, usage usage)
+	void vertex_buffer_object::buffer_data(const void* data, size_t size_in_bytes, usage usage)
 	{
 		bind();
 
-		glBufferData(static_cast<GLenum>(m_target), size_in_bytes, data, convert_usage(usage));
+		glBufferData(convert_target(m_target), size_in_bytes, data, convert_usage(usage));
 
 		m_last_buffer_size = size_in_bytes;
 		m_last_buffer_usage = usage;
 	}
 
-	void vertex_buffer_object::update_data(void* data, size_t size_in_bytes, usage usage)
+	void vertex_buffer_object::update_data(const void* data, size_t size_in_bytes, usage usage)
 	{
 		bind();
 
-		glBufferData(static_cast<GLenum>(m_target), m_last_buffer_size, nullptr, convert_usage(m_last_buffer_usage));
-		glBufferData(static_cast<GLenum>(m_target), size_in_bytes, data, convert_usage(usage));
+		auto target = convert_target(m_target);
+
+		glBufferData(target, m_last_buffer_size, nullptr, convert_usage(m_last_buffer_usage));
+		glBufferData(target, size_in_bytes, data, convert_usage(usage));
 	}
 
-	void vertex_buffer_object::buffer_sub_data(void* data, size_t offset, size_t size_in_bytes)
+	void vertex_buffer_object::buffer_sub_data(const void* data, size_t offset, size_t size_in_bytes)
 	{
 		bind();
 
-		glBufferSubData(static_cast<GLenum>(m_target), offset, size_in_bytes, data);
+		glBufferSubData(convert_target(m_target), offset, size_in_bytes, data);
 	}
 
 	uint32_t vertex_buffer_object::convert_target(target target_to_convert)

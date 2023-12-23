@@ -23,7 +23,7 @@ namespace age
 		constexpr T operator[](size_t i) const { return m_data[i]; }
 		constexpr operator const T* () const { return m_data.data(); }
 
-		inline static constexpr const matrix4<T>& get_identity() { static constexpr matrix4<T> result; return result; }
+		inline static constexpr const matrix4<T>& get_identity() { static constexpr const matrix4<T> result; return result; }
 
 		constexpr const std::array<T, 4 * 4>& get_data() const { return m_data; }
 

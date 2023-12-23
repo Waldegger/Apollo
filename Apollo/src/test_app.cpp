@@ -137,13 +137,18 @@ void test_app::on_update()
     //background_matrix.translate(age::vector2f{ 0.0f, 0.0f });
     //background_matrix.scale(age::vector2f{ 0.75f, 0.75f });
     
+    //ToDo: redesign the way to render, so that the VAO does not need to be activated and released like this
+    //engine::get_instance()->get_default_vertex_array_object().bind();
     //Draw Stuff
-    get_render_window().draw(m_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, background_matrix });
-    get_render_window().draw(m_rect_vertices.data(), m_indizes.data(), m_indizes.size(), age::render_states{ engine::get_instance()->get_default_program_layout(), m_test_texture, m_rect_matrix});
+    get_render_window().draw(m_vertices.data(), m_vertices.size(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program_layout, m_test_texture, background_matrix });
+    get_render_window().draw(m_rect_vertices.data(), m_vertices.size(), m_indizes.data(), m_indizes.size(), age::render_states{engine::get_instance()->get_default_program_layout(), m_test_texture, m_rect_matrix});
     get_render_window().draw(m_test_text, age::render_states{});
     get_render_window().draw(m_fps_text, age::render_states{});
     get_render_window().draw(m_test_rectangle_shape, age::render_states{});
     get_render_window().draw(m_test_circle_shape, age::render_states{});
+
+    //ToDo: with redesing the release should be removed as well
+    //engine::get_instance()->get_default_vertex_array_object().release();
 
     //Update screen
     get_render_window().display();

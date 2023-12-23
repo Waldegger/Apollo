@@ -119,12 +119,12 @@ namespace age
 		//I just assume that m_texture is initialised properly. So all other constructors shall only be called after engine has been constructed
 		states_copy.set_texture(*m_texture);
 
-		target.draw(m_vertices.data(), m_indices.data(), m_indices.size(), states_copy);
+		target.draw(m_vertices.data(), m_vertices.size(), m_indices.data(), m_indices.size(), states_copy);
 
 		if (m_outline_thickness != 0.0f)
 		{
 			states_copy.set_texture(engine::get_instance()->get_default_texture());
-			target.draw(m_outline_vertices.data(), m_outline_indices.data(), m_outline_indices.size(), states_copy);
+			target.draw(m_outline_vertices.data(), m_outline_vertices.size(), m_outline_indices.data(), m_outline_indices.size(), states_copy);
 		}
 	}
 

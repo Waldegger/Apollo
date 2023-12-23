@@ -56,6 +56,10 @@ namespace age
 		inline const vertex_buffer_object& get_default_vertex_buffer_object() const { return m_default_vertex_buffer_object; }
 		inline const vertex_buffer_object& get_default_element_buffer_object() const { return m_default_element_buffer_object; }
 
+		inline vertex_array_object& get_default_vertex_array_object() { return m_default_vertex_array_object; }
+		inline vertex_buffer_object& get_default_vertex_buffer_object() { return m_default_vertex_buffer_object; }
+		inline vertex_buffer_object& get_default_element_buffer_object() { return m_default_element_buffer_object; }
+
 		inline const uniform_buffer_object& get_vp_matrix_ubo() const{ return m_vp_matrix_ubo; }
 		inline const uniform_buffer_object& get_model_matrix_ubo() const { return m_model_matrix_ubo; }
 		inline const uniform_buffer_object& get_texture_matrix_ubo() const { return m_texture_matrix_ubo; }

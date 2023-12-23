@@ -46,7 +46,7 @@ namespace age
 		const vector2f& get_view_size() const;
 
 		void draw(const drawable& drawbable_object, const render_states& states);
-		void draw(const vertex_2d vertices[], const uint32_t indices[], size_t num_indices, const render_states& states);
+		void draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states);
 		void draw(const vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states);
 
 	protected:
@@ -59,7 +59,8 @@ namespace age
 			const texture* last_texture = nullptr;
 		};
 
-		void prepare_draw(const vertex_2d vertices[], const render_states& states);
+		void prepare_draw(const vertex_2d vertices[], size_t num_vertices, const render_states& states);
+		void prepare_draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states);
 		void apply_blend_mode(const blend_mode& mode);
 
 		const matrix4f& get_inverse_projection() const;

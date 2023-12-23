@@ -28,9 +28,9 @@ namespace age
 
 		void bind() const;
 		
-		void buffer_data(void* data, size_t size_in_bytes, usage usage);
-		void update_data(void* data, size_t size_in_bytes, usage usage);
-		void buffer_sub_data(void* data, size_t offset, size_t size_in_bytes);
+		void buffer_data(const void* data, size_t size_in_bytes, usage usage);
+		void update_data(const void* data, size_t size_in_bytes, usage usage);
+		void buffer_sub_data(const void* data, size_t offset, size_t size_in_bytes);
 
 	protected:
 

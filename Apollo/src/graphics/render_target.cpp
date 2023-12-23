@@ -95,7 +95,7 @@ namespace age
 	{
 		// Set the viewport
 		m_viewport = get_viewport(value);
-		int     top = static_cast<int>(get_size().y) - (m_viewport.top + m_viewport.height);
+		int top = static_cast<int>(get_size().y) - (m_viewport.top + m_viewport.height);
 		glViewport(m_viewport.left, top, m_viewport.width, m_viewport.height);
 
 		// Set the projection matrix
@@ -116,13 +116,13 @@ namespace age
 		drawable_object.draw(*this, states);
 	}
 
-	void render_target::draw(const vertex_2d vertices[], const uint32_t indices[], size_t num_indices, const render_states& states)
+	void render_target::draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states)
 	{
 		if (!vertices || !indices || !num_indices)
 			return;
 
-		prepare_draw(vertices, states);
-		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, indices);
+		prepare_draw(vertices, num_vertices, indices, num_indices, states);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, 0);
 	}
 
 	void render_target::draw(const vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states)
@@ -130,7 +130,7 @@ namespace age
 		if (!vertices || !num_vertices)
 			return;
 
-		prepare_draw(vertices, states);
+		prepare_draw(vertices, num_vertices, states);
 		glDrawArrays(primitive_type_to_GL_constant(type), 0, static_cast<GLsizei>(num_vertices));
 	}
 
@@ -140,7 +140,7 @@ namespace age
 		apply_blend_mode(blend_mode::blend_alpha);
 	}
 
-	void render_target::prepare_draw(const vertex_2d vertices[], const render_states& states)
+	void render_target::prepare_draw(const vertex_2d vertices[], size_t num_vertices, const render_states& states)
 	{
 		auto& layout = states.get_program_layout();
 		auto& program = layout.get_program();
@@ -153,11 +153,16 @@ namespace age
 
 		states.get_texture().bind();
 
-		glVertexAttribPointer(engine::get_a_position_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].position);
-		glVertexAttribPointer(engine::get_a_color_index(), 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), &vertices[0].color);
-		glVertexAttribPointer(engine::get_a_tex_coords_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), &vertices[0].tex_coords);
+		engine::get_instance()->get_default_vertex_buffer_object().update_data(vertices, num_vertices * sizeof(vertex_2d), age::vertex_buffer_object::usage::stream_draw);
 
 		apply_blend_mode(states.get_blend_mode());
+	}
+
+	void render_target::prepare_draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states)
+	{
+		engine::get_instance()->get_default_element_buffer_object().update_data(indices, num_indices * sizeof(uint32_t), age::vertex_buffer_object::usage::stream_draw);
+
+		prepare_draw(vertices, num_vertices, states);
 	}
 
 	void render_target::apply_blend_mode(const blend_mode& mode)

@@ -155,7 +155,7 @@ namespace age
 			"{\n"
 			"   gl_Position = u_mvp_matrix * vec4(a_position, 0.0, 1.0);\n"
 			"   v_color = a_color;\n"
-			"	vec4 t_coords = tex_m * vec4(a_tex_coords, 0.0, 1.0);\n"
+			"	vec4 t_coords = u_test_mat * vec4(a_tex_coords, 0.0, 1.0);\n"
 			"   v_tex_coords = t_coords.xy;\n"
 			"}";
 
@@ -201,8 +201,12 @@ namespace age
 		glEnableVertexAttribArray(get_a_position_index());
 		glEnableVertexAttribArray(get_a_color_index());
 		glEnableVertexAttribArray(get_a_tex_coords_index());
+
+		glVertexAttribPointer(get_a_position_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), reinterpret_cast<void*>(0));
+		glVertexAttribPointer(get_a_color_index(), 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), reinterpret_cast<void*>(8));
+		glVertexAttribPointer(get_a_tex_coords_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), reinterpret_cast<void*>(12));
 		
-		m_default_vertex_array_object.release();
+		//m_default_vertex_array_object.release();
 	}
 
 	void engine::create()
