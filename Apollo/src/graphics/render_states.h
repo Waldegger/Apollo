@@ -2,7 +2,6 @@
 
 #include "../algebra/matrix4.h"
 #include "blend_mode.h"
-#include "program_layout.h"
 #include "../engine.h"
 
 namespace age
@@ -15,34 +14,34 @@ namespace age
 	public:
 		render_states() = default;
 
-		render_states(const program_layout& program_layout)
-			: m_program_layout{ &program_layout }
+		render_states(const shader_program& shader_program)
+			: m_shader_program{ &shader_program }
 		{}
 
 		render_states(const matrix4f& the_transform)
 			: m_transform{ the_transform }
 		{}
 
-		render_states(const program_layout& program_layout, const matrix4f& the_transform)
-			: m_program_layout{ &program_layout }
+		render_states(const shader_program& shader_program, const matrix4f& the_transform)
+			: m_shader_program{ &shader_program }
 			, m_transform{ the_transform }
 		{}
 
-		render_states(const program_layout& program_layout, const texture& the_texture, const matrix4f& the_transform)
+		render_states(const shader_program& shader_program, const texture& the_texture, const matrix4f& the_transform)
 			: m_texture{ &the_texture }
-			, m_program_layout{ &program_layout }
+			, m_shader_program{ &shader_program }
 			, m_transform{ the_transform }
 		{}
 
-		render_states(const program_layout& program_layout, const blend_mode& the_blend_mode, const matrix4f& the_transform)
-			: m_program_layout{ &program_layout }
+		render_states(const shader_program& shader_program, const blend_mode& the_blend_mode, const matrix4f& the_transform)
+			: m_shader_program{ &shader_program }
 			, m_blend_mode{ the_blend_mode }
 			, m_transform{ the_transform }
 		{}
 
-		render_states(const program_layout& program_layout, const texture& the_texture, const blend_mode& the_blend_mode, const matrix4f& the_transform)
+		render_states(const shader_program& shader_program, const texture& the_texture, const blend_mode& the_blend_mode, const matrix4f& the_transform)
 			: m_texture{ &the_texture }
-			, m_program_layout{ &program_layout }
+			, m_shader_program{ &shader_program }
 			, m_blend_mode{ the_blend_mode }
 			, m_transform{ the_transform }
 		{}
@@ -51,8 +50,8 @@ namespace age
 		inline void set_texture(const texture& value) { m_texture = &value; }
 		inline const texture& get_texture() const { return *m_texture; }
 
-		inline void set_program_layout(const program_layout& value) { m_program_layout = &value; }
-		inline const program_layout& get_program_layout() const{ return *m_program_layout; }
+		inline void set_shader_program(const shader_program& value) { m_shader_program = &value; }
+		inline const shader_program& get_shader_program() const{ return *m_shader_program; }
 
 		inline void set_blend_mode(const blend_mode& value) { m_blend_mode = value; }
 		inline const blend_mode& get_blend_mode() const { return m_blend_mode; }
@@ -68,7 +67,7 @@ namespace age
 
 	private:
 		const texture* m_texture = &engine::get_instance()->get_default_texture();
-		const program_layout* m_program_layout = &engine::get_instance()->get_default_program_layout();
+		const shader_program* m_shader_program = &engine::get_instance()->get_default_shader_program();
 
 		blend_mode m_blend_mode = blend_mode::blend_alpha;
 		matrix4f m_transform;

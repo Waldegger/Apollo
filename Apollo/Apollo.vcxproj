@@ -225,7 +225,6 @@
     <ClInclude Include="src\graphics\drawable.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\image.h" />
-    <ClInclude Include="src\graphics\program_layout.h" />
     <ClInclude Include="src\graphics\rect.h" />
     <ClInclude Include="src\graphics\rectangle_shape.h" />
     <ClInclude Include="src\graphics\render_states.h" />

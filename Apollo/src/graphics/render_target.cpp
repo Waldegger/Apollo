@@ -101,6 +101,8 @@ namespace age
 		// Set the projection matrix
 		m_projection_matrix = value.get_transform();
 
+		engine::get_instance()->get_vp_matrix_ubo().buffer_sub_data(0, sizeof(matrix4f), m_projection_matrix);
+
 		m_view_size = value.get_size();
 
 		m_projection_needs_update = true;
@@ -142,14 +144,11 @@ namespace age
 
 	void render_target::prepare_draw(const vertex_2d vertices[], size_t num_vertices, const render_states& states)
 	{
-		auto& layout = states.get_program_layout();
-		auto& program = layout.get_program();
+		auto& program = states.get_shader_program();
 
 		program.bind();
 
-		//Correct order is: projection * view * model
-		if (layout.get_mvp_matrix_location() >= 0)
-			program.set_uniform(layout.get_mvp_matrix_location(), m_projection_matrix * states.get_transform());
+		engine::get_instance()->get_model_matrix_ubo().buffer_sub_data(0, sizeof(matrix4f), states.get_transform());
 
 		states.get_texture().bind();
 

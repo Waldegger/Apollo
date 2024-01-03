@@ -64,7 +64,6 @@ private:
     age::shader_program m_background_program;
     age::texture m_test_texture;
 
-    age::program_layout m_background_program_layout{ m_background_program };
     int32_t m_background_program_time_location = -1;
 
     age::clock m_clock;

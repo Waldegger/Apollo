@@ -7,7 +7,6 @@
 #include "graphics/vertex_buffer_object.h"
 #include "graphics/texture.h"
 #include "graphics/shader_program.h"
-#include "graphics/program_layout.h"
 #include "graphics/uniform_buffer_object.h"
 #include "graphics/vertex_array_object.h"
 #include "graphics/vertex_buffer_object.h"
@@ -71,7 +70,7 @@ namespace age
 
 		inline const shader& get_default_vertex_shader() const { return m_default_vertex_shader; }
 		inline const shader& get_default_fragment_shader() const { return m_default_fragment_shader; }
-		inline const program_layout& get_default_program_layout() const { return m_default_program_layout; }
+		inline const shader_program& get_default_shader_program() const { return m_default_shader_program; }
 		inline const texture& get_default_texture() const { return m_default_texture; }
 
 		inline static engine* get_instance() { return m_instance; }
@@ -79,6 +78,10 @@ namespace age
 		inline static constexpr uint32_t get_a_position_index() { return 0; }
 		inline static constexpr uint32_t get_a_color_index() { return 1; }
 		inline static constexpr uint32_t get_a_tex_coords_index() { return 2; }
+
+		inline static constexpr uint32_t get_vp_matrix_binding() { return 0; }
+		inline static constexpr uint32_t get_model_matrix_binding() { return 1; }
+		inline static constexpr uint32_t get_texture_matrix_binding() { return 2; }
 
 	protected:
 
@@ -113,7 +116,6 @@ namespace age
 		shader m_default_vertex_shader{ shader::shader_type::vertex };
 		shader m_default_fragment_shader{ shader::shader_type::fragment };
 		shader_program m_default_shader_program;
-		program_layout m_default_program_layout;
 		texture m_default_texture;
 		
 		int32_t m_exit_code;
