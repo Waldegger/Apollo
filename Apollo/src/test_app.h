@@ -48,10 +48,10 @@ private:
     
     std::array<age::vertex_2d, 4> m_rect_vertices =
     {
-        age::vertex_2d{ age::vector2f{ 0.0f, 0.0f }, age::color{255, 255, 255, 255 }, age::vector2f{0.0f, 109.0f / 2048.0f} },
-        age::vertex_2d{ age::vector2f{ 0.18f, 0.0f }, age::color{255, 255, 255, 255 }, age::vector2f{110.0f / 1024.0f, 109.0f / 2048.0f} },
-        age::vertex_2d{ age::vector2f{ 0.18f, 0.045f }, age::color{255, 255, 255, 255 }, age::vector2f{110.0f / 1024.0f, 136.0f / 2048.0f} },
-        age::vertex_2d{ age::vector2f{ 0.0f, 0.045f }, age::color{255, 255, 255, 255 }, age::vector2f{0.0f, 136.0f / 2048.0f} }
+        age::vertex_2d{ age::vector2f{ 0.0f, 0.0f }, age::color{255, 255, 255, 255 }, age::vector2f{0.0f, 109.0f} },
+        age::vertex_2d{ age::vector2f{ 0.18f, 0.0f }, age::color{255, 255, 255, 255 }, age::vector2f{110.0f, 109.0f} },
+        age::vertex_2d{ age::vector2f{ 0.18f, 0.045f }, age::color{255, 255, 255, 255 }, age::vector2f{110.0f, 136.0f} },
+        age::vertex_2d{ age::vector2f{ 0.0f, 0.045f }, age::color{255, 255, 255, 255 }, age::vector2f{0.0f, 136.0f} }
     };
 
     std::array<uint32_t, 6> m_indizes = {

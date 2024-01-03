@@ -8,13 +8,12 @@ void add_line(std::vector<age::vertex_2d>& vertices,
 	const age::color& color,
 	float offset,
 	float thickness,
-	float pixel_size,
 	float outline_thickness = 0.0f)
 {
 	float top = std::floor(line_top + offset - (thickness / 2) + 0.5f);
 	float bottom = top + std::floor(thickness + 0.5f);
 
-	auto tex_coord = age::vector2f{ pixel_size, pixel_size };
+	auto tex_coord = age::vector2f{ 1, 1 };
 
 	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
@@ -31,8 +30,7 @@ void add_glyph_quad(std::vector<age::vertex_2d>& vertices,
 	age::vector2f position,
 	const age::color& color,
 	const age::font::glyph& glyph,
-	float italic_shear,
-	float pixel_size)
+	float italic_shear)
 {
 	float padding = 1.0;
 
@@ -41,10 +39,10 @@ void add_glyph_quad(std::vector<age::vertex_2d>& vertices,
 	float right = glyph.bounds.left + glyph.bounds.width + padding;
 	float bottom = glyph.bounds.top + glyph.bounds.height + padding;
 
-	float u1 = glyph.render_texture_rect.left - pixel_size;
-	float v1 = glyph.render_texture_rect.top - pixel_size;
-	float u2 = glyph.render_texture_rect.left + glyph.render_texture_rect.width + pixel_size;
-	float v2 = glyph.render_texture_rect.top + glyph.render_texture_rect.height + pixel_size;
+	float u1 = static_cast<float>(glyph.texture_rect.left);
+	float v1 = static_cast<float>(glyph.texture_rect.top);
+	float u2 = static_cast<float>(glyph.texture_rect.left + glyph.texture_rect.width);
+	float v2 = static_cast<float>(glyph.texture_rect.top + glyph.texture_rect.height);
 
 	vertices.emplace_back(
 		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * top, position.y + top}, color, age::vector2f{u1, v1} });
@@ -345,8 +343,6 @@ namespace age
 		if (m_string.empty())
 			return;
 
-		float pixel_size = 1.0f / static_cast<float>(font_texture_size.x);
-
 		bool is_bold = m_style & text_styles::bold;
 		bool is_underlined = m_style & text_styles::underlined;
 		bool is_strike_through = m_style & text_styles::strike_through;
@@ -380,18 +376,18 @@ namespace age
 
 			if (is_underlined && (cur_char == U'\n' && prev_char != U'\n'))
 			{
-				add_line(m_vertices, x, y, m_fill_color, underline_offset, underline_thickness, pixel_size);
+				add_line(m_vertices, x, y, m_fill_color, underline_offset, underline_thickness);
 
 				if (m_outline_thickness != 0)
-					add_line(m_outline_vertices, x, y, m_outline_color, underline_offset, underline_thickness, pixel_size, m_outline_thickness);
+					add_line(m_outline_vertices, x, y, m_outline_color, underline_offset, underline_thickness, m_outline_thickness);
 			}
 
 			if (is_strike_through && (cur_char == U'\n' && prev_char != U'\n'))
 			{
-				add_line(m_vertices, x, y, m_fill_color, strike_through_offset, underline_thickness, pixel_size);
+				add_line(m_vertices, x, y, m_fill_color, strike_through_offset, underline_thickness);
 
 				if (m_outline_thickness != 0)
-					add_line(m_outline_vertices, x, y, m_outline_color, strike_through_offset, underline_thickness, pixel_size, m_outline_thickness);
+					add_line(m_outline_vertices, x, y, m_outline_color, strike_through_offset, underline_thickness, m_outline_thickness);
 			}
 
 			prev_char = cur_char;
@@ -431,14 +427,14 @@ namespace age
 				const font::glyph& glyph = m_font->get_glyph(cur_char, m_character_size, is_bold, m_outline_thickness);
 
 				// Add the outline glyph to the vertices
-				add_glyph_quad(m_outline_vertices, vector2f(x, y), m_outline_color, glyph, italic_shear, pixel_size);
+				add_glyph_quad(m_outline_vertices, vector2f(x, y), m_outline_color, glyph, italic_shear);
 			}
 
 			// Extract the current glyph's description
 			const font::glyph& glyph = m_font->get_glyph(cur_char, m_character_size, is_bold);
 
 			// Add the glyph to the vertices
-			add_glyph_quad(m_vertices, vector2f(x, y), m_fill_color, glyph, italic_shear, pixel_size);
+			add_glyph_quad(m_vertices, vector2f(x, y), m_fill_color, glyph, italic_shear);
 
 			// Update the current bounds
 			float left = glyph.bounds.left;
@@ -468,7 +464,7 @@ namespace age
 		// If we're using the underlined style, add the last line
 		if (is_underlined && (x > 0))
 		{
-			add_line(m_vertices, x, y, m_fill_color, underline_offset, underline_thickness, pixel_size);
+			add_line(m_vertices, x, y, m_fill_color, underline_offset, underline_thickness);
 
 			if (m_outline_thickness != 0)
 				add_line(m_outline_vertices, x, y, m_outline_color, underline_offset, underline_thickness, m_outline_thickness);
@@ -477,7 +473,7 @@ namespace age
 		// If we're using the strike through style, add the last line across all characters
 		if (is_strike_through && (x > 0))
 		{
-			add_line(m_vertices, x, y, m_fill_color, strike_through_offset, underline_thickness, pixel_size);
+			add_line(m_vertices, x, y, m_fill_color, strike_through_offset, underline_thickness);
 
 			if (m_outline_thickness != 0)
 				add_line(m_outline_vertices, x, y, m_outline_color, strike_through_offset, underline_thickness, m_outline_thickness);

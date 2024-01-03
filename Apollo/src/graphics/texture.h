@@ -27,7 +27,7 @@ namespace age
 
 	public:
 		void bind() const;
-
+		
 		void create(const vector2u& size);
 
 		void load(std::string_view filename, const int_rect& area = int_rect{});
@@ -66,6 +66,7 @@ namespace age
 	protected:
 
 	private:
+		
 		inline static uint32_t m_current_bound_texture;
 
 		static uint32_t gen_handle();

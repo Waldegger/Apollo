@@ -131,21 +131,14 @@ namespace age
 
 	void engine::init_defaults()
 	{
-		m_vp_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity().get_data());
-		m_model_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity().get_data());
-		m_texture_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity().get_data());
-		m_texture_matrix_ubo.bind_buffer_base(1);
-		m_viewport_ubo.buffer_data(sizeof(uint32_t) * 2, reinterpret_cast<const void*>(&std::array<uint32_t, 2>{0, 0}[0] ));
-
 		std::string_view vertex_shader_source =
 			"#version 330 core\n"
 			"precision mediump float;\n"
-			"layout(std140) uniform tex_matrices\n"
+			"layout (std140) uniform texture_matrices\n"
 			"{\n"
-			"	mat4 tex_m;"
+			"	mat4 tex_m;\n"
 			"};\n"
 			"uniform mat4 u_mvp_matrix;\n"
-			"uniform mat4 u_test_mat;"
 			"attribute vec2 a_position;\n"
 			"attribute vec4 a_color;\n"
 			"attribute vec2 a_tex_coords;\n"
@@ -153,11 +146,13 @@ namespace age
 			"varying vec2 v_tex_coords;\n"
 			"void main()\n"
 			"{\n"
-			"   gl_Position = u_mvp_matrix * vec4(a_position, 0.0, 1.0);\n"
-			"   v_color = a_color;\n"
-			"	vec4 t_coords = u_test_mat * vec4(a_tex_coords, 0.0, 1.0);\n"
-			"   v_tex_coords = t_coords.xy;\n"
+			"	gl_Position = u_mvp_matrix * vec4(a_position, 0.0, 1.0);\n"
+			"	v_color = a_color;\n"
+			"	vec4 t_coords = tex_m * vec4(a_tex_coords, 0.0, 1.0);\n"
+			"	v_tex_coords = t_coords.xy;\n"
 			"}";
+
+		printf(vertex_shader_source.data());
 
 		std::string_view fragment_shader_source =
 			"#version 330 core\n"
@@ -167,9 +162,9 @@ namespace age
 			"varying vec2 v_tex_coords;\n"
 			"void main()\n"
 			"{\n"
-			"    vec4 texel = texture2D(u_texture, v_tex_coords);\n"
-			"    if(texel.a == 0.0) discard;\n"
-			"    gl_FragColor = v_color * texel;\n"
+			"	vec4 texel = texture2D(u_texture, v_tex_coords);\n"
+			"	if(texel.a == 0.0) discard;\n"
+			"	gl_FragColor = v_color * texel;\n"
 			"}";
 
 		m_default_vertex_shader.compile(vertex_shader_source);
@@ -186,17 +181,20 @@ namespace age
 		m_default_program_layout.texture_name("u_texture");
 
 		m_default_shader_program.set_uniform("u_texture", 0);
-		m_default_shader_program.set_uniform_block_binding("tex_matrices", 1);
+		m_default_shader_program.set_uniform_block_binding("texture_matrices", 0);
 
 		m_default_texture.create(vector2u{ 1, 1 });
 		m_default_texture.update(std::array<uint8_t, 4>{255, 255, 255, 255}.data());
 
-		//Only for testing purpose here
-		m_default_shader_program.set_uniform("u_test_mat", age::matrix4f::get_identity());
-
 		m_default_vertex_array_object.bind();
 		m_default_vertex_buffer_object.bind();
 		m_default_element_buffer_object.bind();
+
+		m_vp_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity());
+		m_model_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity());
+		m_texture_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity());
+		m_texture_matrix_ubo.bind_buffer_base(0);
+		m_viewport_ubo.buffer_data(sizeof(uint32_t) * 2, std::array<uint32_t, 2>{0, 0}.data());
 
 		glEnableVertexAttribArray(get_a_position_index());
 		glEnableVertexAttribArray(get_a_color_index());

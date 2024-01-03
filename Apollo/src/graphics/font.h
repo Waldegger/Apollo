@@ -38,8 +38,6 @@ namespace age
 			int32_t rsb_delta = 0;
 			float_rect bounds;
 			int_rect texture_rect;
-
-			float_rect render_texture_rect;
 		};
 
 		void load(std::string_view fn);
