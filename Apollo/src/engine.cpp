@@ -152,8 +152,6 @@ namespace age
 			"	v_tex_coords = t_coords.xy;\n"
 			"}";
 
-		printf(vertex_shader_source.data());
-
 		std::string_view fragment_shader_source =
 			"#version 330 core\n"
 			"precision mediump float;\n"
