@@ -43,6 +43,10 @@ void test_app::on_create()
 
     m_background_program.set_uniform("iResolution", static_cast<float>(window_size.x), static_cast<float>(window_size.y));
     m_background_program_time_location = m_background_program.get_uniform_location("iTime");
+
+    m_background_program.set_uniform_block_binding("viewprojection_matrix", get_vp_matrix_binding());
+    m_background_program.set_uniform_block_binding("model_matrix", get_model_matrix_binding());
+    m_background_program.set_uniform_block_binding("texture_matrices", get_texture_matrix_binding());
     
     m_test_texture.load("./test_data/test.png");
 
@@ -131,10 +135,8 @@ void test_app::on_update()
     //Clear screen
     get_render_window().clear();
 
-    auto window_size = get_render_window().get_size();
-
     age::matrix4f background_matrix;
-    //background_matrix.translate(age::vector2f{ 20.0f, 20000.0f });
+    background_matrix.translate(age::vector2f{ 0.0f, 0.0f });
     //background_matrix.scale(age::vector2f{ 0.75f, 0.75f });
     
     //ToDo: redesign the way to render, so that the VAO does not need to be activated and released like this
