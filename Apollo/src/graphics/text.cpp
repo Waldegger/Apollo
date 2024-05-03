@@ -1,5 +1,7 @@
 #include "text.h"
 
+#include <glm/trigonometric.hpp>
+
 #include "render_states.h"
 
 void add_line(std::vector<age::vertex_2d>& vertices,
@@ -13,21 +15,21 @@ void add_line(std::vector<age::vertex_2d>& vertices,
 	float top = std::floor(line_top + offset - (thickness / 2) + 0.5f);
 	float bottom = top + std::floor(thickness + 0.5f);
 
-	auto tex_coord = age::vector2f{ 1, 1 };
+	auto tex_coord = glm::vec2{ 1, 1 };
 
-	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, top - outline_thickness}, color, tex_coord });
+	vertices.emplace_back(age::vertex_2d{ glm::vec2{-outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
-	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
-	vertices.emplace_back(age::vertex_2d{ age::vector2f{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
+		age::vertex_2d{ glm::vec2{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
+	vertices.emplace_back(age::vertex_2d{ glm::vec2{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
+	vertices.emplace_back(age::vertex_2d{ glm::vec2{-outline_thickness, bottom + outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
+		age::vertex_2d{ glm::vec2{line_length + outline_thickness, top - outline_thickness}, color, tex_coord });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{line_length + outline_thickness, bottom + outline_thickness}, color, tex_coord });
+		age::vertex_2d{ glm::vec2{line_length + outline_thickness, bottom + outline_thickness}, color, tex_coord });
 }
 
 void add_glyph_quad(std::vector<age::vertex_2d>& vertices,
-	age::vector2f position,
+	glm::vec2 position,
 	const age::color& color,
 	const age::font::glyph& glyph,
 	float italic_shear)
@@ -45,17 +47,17 @@ void add_glyph_quad(std::vector<age::vertex_2d>& vertices,
 	float v2 = static_cast<float>(glyph.texture_rect.top + glyph.texture_rect.height);
 
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * top, position.y + top}, color, age::vector2f{u1, v1} });
+		age::vertex_2d{ glm::vec2{position.x + left - italic_shear * top, position.y + top}, color, glm::vec2{u1, v1} });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{position.x + right - italic_shear * top, position.y + top}, color, age::vector2f{u2, v1} });
+		age::vertex_2d{ glm::vec2{position.x + right - italic_shear * top, position.y + top}, color, glm::vec2{u2, v1} });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * bottom, position.y + bottom}, color, age::vector2f{u1, v2} });
+		age::vertex_2d{ glm::vec2{position.x + left - italic_shear * bottom, position.y + bottom}, color, glm::vec2{u1, v2} });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{position.x + left - italic_shear * bottom, position.y + bottom}, color, age::vector2f{u1, v2} });
+		age::vertex_2d{ glm::vec2{position.x + left - italic_shear * bottom, position.y + bottom}, color, glm::vec2{u1, v2} });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{position.x + right - italic_shear * top, position.y + top}, color, age::vector2f{u2, v1} });
+		age::vertex_2d{ glm::vec2{position.x + right - italic_shear * top, position.y + top}, color, glm::vec2{u2, v1} });
 	vertices.emplace_back(
-		age::vertex_2d{ age::vector2f{position.x + right - italic_shear * bottom, position.y + bottom}, color, age::vector2f{u2, v2} });
+		age::vertex_2d{ glm::vec2{position.x + right - italic_shear * bottom, position.y + bottom}, color, glm::vec2{u2, v2} });
 }
 
 namespace age
@@ -247,9 +249,9 @@ namespace age
 		return m_outline_thickness;
 	}
 
-	vector2f text::find_character_pos(size_t index) const
+	glm::vec2 text::find_character_pos(size_t index) const
 	{
-		vector2f result;
+		glm::vec2 result;
 
 		if (!m_font) return result;
 
@@ -330,7 +332,7 @@ namespace age
 		const auto& font_texture = m_font->get_texture(m_character_size);
 		const auto& font_texture_size = font_texture.get_size();
 
-		if (!m_geometry_needs_update && font_texture.get_id() == m_last_texture_id && font_texture_size.is_equal_to(m_last_texture_size))
+		if (!m_geometry_needs_update && font_texture.get_id() == m_last_texture_id && font_texture_size == m_last_texture_size)
 			return;
 
 		m_last_texture_id = font_texture.get_id();
@@ -342,11 +344,11 @@ namespace age
 
 		if (m_string.empty())
 			return;
-
+		
 		bool is_bold = m_style & text_styles::bold;
 		bool is_underlined = m_style & text_styles::underlined;
 		bool is_strike_through = m_style & text_styles::strike_through;
-		float italic_shear = (m_style & text_styles::italic) ? degrees(12).as_radians() : 0.0f;
+		float italic_shear = (m_style & text_styles::italic) ? glm::radians(12.0f) : 0.0f;
 		float underline_offset = m_font->get_underline_position(m_character_size);
 		float underline_thickness = m_font->get_underline_thickness(m_character_size);
 
@@ -365,7 +367,7 @@ namespace age
 		float min_y = static_cast<float>(m_character_size);
 		float max_x = 0.f;
 		float max_y = 0.f;
-
+		
 		uint32_t prev_char = 0;
 
 		for (auto cur_char : m_string)
@@ -427,14 +429,14 @@ namespace age
 				const font::glyph& glyph = m_font->get_glyph(cur_char, m_character_size, is_bold, m_outline_thickness);
 
 				// Add the outline glyph to the vertices
-				add_glyph_quad(m_outline_vertices, vector2f(x, y), m_outline_color, glyph, italic_shear);
+				add_glyph_quad(m_outline_vertices, glm::vec2(x, y), m_outline_color, glyph, italic_shear);
 			}
 
 			// Extract the current glyph's description
 			const font::glyph& glyph = m_font->get_glyph(cur_char, m_character_size, is_bold);
 
 			// Add the glyph to the vertices
-			add_glyph_quad(m_vertices, vector2f(x, y), m_fill_color, glyph, italic_shear);
+			add_glyph_quad(m_vertices, glm::vec2(x, y), m_fill_color, glyph, italic_shear);
 
 			// Update the current bounds
 			float left = glyph.bounds.left;

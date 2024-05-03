@@ -3,7 +3,7 @@
 #include <string_view>
 #include <istream>
 
-#include "../algebra/vector2.h"
+#include <glm/vec2.hpp>
 #include "rect.h"
 #include "image.h"
 #include "render_window.h"
@@ -28,7 +28,7 @@ namespace age
 	public:
 		void bind() const;
 		
-		void create(const vector2u& size);
+		void create(const glm::u32vec2& size);
 
 		void load(std::string_view filename, const int_rect& area = int_rect{});
 		void load(const std::byte data[], std::size_t size, const int_rect& area = int_rect{});
@@ -38,13 +38,13 @@ namespace age
 		void update(const uint8_t* pixels);
 		void update(const uint8_t* pixels, const uint_rect& area);
 		void update(const texture& other_texture);
-		void update(const texture& other_texture, const vector2u& dest);
+		void update(const texture& other_texture, const glm::u32vec2& dest);
 		void update(const image& img);
-		void update(const image& img, const vector2u& dest);
+		void update(const image& img, const glm::u32vec2& dest);
 		void update(const render_window& window);
-		void update(const render_window& window, const vector2u& dest);
+		void update(const render_window& window, const glm::u32vec2& dest);
 
-		const vector2u& get_size() const;
+		const glm::u32vec2& get_size() const;
 		image copy_to_image() const;
 
 		void set_smooth(bool value);
@@ -74,7 +74,7 @@ namespace age
 
 		uint32_t get_handle() const { return m_handle; }
 
-		vector2u m_size;
+		glm::u32vec2 m_size;
 
 		unique_handle<uint32_t, delete_handle> m_handle;
 		bool m_smooth = false;

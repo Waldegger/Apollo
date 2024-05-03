@@ -517,7 +517,7 @@ namespace age
 		result.lsb_delta = static_cast<int>(face->glyph->lsb_delta);
 		result.rsb_delta = static_cast<int>(face->glyph->rsb_delta);
 
-		vector2u size{bitmap.width, bitmap.rows};
+		glm::u32vec2 size{bitmap.width, bitmap.rows};
 
 		if ((size.x > 0) && (size.y > 0))
 		{
@@ -607,7 +607,7 @@ namespace age
 			uint32_t y = static_cast<unsigned int>(result.texture_rect.top) - padding;
 			uint32_t w = static_cast<unsigned int>(result.texture_rect.width) + 2 * padding;
 			uint32_t h = static_cast<unsigned int>(result.texture_rect.height) + 2 * padding;
-			cur_page.texture.update(m_pixel_buffer.data(), uint_rect{ vector2u{x,y}, vector2u{w,h} });
+			cur_page.texture.update(m_pixel_buffer.data(), uint_rect{ glm::u32vec2{x,y}, glm::u32vec2{w,h} });
 		}
 
 		// Delete the FT glyph is done by glyph_handle
@@ -616,12 +616,12 @@ namespace age
 		return result;
 	}
 
-	int_rect font::find_glyph_rect(page& page, const vector2u& size) const
+	int_rect font::find_glyph_rect(page& page, const glm::u32vec2& size) const
 	{
 		row* matching_row = nullptr;
 		float best_ratio = 0.0f;
 
-		int_rect result{ vector2i{ 0, 0 }, vector2i{ 2, 2 } };
+		int_rect result{ glm::i32vec2{ 0, 0 }, glm::i32vec2{ 2, 2 } };
 
 		for (auto& r : page.rows)
 		{
@@ -777,11 +777,11 @@ namespace age
 		: next_row{ 3 }
 	{
 		image tex_image;
-		tex_image.create(vector2u{ 128, 128 }, color{ 255, 255, 255, 0 });
+		tex_image.create(glm::u32vec2{ 128, 128 }, color{ 255, 255, 255, 0 });
 
 		for (uint32_t x = 0; x < 2; ++x)
 			for (uint32_t y = 0; y < 2; ++y)
-				tex_image.set_pixel(vector2u{ x, y }, color{ 255, 255, 255, 255 });
+				tex_image.set_pixel(glm::u32vec2{ x, y }, color{ 255, 255, 255, 255 });
 
 		texture.load(tex_image);
 		texture.set_smooth(smooth);

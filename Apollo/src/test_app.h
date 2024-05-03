@@ -4,9 +4,10 @@
 
 #include <sstream>
 
+#include <glm/mat4x4.hpp>
+
 #include "graphics/shader_program.h"
 #include "graphics/vertex_2d.h"
-#include "algebra/matrix4.h"
 #include "graphics/texture.h"
 #include "graphics/view_2d.h"
 #include "graphics/font.h"

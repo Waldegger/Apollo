@@ -67,23 +67,25 @@ namespace age
 						{ static_cast<int>(0.5f + width * viewport.width), static_cast<int>(0.5f + height * viewport.height) });
 	}
 
-	vector2f render_target::map_pixel_to_coords(const vector2i& point) const
+	glm::vec2 render_target::map_pixel_to_coords(const glm::i32vec2& point) const
 	{
-		vector2f normalized;
+		glm::vec2 normalized;
 
 		float_rect viewport = float_rect{ m_viewport };
 		normalized.x = -1.f + 2.f * (static_cast<float>(point.x) - viewport.left) / viewport.width;
 		normalized.y = 1.f - 2.f * (static_cast<float>(point.y) - viewport.top) / viewport.height;
 
+		//ToDo:: the last expression is the desired result. Figure out how this is done with GLM
+		return glm::vec2{ get_inverse_projection() * glm::vec4{ normalized } };
 		return get_inverse_projection().transform_point(normalized);
 	}
 
-	vector2i render_target::map_coords_to_pixel(const vector2f& point) const
+	glm::i32vec2 render_target::map_coords_to_pixel(const glm::vec2& point) const
 	{
-		vector2f normalized = m_projection_matrix.transform_point(point);
+		glm::vec2 normalized = m_projection_matrix.transform_point(point);
 
 		// Then convert to viewport coordinates
-		vector2i  pixel;
+		glm::i32vec2  pixel;
 		float_rect viewport = float_rect(m_viewport);
 		pixel.x = static_cast<int>((normalized.x + 1.f) / 2.f * viewport.width + viewport.left);
 		pixel.y = static_cast<int>((-normalized.y + 1.f) / 2.f * viewport.height + viewport.top);
@@ -101,14 +103,14 @@ namespace age
 		// Set the projection matrix
 		m_projection_matrix = value.get_transform();
 
-		engine::get_instance()->get_vp_matrix_ubo().buffer_sub_data(0, sizeof(matrix4f), m_projection_matrix);
+		engine::get_instance()->get_vp_matrix_ubo().buffer_sub_data(0, sizeof(glm::mat4), m_projection_matrix);
 
 		m_view_size = value.get_size();
 
 		m_projection_needs_update = true;
 	}
 
-	const vector2f& render_target::get_view_size() const
+	const glm::vec2& render_target::get_view_size() const
 	{
 		return m_view_size;
 	}
@@ -148,7 +150,7 @@ namespace age
 
 		program.bind();
 
-		engine::get_instance()->get_model_matrix_ubo().buffer_sub_data(0, sizeof(matrix4f), states.get_transform());
+		engine::get_instance()->get_model_matrix_ubo().buffer_sub_data(0, sizeof(glm::mat4), states.get_transform());
 
 		states.get_texture().bind();
 
@@ -180,11 +182,11 @@ namespace age
 		}
 	}
 
-	const matrix4f& render_target::get_inverse_projection() const
+	const glm::mat4& render_target::get_inverse_projection() const
 	{
 		if (m_projection_needs_update)
 		{
-			m_projection_matrix_inverse = m_projection_matrix.get_inverse();
+			m_projection_matrix_inverse = glm::inverse(m_projection_matrix);
 			m_projection_needs_update = false;
 		}
 

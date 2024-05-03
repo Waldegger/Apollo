@@ -81,7 +81,7 @@ namespace age
 		if (!(flags & SDL_WINDOW_HIDDEN))
 			SDL_ShowWindow(handle);
 		
-		vector2f view_size{ 1.0f, static_cast<float>(height) / static_cast<float>(width) };
+		glm::vec2 view_size{ 1.0f, static_cast<float>(height) / static_cast<float>(width) };
 		view_2d view{ view_size * 0.5f, view_size };
 
 		apply_view(view);
@@ -97,14 +97,14 @@ namespace age
 		SDL_GL_SwapWindow(static_cast<SDL_Window*>(m_windowhandle.get()));
 	}
 
-	vector2u render_window::get_size() const
+	glm::u32vec2 render_window::get_size() const
 	{
 		int w;
 		int h;
 
 		SDL_GetWindowSize(static_cast<SDL_Window*>(m_windowhandle.get()), &w, &h);
 
-		return vector2u{ static_cast<uint32_t>(w), static_cast<uint32_t>(h) };
+		return glm::u32vec2{ static_cast<uint32_t>(w), static_cast<uint32_t>(h) };
 	}
 
 	void render_window::destroy_window_lib(void* window)

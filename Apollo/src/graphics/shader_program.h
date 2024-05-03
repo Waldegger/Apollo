@@ -4,7 +4,7 @@
 #include <string_view>
 
 #include "shader.h"
-#include "../algebra/matrix4.h"
+#include <glm/mat4x4.hpp>
 #include "../utility/utility.h"
 
 namespace age
@@ -54,8 +54,8 @@ namespace age
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 2>& v) const;
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 3>& v) const;
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 4>& v) const;
-		void set_uniform(int32_t location, const matrix4f& v, bool transpose = false) const;
-		void set_uniform(int32_t location, const matrix4f* v[], size_t size, bool transpose = false) const;
+		void set_uniform(int32_t location, const glm::mat4x4& v, bool transpose = false) const;
+		void set_uniform(int32_t location, const glm::mat4x4* v[], size_t size, bool transpose = false) const;
 		//If necessary add more uniforms for matrices: https://registry.khronos.org/OpenGL-Refpages/gl4/html/glUniform.xhtml
 
 		void set_uniform(std::string_view name, float v0) const;
@@ -82,8 +82,8 @@ namespace age
 		void set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 2>& v) const;
 		void set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 3>& v) const;
 		void set_uniform(std::string_view name, uint32_t count, const std::array<uint32_t, 4>& v) const;
-		void set_uniform(std::string_view name, const matrix4f& v, bool transpose = false) const;
-		void set_uniform(std::string_view name, const matrix4f* v[], size_t size, bool transpose = false) const;
+		void set_uniform(std::string_view name, const glm::mat4x4& v, bool transpose = false) const;
+		void set_uniform(std::string_view name, const glm::mat4x4* v[], size_t size, bool transpose = false) const;
 
 	protected:
 

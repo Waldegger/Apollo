@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <array>
 
 namespace age
 {
@@ -270,14 +271,14 @@ namespace age
 		glUniform4uiv(location, count, v.data());
 	}
 
-	void shader_program::set_uniform(int32_t location, const matrix4f& v, bool transpose) const
+	void shader_program::set_uniform(int32_t location, const glm::mat4& v, bool transpose) const
 	{
 		bind();
 
-		glUniformMatrix4fv(location, 1, transpose ? GL_TRUE : GL_FALSE, v);
+		glUniformMatrix4fv(location, 1, transpose ? GL_TRUE : GL_FALSE, reinterpret_cast<const float*>(&v));
 	}
 
-	void shader_program::set_uniform(int32_t location, const matrix4f* v[], size_t size, bool transpose) const
+	void shader_program::set_uniform(int32_t location, const glm::mat4* v[], size_t size, bool transpose) const
 	{
 		bind();
 
@@ -452,14 +453,14 @@ namespace age
 		set_uniform(loc, count, v);
 	}
 
-	void shader_program::set_uniform(std::string_view name, const matrix4f& v, bool transpose) const
+	void shader_program::set_uniform(std::string_view name, const glm::mat4& v, bool transpose) const
 	{
 		auto loc = get_uniform_location(name);
 
 		set_uniform(loc, v, transpose);
 	}
 
-	void shader_program::set_uniform(std::string_view name, const matrix4f* v[], size_t size, bool transpose) const
+	void shader_program::set_uniform(std::string_view name, const glm::mat4* v[], size_t size, bool transpose) const
 	{
 		auto loc = get_uniform_location(name);
 

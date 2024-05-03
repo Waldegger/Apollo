@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../algebra/matrix4.h"
-#include "../algebra/vector2.h"
+#include <glm/mat4x4.hpp>
+#include <glm/vec2.hpp>
 #include "rect.h"
 
 namespace age
@@ -11,14 +11,14 @@ namespace age
 	public:
 		view_2d();
 		explicit view_2d(const float_rect& rect);
-		view_2d(const vector2f& center, const vector2f& size);
+		view_2d(const glm::vec2& center, const glm::vec2& size);
 
 	public:
-		void set_center(const vector2f& value);
-		const vector2f& get_center() const;
+		void set_center(const glm::vec2& value);
+		const glm::vec2& get_center() const;
 
-		void set_size(const vector2f& value);
-		const vector2f& get_size() const;
+		void set_size(const glm::vec2& value);
+		const glm::vec2& get_size() const;
 
 		void set_rotation(float value);
 		float get_rotation() const;
@@ -28,22 +28,22 @@ namespace age
 
 		void reset(const float_rect& rectangle);
 
-		void move(const vector2f& offset);
+		void move(const glm::vec2& offset);
 		void rotate(float value);
 		void zoom(float factor);
 
-		const matrix4f& get_transform() const;
-		const matrix4f& get_inverse_transform() const;
+		const glm::mat4x4& get_transform() const;
+		const glm::mat4x4& get_inverse_transform() const;
 
 	protected:
 
 	private:
-		vector2f m_center;
-		vector2f m_size;
+		glm::vec2 m_center;
+		glm::vec2 m_size;
 		float m_rotation = 0.0f;
 		float_rect m_viewport{{0.0f, 0.0f}, {1.0f, 1.0f}};
-		mutable matrix4f m_transform;
-		mutable matrix4f m_inverse_transform;
+		mutable glm::mat4x4 m_transform;
+		mutable glm::mat4x4 m_inverse_transform;
 		mutable bool m_transform_updated = false;
 		mutable bool m_inv_transform_updated = false;
 	};

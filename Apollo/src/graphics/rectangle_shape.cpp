@@ -6,11 +6,11 @@
 
 namespace age
 {
-	rectangle_shape::rectangle_shape(const vector2f& size)
-		: m_vertices{	vertex_2d{ vector2f{0.0f, 0.0f}, vector2f{0.0f, 0.0f} }, 
-						vertex_2d{ vector2f{size.x, 0.0f}, vector2f{1.0f, 0.0f} }, 
-						vertex_2d{ vector2f{size.x, size.y}, vector2f{1.0f, 1.0f} }, 
-						vertex_2d{ vector2f{0.0f, size.y}, vector2f{0.0f, 1.0f} } }
+	rectangle_shape::rectangle_shape(const glm::vec2& size)
+		: m_vertices{	vertex_2d{ glm::vec2{0.0f, 0.0f}, glm::vec2{0.0f, 0.0f} },
+						vertex_2d{ glm::vec2{size.x, 0.0f}, glm::vec2{1.0f, 0.0f} },
+						vertex_2d{ glm::vec2{size.x, size.y}, glm::vec2{1.0f, 1.0f} },
+						vertex_2d{ glm::vec2{0.0f, size.y}, glm::vec2{0.0f, 1.0f} } }
 		, m_indices{ 0, 1, 2, 2, 3, 0 }
 		, m_outline_indices{ 0, 1, 2, 2, 3, 0, 1, 4, 5, 5, 2, 1, 4, 6, 7, 7, 5, 4, 6, 0, 3, 3, 7, 6 }
 		, m_size{ size }
@@ -33,7 +33,7 @@ namespace age
 		*/
 	}
 
-	void rectangle_shape::set_size(const vector2f& value)
+	void rectangle_shape::set_size(const glm::vec2& value)
 	{
 		m_size = value;
 
@@ -41,7 +41,7 @@ namespace age
 		update_outline();
 	}
 
-	const vector2f& rectangle_shape::get_size() const
+	const glm::vec2& rectangle_shape::get_size() const
 	{
 		return m_size;
 	}
@@ -56,7 +56,7 @@ namespace age
 
 		if (reset_texture_rect || m_texture_rect == uint_rect{})
 		{
-			m_texture_rect = uint_rect{ vector2u{0, 0}, value.get_size() };
+			m_texture_rect = uint_rect{ glm::u32vec2{0, 0}, value.get_size() };
 			update_coords = true;
 		}
 
@@ -135,12 +135,12 @@ namespace age
 
 	void rectangle_shape::update_vertices()
 	{
-		vector2f size_without_outline{ m_size.x - 2.0f * m_outline_thickness, m_size.y - 2.0f * m_outline_thickness };
+		glm::vec2 size_without_outline{ m_size.x - 2.0f * m_outline_thickness, m_size.y - 2.0f * m_outline_thickness };
 
-		m_vertices[0].position = vector2f{ m_outline_thickness, m_outline_thickness };
-		m_vertices[1].position = vector2f{ size_without_outline.x + m_outline_thickness, m_outline_thickness };
-		m_vertices[2].position = vector2f{ size_without_outline.x + m_outline_thickness, size_without_outline.y + m_outline_thickness };
-		m_vertices[3].position = vector2f{ m_outline_thickness, size_without_outline.y + m_outline_thickness };
+		m_vertices[0].position = glm::vec2{ m_outline_thickness, m_outline_thickness };
+		m_vertices[1].position = glm::vec2{ size_without_outline.x + m_outline_thickness, m_outline_thickness };
+		m_vertices[2].position = glm::vec2{ size_without_outline.x + m_outline_thickness, size_without_outline.y + m_outline_thickness };
+		m_vertices[3].position = glm::vec2{ m_outline_thickness, size_without_outline.y + m_outline_thickness };
 	}
 
 	void rectangle_shape::update_outline()
@@ -170,9 +170,9 @@ namespace age
 	{
 		auto texture_size = m_texture->get_size();
 
-		m_vertices[0].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
-		m_vertices[1].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
-		m_vertices[2].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
-		m_vertices[3].tex_coords = vector2f{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
+		m_vertices[0].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
+		m_vertices[1].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
+		m_vertices[2].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
+		m_vertices[3].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
 	}
 }

@@ -93,21 +93,21 @@ namespace age
 		source.set_looping(looped);
 	}
 
-	void sound_interface::set_position(const vector3f& value)
+	void sound_interface::set_position(const glm::vec3& value)
 	{
 		m_position = value;
 	}
 
-	void sound_interface::update_position(const vector3f& value)
+	void sound_interface::update_position(const glm::vec3& value)
 	{
-		if (!m_position.is_equal_to(value))
+		if (m_position != value)
 		{
 			set_position(value);
 			if (m_attached_source) m_attached_source->set_position(value);
 		}
 	}
 
-	const vector3f& sound_interface::get_position() const
+	const glm::vec3& sound_interface::get_position() const
 	{
 		return m_position;
 	}

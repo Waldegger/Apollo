@@ -37,13 +37,13 @@ namespace age
 	public:
 		int_rect get_viewport(const view_2d& view) const;
 
-		vector2f map_pixel_to_coords(const vector2i& point) const;
-		vector2i map_coords_to_pixel(const vector2f& point) const;
+		glm::vec2 map_pixel_to_coords(const glm::i32vec2& point) const;
+		glm::i32vec2 map_coords_to_pixel(const glm::vec2& point) const;
 		
-		virtual vector2u get_size() const = 0;
+		virtual glm::u32vec2 get_size() const = 0;
 
 		void apply_view(const view_2d& view);
-		const vector2f& get_view_size() const;
+		const glm::vec2& get_view_size() const;
 
 		void draw(const drawable& drawbable_object, const render_states& states);
 		void draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states);
@@ -63,12 +63,12 @@ namespace age
 		void prepare_draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states);
 		void apply_blend_mode(const blend_mode& mode);
 
-		const matrix4f& get_inverse_projection() const;
+		const glm::mat4x4& get_inverse_projection() const;
 
-		vector2f m_view_size;
+		glm::vec2 m_view_size;
 		int_rect m_viewport;
-		matrix4f m_projection_matrix;
-		mutable matrix4f m_projection_matrix_inverse;
+		glm::mat4x4 m_projection_matrix;
+		mutable glm::mat4x4 m_projection_matrix_inverse;
 		states_cache m_states_cache;
 
 		mutable bool m_projection_needs_update;

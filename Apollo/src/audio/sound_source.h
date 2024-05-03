@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../algebra/vector3.h"
+#include <glm/vec3.hpp>
 #include "../utility/utility.h"
 #include "sound_queue_buffer.h"
 #include "sound_state.h"
@@ -33,8 +33,8 @@ namespace age
 		void stop();
 		void pause();
 		
-		void set_position(const vector3f& value);
-		vector3f get_position() const;
+		void set_position(const glm::vec3& value);
+		glm::vec3 get_position() const;
 
 		void set_pitch(float value);
 		float get_pitch() const;

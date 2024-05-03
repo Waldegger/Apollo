@@ -69,7 +69,7 @@ namespace age
 		void set_outline_thickness(float value);
 		float get_outline_thickness() const;
 
-		vector2f find_character_pos(size_t index) const;
+		glm::vec2 find_character_pos(size_t index) const;
 
 		float_rect get_local_bounds() const;
 
@@ -93,7 +93,7 @@ namespace age
 		color m_outline_color;
 		float m_outline_thickness;
 
-		mutable vector2u m_last_texture_size;
+		mutable glm::u32vec2 m_last_texture_size;
 		mutable uint32_t m_last_texture_id;
 
 		mutable std::vector<vertex_2d> m_vertices;

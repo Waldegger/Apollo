@@ -186,16 +186,16 @@ namespace age
 		m_default_shader_program.set_uniform_block_binding("model_matrix", get_model_matrix_binding());
 		m_default_shader_program.set_uniform_block_binding("texture_matrices", get_texture_matrix_binding());
 
-		m_default_texture.create(vector2u{ 1, 1 });
+		m_default_texture.create(glm::u32vec2{ 1, 1 });
 		m_default_texture.update(std::array<uint8_t, 4>{255, 255, 255, 255}.data());
 
 		m_default_vertex_array_object.bind();
 		m_default_vertex_buffer_object.bind();
 		m_default_element_buffer_object.bind();
-
-		m_vp_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity());
-		m_model_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity());
-		m_texture_matrix_ubo.buffer_data(sizeof(age::matrix4f), &age::matrix4f::get_identity());
+	
+		m_vp_matrix_ubo.buffer_data(sizeof(glm::mat4x4), &glm::mat4x4{1.0f});
+		m_model_matrix_ubo.buffer_data(sizeof(glm::mat4x4), &glm::mat4x4{1.0f});
+		m_texture_matrix_ubo.buffer_data(sizeof(glm::mat4x4), &glm::mat4x4{1.0f});
 		m_viewport_ubo.buffer_data(sizeof(uint32_t) * 2, std::array<uint32_t, 2>{0, 0}.data());
 
 		m_vp_matrix_ubo.bind_buffer_base(get_vp_matrix_binding());

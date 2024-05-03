@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(ProjectDir)\extlibs\headers\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(ProjectDir)\extlibs\headers\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(ProjectDir)\extlibs\headers\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(IncludePath)</IncludePath>
+    <IncludePath>$(SDL2)\include;$(GLEW)\include;$(FREETYPE)\include;$(OPENAL)\include;$(OGG)\include;$(VORBIS)\include;$(ProjectDir)\extlibs\headers\stb_image;$(ProjectDir)\extlibs\headers\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -199,11 +199,6 @@
     <ClCompile Include="src\utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\algebra\angle.h" />
-    <ClInclude Include="src\algebra\matrix4.h" />
-    <ClInclude Include="src\algebra\quaternion.h" />
-    <ClInclude Include="src\algebra\vector2.h" />
-    <ClInclude Include="src\algebra\vector3.h" />
     <ClInclude Include="src\audio\audio_device.h" />
     <ClInclude Include="src\audio\audio_format.h" />
     <ClInclude Include="src\audio\listener.h" />

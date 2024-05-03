@@ -55,7 +55,7 @@ namespace age
 	void sprite::update_vertices()
 	{
 		auto& tex_size = m_texture->get_size();
-		vector2f size{ static_cast<float>(tex_size.x), static_cast<float>(tex_size.y) };
+		glm::vec2 size{ static_cast<float>(tex_size.x), static_cast<float>(tex_size.y) };
 
 		m_vertices[1].position.x = size.x;
 		m_vertices[2].position = size;

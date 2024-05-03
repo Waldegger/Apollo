@@ -32,17 +32,17 @@ namespace age
 		alSourcePause(m_handle);
 	}
 
-	void sound_source::set_position(const vector3f& value)
+	void sound_source::set_position(const glm::vec3& value)
 	{
 		alSource3f(m_handle, AL_POSITION, value.x, value.y, value.z);
 	}
 
-	vector3f sound_source::get_position() const
+	glm::vec3 sound_source::get_position() const
 	{
 		ALfloat value[3] = { 0.0f, 0.0f, 0.0f };
 		alGetSource3f(m_handle, AL_POSITION, &value[0], &value[1], &value[2]);
 
-		return vector3f{ value[0], value[1], value[2] };
+		return glm::vec3{ value[0], value[1], value[2] };
 	}
 
 	void sound_source::set_pitch(float value)

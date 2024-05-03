@@ -3,7 +3,7 @@
 #include <optional>
 #include <algorithm>
 
-#include "../algebra/vector2.h"
+#include <glm/vec2.hpp>
 
 namespace age
 {
@@ -11,17 +11,17 @@ namespace age
 	struct rect
 	{
 		constexpr rect() = default;
-		constexpr rect(const vector2<T>& positon, const vector2<T>& size);
+		constexpr rect(const glm::vec<2, T>& positon, const glm::vec<2, T>& size);
 
 		template<typename U>
 		constexpr explicit rect(const rect<U>& rectangle);
 
-		constexpr bool contains(vector2<T>& point) const;
+		constexpr bool contains(glm::vec<2, T>& point) const;
 
 		constexpr std::optional<rect<T>> find_intersection(const rect<T>& rectangle) const;
 
-		constexpr vector2<T> get_position() const;
-		constexpr vector2<T> get_size() const;
+		constexpr glm::vec<2, T> get_position() const;
+		constexpr glm::vec<2, T> get_size() const;
 
 		T left{};
 		T top{};
@@ -34,7 +34,7 @@ namespace age
 	using float_rect = rect<float>;
 
 	template<typename T>
-	constexpr rect<T>::rect(const vector2<T>& position, const vector2<T>& size)
+	constexpr rect<T>::rect(const glm::vec<2, T>& position, const glm::vec<2, T>& size)
 		: left{ position.x }
 		, top{ position.y }
 		, width{ size.x }
@@ -51,7 +51,7 @@ namespace age
 	{}
 
 	template<typename T>
-	constexpr bool rect<T>::contains(vector2<T>& point) const
+	constexpr bool rect<T>::contains(glm::vec<2, T>& point) const
 	{
 		const T min_x = std::min(left, static_cast<T>(left + width));
 		const T max_x = std::max(left, static_cast<T>(left + width));
@@ -96,15 +96,15 @@ namespace age
 	}
 
 	template<typename T>
-	constexpr vector2<T> rect<T>::get_position() const
+	constexpr glm::vec<2, T> rect<T>::get_position() const
 	{
-		return vector2<T>{ left, top };
+		return glm::vec<2, T>{ left, top };
 	}
 
 	template<typename T>
-	constexpr vector2<T> rect<T>::get_size() const
+	constexpr glm::vec<2, T> rect<T>::get_size() const
 	{
-		return vector2<T>{ width, height };
+		return glm::vec<2, T>{ width, height };
 	}
 
 	template <typename T>

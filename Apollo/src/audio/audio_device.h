@@ -7,7 +7,7 @@
 #include <mutex>
 
 #include "sound_source.h"
-#include "../algebra/vector3.h"
+#include <glm/vec3.hpp>
 
 namespace age
 {
@@ -29,14 +29,14 @@ namespace age
 		static void set_listener_volume(float value);
 		static float get_listener_volume();
 
-		static void set_listener_position(const vector3f& value);
-		static const vector3f& get_listener_position();
+		static void set_listener_position(const glm::vec3& value);
+		static const glm::vec3& get_listener_position();
 		
-		static void set_listener_direction(const vector3f& value);
-		static const vector3f& get_listener_direction();
+		static void set_listener_direction(const glm::vec3& value);
+		static const glm::vec3& get_listener_direction();
 
-		static void set_listener_up_vector(const vector3f& value);
-		static const vector3f& get_listener_up_vector();
+		static void set_listener_up_vector(const glm::vec3& value);
+		static const glm::vec3& get_listener_up_vector();
 
 		sound_source* get_free_source(bool for_permanent_use = false) const;
 		void make_source_available(const sound_source* value);
@@ -50,9 +50,9 @@ namespace age
 		inline static constexpr uint32_t MAX_SOURCES = 255;
 
 		inline static float m_listener_volume = 1.0f;
-		inline static vector3f m_listener_position{ 0.0f, 0.0f, 0.0f };
-		inline static vector3f m_listener_direction{ 0.0f, 0.0f, -1.0f };
-		inline static vector3f m_listener_up_vector{ 0.0f, 1.0f, 0.0f };
+		inline static glm::vec3 m_listener_position{ 0.0f, 0.0f, 0.0f };
+		inline static glm::vec3 m_listener_direction{ 0.0f, 0.0f, -1.0f };
+		inline static glm::vec3 m_listener_up_vector{ 0.0f, 1.0f, 0.0f };
 
 		audio_device();
 		audio_device(const audio_device& other) = delete;

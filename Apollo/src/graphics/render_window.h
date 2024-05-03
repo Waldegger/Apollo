@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <string_view>
 
-#include "../algebra/vector2.h"
+#include <glm/vec2.hpp>
 #include "../utility/utility.h"
 
 namespace age
@@ -29,7 +29,7 @@ namespace age
 		void clear();
 		void display();
 
-		virtual vector2u get_size() const override;
+		virtual glm::u32vec2 get_size() const override;
 
 	protected:
 

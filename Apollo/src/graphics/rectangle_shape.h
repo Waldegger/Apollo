@@ -15,12 +15,12 @@ namespace age
 		: public shape_2d
 	{
 	public:
-		rectangle_shape(const vector2f& size = vector2f{ 0.0f, 0.0f });
+		rectangle_shape(const glm::vec2& size = glm::vec2{ 0.0f, 0.0f });
 
 	public:
 
-		void set_size(const vector2f& value);
-		const vector2f& get_size() const;
+		void set_size(const glm::vec2& value);
+		const glm::vec2& get_size() const;
 
 		void set_texture(const texture& value, bool reset_texture_rect = false);
 		void set_texture_rect(const uint_rect& value);
@@ -59,7 +59,7 @@ namespace age
 		std::array<uint32_t, 24> m_outline_indices;
 
 		uint_rect m_texture_rect;
-		vector2f m_size;
+		glm::vec2 m_size;
 
 		const texture* m_texture;
 

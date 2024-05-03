@@ -4,7 +4,7 @@
 #include <string_view>
 #include <istream>
 
-#include "../algebra/vector2.h"
+#include <glm/vec2.hpp>
 #include "color.h"
 
 namespace age
@@ -14,8 +14,8 @@ namespace age
 	public:
 
 	public:
-		void create(const vector2u& size, const color& the_color = color::black);
-		void create(const vector2u& size, const uint8_t* pixels);
+		void create(const glm::u32vec2& size, const color& the_color = color::black);
+		void create(const glm::u32vec2& size, const uint8_t* pixels);
 
 		void load(std::string_view fn);
 		void load(const std::byte data[], size_t size);
@@ -26,10 +26,10 @@ namespace age
 
 		void create_mask_from_color(const color& color_key, uint8_t alpha);
 
-		void set_pixel(const vector2u& coords, const color& pixel_color);
-		color get_pixel(const vector2u& coords) const;
+		void set_pixel(const glm::u32vec2& coords, const color& pixel_color);
+		color get_pixel(const glm::u32vec2& coords) const;
 
-		const vector2u& get_size() const;
+		const glm::u32vec2& get_size() const;
 		const uint8_t* get_pixel_ptr() const;
 
 		void flip_horizontal();
@@ -37,7 +37,7 @@ namespace age
 	protected:
 
 	private:
-		vector2u m_size;
+		glm::u32vec2 m_size;
 		std::vector<uint8_t> m_pixels;
 	};
 

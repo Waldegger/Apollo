@@ -137,13 +137,13 @@ namespace age
 		m_vertices.reserve(m_resolution + 1);
 		m_indices.reserve(m_resolution * 3);
 
-		m_vertices.emplace_back(vector2f{ m_radius * 0.5f, m_radius * 0.5f });
+		m_vertices.emplace_back(glm::vec2{ m_radius * 0.5f, m_radius * 0.5f });
 
 		for (uint32_t i = 0; i < m_resolution; ++i)
 		{
 			float angle = static_cast<float>(i) * 2.0f * PI / static_cast<float>(m_resolution);
 
-			m_vertices.emplace_back(vector2f{ cos(angle) * m_radius + m_radius, sin(angle) * m_radius + m_radius });
+			m_vertices.emplace_back(glm::vec2{ cos(angle) * m_radius + m_radius, sin(angle) * m_radius + m_radius });
 
 			m_indices.push_back(0);
 			m_indices.push_back(i + 1);
@@ -170,7 +170,7 @@ namespace age
 			vertex_2d& v = m_vertices[i + 1];
 
 			float angle = static_cast<float>(i) * 2.0f * PI / static_cast<float>(m_resolution);
-			m_outline_vertices.emplace_back(vector2f{ cos(angle) * m_radius + m_radius, sin(angle) * m_radius + m_radius });
+			m_outline_vertices.emplace_back(glm::vec2{ cos(angle) * m_radius + m_radius, sin(angle) * m_radius + m_radius });
 			m_outline_vertices.push_back(v);
 			
 			uint32_t index = i * 2;
@@ -207,7 +207,7 @@ namespace age
 			float angle = static_cast<float>(i) * 2.0f * PI / static_cast<float>(m_resolution);
 
 			auto index = i + 1;
-			m_vertices[index].position = vector2f{ cos(angle) * inner_radius + m_radius, sin(angle) * inner_radius + m_radius };
+			m_vertices[index].position = glm::vec2{ cos(angle) * inner_radius + m_radius, sin(angle) * inner_radius + m_radius };
 		}
 	}
 }

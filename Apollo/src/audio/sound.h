@@ -2,7 +2,7 @@
 #include "sound_interface.h"
 
 #include "sound_state.h"
-#include "../algebra/vector3.h"
+#include <glm/vec3.hpp>
 
 namespace age
 {

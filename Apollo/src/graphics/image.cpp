@@ -50,7 +50,7 @@ namespace
 		std::copy(source, source + size, std::back_inserter(*dest));
 	}
 
-	void load_image_from_stream(std::istream& stream, std::vector<uint8_t>& pixels, age::vector2u& size)
+	void load_image_from_stream(std::istream& stream, std::vector<uint8_t>& pixels, glm::u32vec2& size)
 	{
 		pixels.clear();
 
@@ -93,7 +93,7 @@ namespace
 		}
 	}
 
-	void load_image_from_memory(const void* data, std::size_t data_size, std::vector<std::uint8_t>& pixels, age::vector2u& size)
+	void load_image_from_memory(const void* data, std::size_t data_size, std::vector<std::uint8_t>& pixels, glm::u32vec2& size)
 	{
 		// Check input parameters
 		if (data && data_size)
@@ -145,7 +145,7 @@ namespace
 
 namespace age
 {
-	void image::create(const vector2u& size, const color& the_color)
+	void image::create(const glm::u32vec2& size, const color& the_color)
 	{
 		if (size.x && size.y)
 		{
@@ -182,7 +182,7 @@ namespace age
 		}
 	}
 
-	void image::create(const vector2u& size, const uint8_t* pixels)
+	void image::create(const glm::u32vec2& size, const uint8_t* pixels)
 	{
 		if (pixels && size.x && size.y)
 		{
@@ -298,7 +298,7 @@ namespace age
 		}
 	}
 
-	void image::set_pixel(const vector2u& coords, const color& pixel_color)
+	void image::set_pixel(const glm::u32vec2& coords, const color& pixel_color)
 	{
 		std::uint8_t* pixel = &m_pixels[(coords.x + coords.y * m_size.x) * 4];
 		*pixel++ = pixel_color.r;
@@ -307,12 +307,12 @@ namespace age
 		*pixel++ = pixel_color.a;
 	}
 
-	const vector2u& image::get_size() const
+	const glm::u32vec2& image::get_size() const
 	{
 		return m_size;
 	}
 
-	color image::get_pixel(const vector2u& coords) const
+	color image::get_pixel(const glm::u32vec2& coords) const
 	{
 		const std::uint8_t* pixel = &m_pixels[(coords.x + coords.y * m_size.x) * 4];
 		return color(pixel[0], pixel[1], pixel[2], pixel[3]);

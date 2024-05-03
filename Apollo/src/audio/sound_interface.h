@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../algebra/vector3.h"
+#include <glm/vec3.hpp>
 
 namespace age
 {
@@ -29,9 +29,9 @@ namespace age
 
 		void update_source(sound_source& source, bool looped) const;
 
-		void set_position(const vector3f& value);
-		void update_position(const vector3f& value);
-		const vector3f& get_position() const;
+		void set_position(const glm::vec3& value);
+		void update_position(const glm::vec3& value);
+		const glm::vec3& get_position() const;
 
 		void set_pitch(float value);
 		void update_pitch(float value);
@@ -62,7 +62,7 @@ namespace age
 
 	private:
 
-		vector3f m_position;
+		glm::vec3 m_position;
 		mutable sound_source* m_attached_source;
 
 		float m_pitch;

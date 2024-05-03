@@ -140,18 +140,18 @@ namespace age
 		return m_listener_volume;
 	}
 
-	void audio_device::set_listener_position(const vector3f& value)
+	void audio_device::set_listener_position(const glm::vec3& value)
 	{
 		m_listener_position = value;
 		alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z);
 	}
 
-	const vector3f& audio_device::get_listener_position()
+	const glm::vec3& audio_device::get_listener_position()
 	{
 		return m_listener_position;
 	}
 
-	void audio_device::set_listener_direction(const vector3f& value)
+	void audio_device::set_listener_direction(const glm::vec3& value)
 	{
 		m_listener_direction = value;
 		
@@ -165,12 +165,12 @@ namespace age
 		alListenerfv(AL_ORIENTATION, orientation);
 	}
 
-	const vector3f& audio_device::get_listener_direction()
+	const glm::vec3& audio_device::get_listener_direction()
 	{
 		return m_listener_direction;
 	}
 
-	void audio_device::set_listener_up_vector(const vector3f& value)
+	void audio_device::set_listener_up_vector(const glm::vec3& value)
 	{
 		m_listener_up_vector = value;
 		float orientation[] = { m_listener_direction.x,
@@ -183,7 +183,7 @@ namespace age
 		alListenerfv(AL_ORIENTATION, orientation);
 	}
 
-	const vector3f& audio_device::get_listener_up_vector()
+	const glm::vec3& audio_device::get_listener_up_vector()
 	{
 		return m_listener_up_vector;
 	}

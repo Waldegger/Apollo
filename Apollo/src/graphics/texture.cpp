@@ -33,16 +33,16 @@ namespace age
 		{
 			glBindTexture(GL_TEXTURE_2D, handle);
 
-			const age::vector2u& size = get_size();
-			matrix4f tex_matrix = matrix4f::get_identity();
+			const glm::u32vec2& size = get_size();
+			glm::mat4 tex_matrix = glm::mat4{ 1.0f }; 
 			tex_matrix.scale({ 1.0f / static_cast<float>(size.x), 1.0f / static_cast<float>(size.y) });
-			age::engine::get_instance()->get_texture_matrix_ubo().buffer_data(sizeof(age::matrix4f), &tex_matrix.get_data());
+			age::engine::get_instance()->get_texture_matrix_ubo().buffer_data(sizeof(glm::mat4), &tex_matrix);
 			
 			m_current_bound_texture = handle;
 		}
 	}
 
-	void texture::create(const vector2u& size)
+	void texture::create(const glm::u32vec2& size)
 	{
 		if (size.x == 0 || size.y == 0)
 		{
@@ -138,7 +138,7 @@ namespace age
 		if (rectangle.top + rectangle.height > height)
 			rectangle.height = height - rectangle.top;
 
-		create(vector2u{ static_cast<uint32_t>(rectangle.width), static_cast<uint32_t>(rectangle.height) });
+		create(glm::u32vec2{ static_cast<uint32_t>(rectangle.width), static_cast<uint32_t>(rectangle.height) });
 
 		auto pixels = img.get_pixel_ptr() + 4 * (rectangle.left + (width * rectangle.top));
 		bind();
@@ -157,7 +157,7 @@ namespace age
 
 	void texture::update(const uint8_t* pixels)
 	{
-		update(pixels, uint_rect{ vector2u{}, get_size() });
+		update(pixels, uint_rect{ glm::u32vec2{}, get_size() });
 	}
 
 	void texture::update(const uint8_t* pixels, const uint_rect& area)
@@ -188,10 +188,10 @@ namespace age
 
 	void texture::update(const texture& other_texture)
 	{
-		update(other_texture, vector2u{});
+		update(other_texture, glm::u32vec2{});
 	}
 
-	void texture::update(const texture& other_texture, const vector2u& dest)
+	void texture::update(const texture& other_texture, const glm::u32vec2& dest)
 	{
 		assert(dest.x + other_texture.m_size.x <= m_size.x);
 		assert(dest.y + other_texture.m_size.y <= m_size.y);
@@ -202,10 +202,10 @@ namespace age
 	void texture::update(const image& img)
 	{
 		// Update the whole texture
-		update(img.get_pixel_ptr(), uint_rect{ vector2u{}, img.get_size() });
+		update(img.get_pixel_ptr(), uint_rect{ glm::u32vec2{}, img.get_size() });
 	}
 
-	void texture::update(const image& img, const vector2u& dest)
+	void texture::update(const image& img, const glm::u32vec2& dest)
 	{
 		update(img.get_pixel_ptr(), uint_rect{ dest, img.get_size() });
 	}
@@ -215,13 +215,13 @@ namespace age
 		update(window, { 0, 0 });
 	}
 
-	void texture::update(const render_window& window, const vector2u& dest)
+	void texture::update(const render_window& window, const glm::u32vec2& dest)
 	{
 		bind();
 		//ToDo: Finish me
 	}
 
-	const vector2u& texture::get_size() const
+	const glm::u32vec2& texture::get_size() const
 	{
 		return m_size;
 	}

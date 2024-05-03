@@ -31,12 +31,6 @@
     <Filter Include="Quelldateien\utility">
       <UniqueIdentifier>{b643eb5e-ddcd-492f-851c-a9858b0c5171}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\algebra">
-      <UniqueIdentifier>{037e7114-522a-406d-831f-c024311ae1ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Quelldateien\algebra">
-      <UniqueIdentifier>{b673ec68-7117-430d-9a9d-db2a06cbea2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\audio">
       <UniqueIdentifier>{c4d81b0e-9ca5-477b-9c8d-d1923db89c65}</UniqueIdentifier>
     </Filter>
@@ -253,21 +247,6 @@
     </ClInclude>
     <ClInclude Include="src\graphics\drawable.h">
       <Filter>Headerdateien\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\algebra\angle.h">
-      <Filter>Headerdateien\algebra</Filter>
-    </ClInclude>
-    <ClInclude Include="src\algebra\matrix4.h">
-      <Filter>Headerdateien\algebra</Filter>
-    </ClInclude>
-    <ClInclude Include="src\algebra\quaternion.h">
-      <Filter>Headerdateien\algebra</Filter>
-    </ClInclude>
-    <ClInclude Include="src\algebra\vector2.h">
-      <Filter>Headerdateien\algebra</Filter>
-    </ClInclude>
-    <ClInclude Include="src\algebra\vector3.h">
-      <Filter>Headerdateien\algebra</Filter>
     </ClInclude>
     <ClInclude Include="src\utility\endian.h">
       <Filter>Headerdateien\utility</Filter>

@@ -95,7 +95,7 @@ namespace age
 		page& load_page(uint32_t character_size) const;
 		glyph load_glyph(uint32_t code_point, uint32_t character_size, bool bold, float outline_thickness) const;
 
-		int_rect find_glyph_rect(page& page, const vector2u& size) const;
+		int_rect find_glyph_rect(page& page, const glm::u32vec2& size) const;
 
 		void set_current_size(uint32_t character_size) const;
 
