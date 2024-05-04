@@ -41,18 +41,18 @@ private:
 
     std::array<age::vertex_2d, 4> m_vertices =
     {
-        age::vertex_2d{ age::vector2f{ 0.0f, 0.0f } },
-        age::vertex_2d{ age::vector2f{ 1.0f, 0.0f } },
-        age::vertex_2d{ age::vector2f{ 1.0f, 1.777777f } },
-        age::vertex_2d{ age::vector2f{ 0.0f, 1.777777f } }
+        age::vertex_2d{ glm::vec2{ 0.0f, 0.0f } },
+        age::vertex_2d{ glm::vec2{ 1.0f, 0.0f } },
+        age::vertex_2d{ glm::vec2{ 1.0f, 1.777777f } },
+        age::vertex_2d{ glm::vec2{ 0.0f, 1.777777f } }
     };
     
     std::array<age::vertex_2d, 4> m_rect_vertices =
     {
-        age::vertex_2d{ age::vector2f{ 0.0f, 0.0f }, age::color{255, 255, 255, 255 }, age::vector2f{0.0f, 109.0f} },
-        age::vertex_2d{ age::vector2f{ 0.18f, 0.0f }, age::color{255, 255, 255, 255 }, age::vector2f{110.0f, 109.0f} },
-        age::vertex_2d{ age::vector2f{ 0.18f, 0.045f }, age::color{255, 255, 255, 255 }, age::vector2f{110.0f, 136.0f} },
-        age::vertex_2d{ age::vector2f{ 0.0f, 0.045f }, age::color{255, 255, 255, 255 }, age::vector2f{0.0f, 136.0f} }
+        age::vertex_2d{ glm::vec2{ 0.0f, 0.0f }, age::color{255, 255, 255, 255 }, glm::vec2{0.0f, 109.0f} },
+        age::vertex_2d{ glm::vec2{ 0.18f, 0.0f }, age::color{255, 255, 255, 255 }, glm::vec2{110.0f, 109.0f} },
+        age::vertex_2d{ glm::vec2{ 0.18f, 0.045f }, age::color{255, 255, 255, 255 }, glm::vec2{110.0f, 136.0f} },
+        age::vertex_2d{ glm::vec2{ 0.0f, 0.045f }, age::color{255, 255, 255, 255 }, glm::vec2{0.0f, 136.0f} }
     };
 
     std::array<uint32_t, 6> m_indizes = {
@@ -60,7 +60,7 @@ private:
         2, 3, 0
     };
 
-    age::matrix4f m_rect_matrix;
+    glm::mat4 m_rect_matrix;
 
     age::shader_program m_background_program;
     age::texture m_test_texture;
@@ -73,7 +73,7 @@ private:
     age::text m_test_text;
     age::text m_fps_text;
 
-    age::rectangle_shape m_test_rectangle_shape{ age::vector2f{0.25f, 0.25f} };
+    age::rectangle_shape m_test_rectangle_shape{ glm::vec2{0.25f, 0.25f} };
     age::circle_shape m_test_circle_shape{ 0.2f, 3 };
 
     std::basic_stringstream<char32_t> m_fps_stringstream;

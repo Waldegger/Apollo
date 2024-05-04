@@ -37,7 +37,7 @@ namespace age
 	protected:
 
 	private:
-		glm::u32vec2 m_size;
+		glm::u32vec2 m_size{ 0.0f, 0.0f };
 		std::vector<uint8_t> m_pixels;
 	};
 

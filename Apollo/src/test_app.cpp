@@ -6,6 +6,8 @@
 #include <sstream>
 #include <iostream>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "graphics/render_states.h"
 #include "graphics/image.h"
 #include "graphics/texture.h"
@@ -49,9 +51,8 @@ void test_app::on_create()
     m_background_program.set_uniform_block_binding("texture_matrices", get_texture_matrix_binding());
     
     m_test_texture.load("./test_data/test.png");
-
-    m_rect_matrix.translate(age::vector2f{ 0.5f, 1.5f });
-
+    glm::translate(m_rect_matrix, glm::vec3{ 0.5f, 1.5f, 0.0f });
+    
     uint32_t text_size = 64;
     m_test_font.load("./test_data/comic.ttf");
     m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 some special chars !\"§$%/()=? and don't forget about Zonk or zuzu! Yolo ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", text_size, false, 0.0f);
@@ -61,19 +62,19 @@ void test_app::on_create()
     m_test_text.set_character_size(64);
     m_test_text.set_font(m_test_font);
     m_test_text.set_string("Apollo flies way\nhigher\nthan the moon!");
-    m_test_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
-    m_test_text.set_position(age::vector2f{ 0.0f, 0.75f });
+    m_test_text.set_scale(glm::vec2{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
+    m_test_text.set_position(glm::vec2{ 0.0f, 0.75f });
 
     m_fps_text.set_font(m_test_font);
-    m_fps_text.set_scale(age::vector2f{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
-    m_fps_text.set_position(age::vector2f{ 0.05f, 0.05f });
+    m_fps_text.set_scale(glm::vec2{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
+    m_fps_text.set_position(glm::vec2{ 0.05f, 0.05f });
 
-    m_test_rectangle_shape.set_scale(age::vector2f{ 1.0f, 1.0f });
-    m_test_rectangle_shape.set_position(age::vector2f{ 0.0f, 1.0f });
+    m_test_rectangle_shape.set_scale(glm::vec2{ 1.0f, 1.0f });
+    m_test_rectangle_shape.set_position(glm::vec2{ 0.0f, 1.0f });
     m_test_rectangle_shape.set_outline_thickness(0.025f);
     m_test_rectangle_shape.set_outline_color(age::color::magenta);
 
-    m_test_circle_shape.set_position(age::vector2f{ 0.25f, 0.25f });
+    m_test_circle_shape.set_position(glm::vec2{ 0.25f, 0.25f });
     m_test_circle_shape.set_outline_thickness(0.025f);
     m_test_circle_shape.set_outline_color(age::color::magenta);
     m_test_circle_shape.set_resolution(6);
@@ -120,23 +121,23 @@ void test_app::on_update()
 
     if (m_key_left)
     {
-        age::vector2f dir{ -1.0f, 0.0f };
+        glm::vec3 dir{ -1.0f, 0.0f, 0.0f };
         dir *= m_delta_time;
-        m_rect_matrix.translate(dir);
+        m_rect_matrix = glm::translate(m_rect_matrix, dir);
     }
 
     if (m_key_right)
     {
-        age::vector2f dir{ 1.0f, 0.0f };
+        glm::vec3 dir{ 1.0f, 0.0f, 0.0f };
         dir *= m_delta_time;
-        m_rect_matrix.translate(dir);
+        m_rect_matrix = glm::translate(m_rect_matrix, dir);
     }
 
     //Clear screen
     get_render_window().clear();
 
-    age::matrix4f background_matrix;
-    background_matrix.translate(age::vector2f{ 0.0f, 0.0f });
+    glm::mat4 background_matrix;
+    background_matrix = glm::translate(background_matrix, glm::vec3{ 0.0f, 0.0f, 0.0f });
     //background_matrix.scale(age::vector2f{ 0.75f, 0.75f });
     
     //ToDo: redesign the way to render, so that the VAO does not need to be activated and released like this
@@ -208,14 +209,14 @@ void test_app::on_process_event(SDL_Event& e)
                 break;
             case SDLK_a:
             {
-                age::vector3f sound_pos = m_test_sound.get_position();
+                auto sound_pos = m_test_sound.get_position();
                 sound_pos.x -= 1.0f;
                 m_test_sound.update_position(sound_pos);
             }
             break;
             case SDLK_d:
             {
-                age::vector3f sound_pos = m_test_sound.get_position();
+                auto sound_pos = m_test_sound.get_position();
                 sound_pos.x += 1.0f;
                 m_test_sound.update_position(sound_pos);
             }

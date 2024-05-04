@@ -14,31 +14,31 @@ namespace age
 		reset(rect);
 	}
 
-	view_2d::view_2d(const vector2f& center, const vector2f& size)
+	view_2d::view_2d(const glm::vec2& center, const glm::vec2& size)
 		: m_center{ center }
 		, m_size{ size }
 	{}
 
-	void view_2d::set_center(const vector2f& value)
+	void view_2d::set_center(const glm::vec2& value)
 	{
 		m_center = value;
 		m_transform_updated = false;
 		m_inv_transform_updated = false;
 	}
 
-	const vector2f& view_2d::get_center() const
+	const glm::vec2& view_2d::get_center() const
 	{
 		return m_center;
 	}
 
-	void view_2d::set_size(const vector2f& value)
+	void view_2d::set_size(const glm::vec2& value)
 	{
 		m_size = value;
 		m_transform_updated = false;
 		m_inv_transform_updated = false;
 	}
 
-	const vector2f& view_2d::get_size() const
+	const glm::vec2& view_2d::get_size() const
 	{
 		return m_size;
 	}
@@ -80,7 +80,7 @@ namespace age
 		m_inv_transform_updated = false;
 	}
 
-	void view_2d::move(const vector2f& offset)
+	void view_2d::move(const glm::vec2& offset)
 	{
 		set_center(m_center + offset);
 	}
@@ -95,7 +95,7 @@ namespace age
 		set_size(m_size * factor);
 	}
 
-	const matrix4f& view_2d::get_transform() const
+	const glm::mat4& view_2d::get_transform() const
 	{
 		// Recompute the matrix if needed
 		if (!m_transform_updated)
@@ -112,9 +112,9 @@ namespace age
 			float b = -2.0f / m_size.y;
 			float c = -a * m_center.x;
 			float d = -b * m_center.y;
-
+		
 			// Rebuild the projection matrix
-			m_transform = matrix4f(a * cosine, a * sine, a * tx + c,
+			m_transform = glm::mat3(a * cosine, a * sine, a * tx + c,
 				-b * sine, b * cosine, b * ty + d,
 				0.0f, 0.0f, 1.0f);
 
@@ -124,12 +124,12 @@ namespace age
 		return m_transform;
 	}
 
-	const matrix4f& view_2d::get_inverse_transform() const
+	const glm::mat4& view_2d::get_inverse_transform() const
 	{
 		// Recompute the matrix if needed
 		if (!m_inv_transform_updated)
 		{
-			m_inverse_transform = get_transform().get_inverse();
+			m_inverse_transform = glm::inverse(get_transform());
 			m_inv_transform_updated = true;
 		}
 

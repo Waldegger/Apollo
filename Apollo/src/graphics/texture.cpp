@@ -1,10 +1,12 @@
 #include "texture.h"
 
-#include <GL/glew.h>
-
 #include <exception>
 #include <sstream>
 #include <cassert>
+
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <GL/glew.h>
 
 #include "../engine.h"
 
@@ -32,10 +34,10 @@ namespace age
 		if (handle != m_current_bound_texture)
 		{
 			glBindTexture(GL_TEXTURE_2D, handle);
-
+			
 			const glm::u32vec2& size = get_size();
-			glm::mat4 tex_matrix = glm::mat4{ 1.0f }; 
-			tex_matrix.scale({ 1.0f / static_cast<float>(size.x), 1.0f / static_cast<float>(size.y) });
+
+			glm::mat4 tex_matrix = glm::scale(glm::mat4{ 1.0f }, glm::vec3(1.0f / static_cast<float>(size.x), 1.0f / static_cast<float>(size.y), 1.0f));
 			age::engine::get_instance()->get_texture_matrix_ubo().buffer_data(sizeof(glm::mat4), &tex_matrix);
 			
 			m_current_bound_texture = handle;

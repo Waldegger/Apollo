@@ -1,5 +1,7 @@
 #include "transformable_2d.h"
 
+#include <glm/trigonometric.hpp>
+
 namespace age
 {
 	transformable_2d::transformable_2d()
@@ -21,74 +23,74 @@ namespace age
 
 	transformable_2d::~transformable_2d() = default;
 
-	void transformable_2d::set_position(const vector2f& value)
+	void transformable_2d::set_position(const glm::vec2& value)
 	{
 		m_position = value;
 		m_transform_needs_update = true;
 		m_inverse_transform_needs_update = true;
 	}
 
-	void transformable_2d::move(const vector2f& offset)
+	void transformable_2d::move(const glm::vec2& offset)
 	{
 		set_position(m_position + offset);
 	}
 
-	const vector2f& transformable_2d::get_position() const
+	const glm::vec2& transformable_2d::get_position() const
 	{
 		return m_position;
 	}
 
-	void transformable_2d::set_rotation(angle value)
+	void transformable_2d::set_rotation(float value)
 	{
 		m_rotation = value;
 		m_transform_needs_update = true;
 		m_inverse_transform_needs_update = true;
 	}
 
-	void transformable_2d::rotate(angle value)
+	void transformable_2d::rotate(float value)
 	{
 		set_rotation(m_rotation + value);
 	}
 
-	angle transformable_2d::get_rotation() const
+	float transformable_2d::get_rotation() const
 	{
 		return m_rotation;
 	}
 
-	void transformable_2d::set_scale(const vector2f& value)
+	void transformable_2d::set_scale(const glm::vec2& value)
 	{
 		m_scale = value;
 		m_transform_needs_update = true;
 		m_inverse_transform_needs_update = true;
 	}
 
-	void transformable_2d::scale(const vector2f& factor)
+	void transformable_2d::scale(const glm::vec2& factor)
 	{
-		set_scale(vector2f{ m_scale.x * factor.x, m_scale.y * factor.y });
+		set_scale(glm::vec2{ m_scale.x * factor.x, m_scale.y * factor.y });
 	}
 
-	const vector2f& transformable_2d::get_scale() const
+	const glm::vec2& transformable_2d::get_scale() const
 	{
 		return m_scale;
 	}
 
-	void transformable_2d::set_origin(const vector2f& value)
+	void transformable_2d::set_origin(const glm::vec2& value)
 	{
 		m_origin = value;
 		m_transform_needs_update = true;
 		m_inverse_transform_needs_update = true;
 	}
 
-	const vector2f& transformable_2d::get_origin() const
+	const glm::vec2& transformable_2d::get_origin() const
 	{
 		return m_origin;
 	}
 
-	const matrix4f& transformable_2d::get_transform() const
+	const glm::mat4& transformable_2d::get_transform() const
 	{
 		if (m_transform_needs_update)
 		{
-			float angle = -m_rotation.as_radians();
+			float angle = -glm::radians(m_rotation);
 			float cosine = std::cos(angle);
 			float sine = std::sin(angle);
 			float sxc = m_scale.x * cosine;
@@ -98,7 +100,7 @@ namespace age
 			float tx = -m_origin.x * sxc - m_origin.y * sys + m_position.x;
 			float ty = m_origin.x * sxs - m_origin.y * syc + m_position.y;
 
-			m_transform = matrix4f(sxc, sys, tx,
+			m_transform = glm::mat3(sxc, sys, tx,
 				-sxs, syc, ty,
 				0.f, 0.f, 1.f);
 			
@@ -108,11 +110,11 @@ namespace age
 		return m_transform;
 	}
 
-	const matrix4f& transformable_2d::get_inverse_transform() const
+	const glm::mat4& transformable_2d::get_inverse_transform() const
 	{
 		if (m_inverse_transform_needs_update)
 		{
-			m_inverse_transform = get_transform().get_inverse();
+			m_inverse_transform = glm::inverse(get_transform());
 			m_inverse_transform_needs_update = false;
 		}
 

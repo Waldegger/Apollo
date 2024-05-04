@@ -290,8 +290,8 @@ namespace age
 			result.x += m_font->get_glyph(cur_char, m_character_size, is_bold, m_outline_thickness).advance + letter_spacing;
 		}
 
-		result = get_transform().transform_point(result);
-
+		result = glm::vec2{ get_transform() * glm::vec4{ result.x, result.y, 0.0f, 1.0f } };
+		
 		return result;
 	}
 
@@ -304,7 +304,14 @@ namespace age
 
 	float_rect text::get_global_bounds() const
 	{
-		return get_transform().transform_rect(get_local_bounds());
+		auto local_bounds = get_local_bounds();
+		auto bounds_vec = glm::vec4{ local_bounds.left, local_bounds.top, 0.0f, 1.0f };
+		auto result_vec = glm::vec2{ get_transform() * bounds_vec };
+
+		local_bounds.left = result_vec.x;
+		local_bounds.top = result_vec.y;
+
+		return local_bounds;
 	}
 
 	void text::draw(render_target& target, const render_states& states) const

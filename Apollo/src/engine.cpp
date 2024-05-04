@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <stdexcept>
 #include <array>
 
@@ -193,9 +195,11 @@ namespace age
 		m_default_vertex_buffer_object.bind();
 		m_default_element_buffer_object.bind();
 	
-		m_vp_matrix_ubo.buffer_data(sizeof(glm::mat4x4), &glm::mat4x4{1.0f});
-		m_model_matrix_ubo.buffer_data(sizeof(glm::mat4x4), &glm::mat4x4{1.0f});
-		m_texture_matrix_ubo.buffer_data(sizeof(glm::mat4x4), &glm::mat4x4{1.0f});
+		
+		m_vp_matrix_ubo.buffer_data(sizeof(glm::mat4x4), glm::value_ptr(glm::mat4{ 1.0f }));
+		m_model_matrix_ubo.buffer_data(sizeof(glm::mat4x4), glm::value_ptr(glm::mat4{ 1.0f }));
+		m_texture_matrix_ubo.buffer_data(sizeof(glm::mat4x4), glm::value_ptr(glm::mat4{ 1.0f }));
+		
 		m_viewport_ubo.buffer_data(sizeof(uint32_t) * 2, std::array<uint32_t, 2>{0, 0}.data());
 
 		m_vp_matrix_ubo.bind_buffer_base(get_vp_matrix_binding());
