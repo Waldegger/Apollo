@@ -7,10 +7,10 @@ namespace age
 	transformable_2d::transformable_2d()
 		: m_origin{ 0.0f, 0.0f }
 		, m_position{ 0.0f, 0.0f }
-		, m_rotation{}
+		, m_rotation{ 0.0f }
 		, m_scale{ 1.0f, 1.0f }
-		, m_transform{}
-		, m_inverse_transform{}
+		, m_transform{ 1.0f }
+		, m_inverse_transform{ 1.0f }
 		, m_transform_needs_update{ false }
 		, m_inverse_transform_needs_update{ false }
 	{}

@@ -33,8 +33,8 @@ namespace age
 		void set_origin(const glm::vec2& value);
 		const glm::vec2& get_origin() const;
 
-		const glm::mat4x4& get_transform() const;
-		const glm::mat4x4& get_inverse_transform() const;
+		const glm::mat4& get_transform() const;
+		const glm::mat4& get_inverse_transform() const;
 
 	protected:
 
@@ -45,8 +45,8 @@ namespace age
 		float m_rotation;
 		glm::vec2 m_scale;
 
-		mutable glm::mat4x4 m_transform;
-		mutable glm::mat4x4 m_inverse_transform;
+		mutable glm::mat4 m_transform;
+		mutable glm::mat4 m_inverse_transform;
 		mutable bool m_transform_needs_update;
 		mutable bool m_inverse_transform_needs_update;
 	};

@@ -251,7 +251,7 @@ namespace age
 
 	glm::vec2 text::find_character_pos(size_t index) const
 	{
-		glm::vec2 result;
+		glm::vec2 result{ 0.0f };
 
 		if (!m_font) return result;
 

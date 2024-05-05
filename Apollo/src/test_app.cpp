@@ -51,7 +51,7 @@ void test_app::on_create()
     m_background_program.set_uniform_block_binding("texture_matrices", get_texture_matrix_binding());
     
     m_test_texture.load("./test_data/test.png");
-    glm::translate(m_rect_matrix, glm::vec3{ 0.5f, 1.5f, 0.0f });
+    m_rect_matrix = glm::translate(m_rect_matrix, glm::vec3{ 0.5f, 1.5f, 0.0f });
     
     uint32_t text_size = 64;
     m_test_font.load("./test_data/comic.ttf");
@@ -97,8 +97,7 @@ void test_app::on_create()
     age::assetistream is{ "./test_data/laser.wav", std::ios::binary };
     m_test_buffer.load(is);
     */
-
-
+    
     m_test_sound.set_buffer(&m_test_buffer);
 
     m_test_music.open("./test_data/menu.ogg");
@@ -136,7 +135,7 @@ void test_app::on_update()
     //Clear screen
     get_render_window().clear();
 
-    glm::mat4 background_matrix;
+    glm::mat4 background_matrix{ 1.0f };
     background_matrix = glm::translate(background_matrix, glm::vec3{ 0.0f, 0.0f, 0.0f });
     //background_matrix.scale(age::vector2f{ 0.75f, 0.75f });
     

@@ -65,10 +65,10 @@ namespace age
 
 		const glm::mat4x4& get_inverse_projection() const;
 
-		glm::vec2 m_view_size;
+		glm::vec2 m_view_size{ 0.0f };
 		int_rect m_viewport;
-		glm::mat4x4 m_projection_matrix;
-		mutable glm::mat4x4 m_projection_matrix_inverse;
+		glm::mat4x4 m_projection_matrix{ 1.0f };
+		mutable glm::mat4x4 m_projection_matrix_inverse{ 1.0f };
 		states_cache m_states_cache;
 
 		mutable bool m_projection_needs_update;

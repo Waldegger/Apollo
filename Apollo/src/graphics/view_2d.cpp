@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace age
 {
 	view_2d::view_2d()
@@ -100,6 +102,8 @@ namespace age
 		// Recompute the matrix if needed
 		if (!m_transform_updated)
 		{
+			//Remove following comment when everything works
+			/*
 			// Rotation components
 			float angle = m_rotation * (3.14159265358979323846f / 180.0f);
 			float cosine = std::cos(angle);
@@ -117,6 +121,12 @@ namespace age
 			m_transform = glm::mat3(a * cosine, a * sine, a * tx + c,
 				-b * sine, b * cosine, b * ty + d,
 				0.0f, 0.0f, 1.0f);
+			*/
+		
+			m_transform = glm::ortho(0.0f, m_size.x, m_size.y, 0.0f);
+			m_transform = glm::translate(m_transform, glm::vec3{ m_center.x, m_center.y, 0.0f });
+			m_transform = glm::rotate(m_transform, glm::radians(m_rotation), glm::vec3{ 0.0f,0.0f,1.0f });
+			m_transform = glm::translate(m_transform, glm::vec3{ -m_center.x, -m_center.y, 0.0f });
 
 			m_transform_updated = true;
 		}

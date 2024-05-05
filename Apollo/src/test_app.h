@@ -60,7 +60,7 @@ private:
         2, 3, 0
     };
 
-    glm::mat4 m_rect_matrix;
+    glm::mat4 m_rect_matrix{ 1.0f };
 
     age::shader_program m_background_program;
     age::texture m_test_texture;
