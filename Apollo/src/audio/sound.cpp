@@ -46,7 +46,11 @@ namespace age
 			if (current_attached_source->get_looping())
 			{
 				current_attached_source->stop();
-				audio_device::get().make_source_available(current_attached_source);
+				current_attached_source->set_buffer(*m_buffer);
+				current_attached_source->set_looping(looped);
+				current_attached_source->play();
+
+				return;
 			}
 		}
 

@@ -32,6 +32,7 @@ namespace age
 		void play();
 		void stop();
 		void pause();
+		void rewind();
 		
 		void set_position(const glm::vec3& value);
 		glm::vec3 get_position() const;

@@ -32,6 +32,11 @@ namespace age
 		alSourcePause(m_handle);
 	}
 
+	void sound_source::rewind()
+	{
+		alSourceRewind(m_handle);
+	}
+
 	void sound_source::set_position(const glm::vec3& value)
 	{
 		alSource3f(m_handle, AL_POSITION, value.x, value.y, value.z);
