@@ -60,6 +60,15 @@ namespace age
 	void sound_buffer::load(std::byte data[], size_t size_in_bytes)
 	{
 
+		switch (audio_format::get_format(data, size_in_bytes))
+		{
+			default:
+			{
+				throw std::runtime_error{ "Not supported format" };
+			}
+			break;
+		}
+
 	}
 
 	void sound_buffer::buffer_data(format the_format, const std::byte data[], size_t size_in_bytes, uint32_t frequency)
