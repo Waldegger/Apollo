@@ -258,6 +258,7 @@ void test_app::on_process_event(SDL_Event& e)
             {
                 age::audio_device::get().stop_all_sounds();
             }
+            break;
         }
         break;
     }
