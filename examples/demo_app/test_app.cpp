@@ -82,7 +82,7 @@ void test_app::on_create()
     //Testing memstream
  
     age::assetistream is{ "./test_data/laser.wav", std::ios::binary | std::ios::ate };
-    size_t file_size = is.tellg();
+    auto file_size = is.tellg();
     is.seekg(0);
     std::vector<std::byte> file_data{ file_size };
     is.read(reinterpret_cast<char*>(&file_data[0]), file_size);
