@@ -44,7 +44,7 @@ namespace age
 		void update(const render_window& window);
 		void update(const render_window& window, const glm::u32vec2& dest);
 
-		const glm::u32vec2& get_size() const;
+		const glm::uvec2& get_size() const;
 		image copy_to_image() const;
 
 		void set_smooth(bool value);
@@ -74,7 +74,7 @@ namespace age
 
 		uint32_t get_handle() const { return m_handle; }
 
-		glm::u32vec2 m_size;
+		glm::uvec2 m_size;
 
 		unique_handle<uint32_t, delete_handle> m_handle;
 		bool m_smooth = false;

@@ -32,8 +32,8 @@ namespace age
 		void rotate(float value);
 		void zoom(float factor);
 
-		const glm::mat4x4& get_transform() const;
-		const glm::mat4x4& get_inverse_transform() const;
+		const glm::mat4& get_transform() const;
+		const glm::mat4& get_inverse_transform() const;
 
 	protected:
 
@@ -42,8 +42,8 @@ namespace age
 		glm::vec2 m_size;
 		float m_rotation = 0.0f;
 		float_rect m_viewport{{0.0f, 0.0f}, {1.0f, 1.0f}};
-		mutable glm::mat4x4 m_transform{ 1.0f };
-		mutable glm::mat4x4 m_inverse_transform{ 1.0f };
+		mutable glm::mat4 m_transform{ 1.0f };
+		mutable glm::mat4 m_inverse_transform{ 1.0f };
 		mutable bool m_transform_updated = false;
 		mutable bool m_inv_transform_updated = false;
 	};

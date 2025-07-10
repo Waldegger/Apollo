@@ -37,8 +37,8 @@ namespace age
 	public:
 		int_rect get_viewport(const view_2d& view) const;
 
-		glm::vec2 map_pixel_to_coords(const glm::i32vec2& point) const;
-		glm::i32vec2 map_coords_to_pixel(const glm::vec2& point) const;
+		glm::vec2 map_pixel_to_coords(const glm::ivec2& point) const;
+		glm::ivec2 map_coords_to_pixel(const glm::vec2& point) const;
 		
 		virtual glm::u32vec2 get_size() const = 0;
 
@@ -63,12 +63,12 @@ namespace age
 		void prepare_draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states);
 		void apply_blend_mode(const blend_mode& mode);
 
-		const glm::mat4x4& get_inverse_projection() const;
+		const glm::mat4& get_inverse_projection() const;
 
 		glm::vec2 m_view_size{ 0.0f };
 		int_rect m_viewport;
-		glm::mat4x4 m_projection_matrix{ 1.0f };
-		mutable glm::mat4x4 m_projection_matrix_inverse{ 1.0f };
+		glm::mat4 m_projection_matrix{ 1.0f };
+		mutable glm::mat4 m_projection_matrix_inverse{ 1.0f };
 		states_cache m_states_cache;
 
 		mutable bool m_projection_needs_update;

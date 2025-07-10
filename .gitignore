@@ -1,2 +1,2 @@
 # Exclude build directory
-cmake-build-debug/
+cmake-build*/

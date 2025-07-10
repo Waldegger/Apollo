@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.16)                # Require CMake 3.16+
-    include(FetchContent)                           # include the FetchContent Module to dynamically load the dependencies if needed
 
 set(LIB_NAME Apollo)
 set(EXE_NAME DemoApp)
