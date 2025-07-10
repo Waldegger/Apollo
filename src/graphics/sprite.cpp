@@ -58,7 +58,10 @@ namespace age
 		glm::vec2 size{ static_cast<float>(tex_size.x), static_cast<float>(tex_size.y) };
 
 		m_vertices[1].position.x = size.x;
+		m_vertices[1].tex_coords.x = size.x;
 		m_vertices[2].position = size;
+		m_vertices[2].tex_coords = size;
 		m_vertices[3].position.y = size.y;
+		m_vertices[3].tex_coords.y = size.y;
 	}
 }

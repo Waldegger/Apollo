@@ -90,19 +90,27 @@ namespace age
 	{
 		if (m_transform_needs_update)
 		{
-			float angle = -glm::radians(m_rotation);
-			float cosine = std::cos(angle);
-			float sine = std::sin(angle);
-			float sxc = m_scale.x * cosine;
-			float syc = m_scale.y * cosine;
-			float sxs = m_scale.x * sine;
-			float sys = m_scale.y * sine;
-			float tx = -m_origin.x * sxc - m_origin.y * sys + m_position.x;
-			float ty = m_origin.x * sxs - m_origin.y * syc + m_position.y;
+			float angle = glm::radians(m_rotation); // No minus; OpenGL rotates counterclockwise by default
+			float cosA = std::cos(angle);
+			float sinA = std::sin(angle);
 
-			m_transform = glm::mat3(sxc, sys, tx,
-				-sxs, syc, ty,
-				0.f, 0.f, 1.f);
+			// Rotation and scaling
+			float m00 =  cosA * m_scale.x;
+			float m01 =  -sinA * m_scale.y;
+			float m10 =  sinA * m_scale.x;
+			float m11 =  cosA * m_scale.y;
+
+			// Origin compensation (pivot)
+			float tx = -m_origin.x * m00 - m_origin.y * m01 + m_position.x;
+			float ty = -m_origin.x * m10 - m_origin.y * m11 + m_position.y;
+
+			// Column-major matrix
+			m_transform = glm::mat4{
+				m00, m10, 0.0f, 0.0f,	// column 0
+				m01, m11, 0.0f, 0.0f,	// column 1
+				0.0f,0.0f,1.0f, 0.0f,	// column 2 (Z)
+				tx,  ty,  0.0f, 1.0f	// column 3 (translation)
+			};
 			
 			m_transform_needs_update = false;
 		}

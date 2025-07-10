@@ -51,6 +51,7 @@ void test_app::on_create()
     m_background_program.set_uniform_block_binding("texture_matrices", get_texture_matrix_binding());
     
     m_test_texture.load("./test_data/test.png");
+    m_test_font_texture.load("./test_data/font_texture.png");
     m_rect_matrix = glm::translate(m_rect_matrix, glm::vec3{ 0.5f, 1.5f, 0.0f });
     
     uint32_t text_size = 64;
@@ -63,11 +64,13 @@ void test_app::on_create()
     m_test_text.set_font(m_test_font);
     m_test_text.set_string("Apollo flies way\nhigher\nthan the moon!");
     m_test_text.set_scale(glm::vec2{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
-    m_test_text.set_position(glm::vec2{ 0.0f, 0.75f });
+    m_test_text.set_position(glm::vec2{ 0.0f, 0.2f });
 
+    m_fps_text.set_character_size(64);
     m_fps_text.set_font(m_test_font);
+    m_fps_text.set_string("fps: ");
     m_fps_text.set_scale(glm::vec2{ (1.0f / static_cast<float>(window_size.x)), (1.0f / static_cast<float>(window_size.x)) });
-    m_fps_text.set_position(glm::vec2{ 0.05f, 0.05f });
+    m_fps_text.set_position(glm::vec2{ 0.0f, 0.05f });
 
     m_test_rectangle_shape.set_scale(glm::vec2{ 1.0f, 1.0f });
     m_test_rectangle_shape.set_position(glm::vec2{ 0.0f, 1.0f });
@@ -111,8 +114,10 @@ void test_app::on_update()
 {
     m_delta_time = static_cast<float>(m_clock.restart());
 
-    m_fps_stringstream.str(U"");
-    m_fps_stringstream << U"fps: " << 1.0f / m_delta_time;
+    m_fps_stringstream.str("");
+    m_fps_stringstream.clear();
+    m_fps_stringstream << "fps: " << (1.0f / m_delta_time);
+
     m_fps_text.set_string(m_fps_stringstream.str());
 
     m_elapsed_time += m_delta_time;
@@ -144,10 +149,11 @@ void test_app::on_update()
     //Draw Stuff
     get_render_window().draw(m_vertices.data(), m_vertices.size(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program, m_test_texture, background_matrix });
     get_render_window().draw(m_rect_vertices.data(), m_vertices.size(), m_indizes.data(), m_indizes.size(), age::render_states{engine::get_instance()->get_default_shader_program(), m_test_texture, m_rect_matrix});
-    get_render_window().draw(m_test_text, age::render_states{});
+    //get_render_window().draw(m_test_text, age::render_states{});
     get_render_window().draw(m_fps_text, age::render_states{});
-    get_render_window().draw(m_test_rectangle_shape, age::render_states{});
-    get_render_window().draw(m_test_circle_shape, age::render_states{});
+    //get_render_window().draw(m_test_rectangle_shape, age::render_states{});
+    //get_render_window().draw(m_test_circle_shape, age::render_states{});
+    //get_render_window().draw(m_text_test_vertices.data(), m_text_test_vertices.size(), age::primitive_type::triangles, age::render_states{engine::get_instance()->get_default_shader_program(), m_test_font_texture, glm::scale(glm::mat4{1.0}, glm::vec3{0.01f, 0.01f, 1.0f})});
 
     //ToDo: with redesing the release should be removed as well
     //engine::get_instance()->get_default_vertex_array_object().release();

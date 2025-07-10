@@ -41,6 +41,9 @@ namespace age
 
 		glBufferData(target, m_last_buffer_size, nullptr, convert_usage(m_last_buffer_usage));
 		glBufferData(target, size_in_bytes, data, convert_usage(usage));
+
+		m_last_buffer_size = size_in_bytes;
+		m_last_buffer_usage = usage;
 	}
 
 	void vertex_buffer_object::buffer_sub_data(const void* data, size_t offset, size_t size_in_bytes)

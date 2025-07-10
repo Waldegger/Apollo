@@ -1,6 +1,7 @@
 #include "graphics/text.h"
 
 #include <glm/trigonometric.hpp>
+#include <algorithm>
 
 #include "graphics/render_states.h"
 
@@ -115,7 +116,20 @@ namespace age
 
 	void text::set_string(std::string_view value)
 	{
+		if (value.length() == m_string.length())
+		{
+			for (size_t i = 0; i < value.length(); ++i)
+			{
+				if (value[i] != m_string[i])
+					goto do_update;
+			}
+
+			return;
+		}
+
+		do_update:
 		m_string.assign(value.begin(), value.end());
+		m_geometry_needs_update = true;
 	}
 
 	void text::set_string(std::u32string_view value)
@@ -290,7 +304,7 @@ namespace age
 			result.x += m_font->get_glyph(cur_char, m_character_size, is_bold, m_outline_thickness).advance + letter_spacing;
 		}
 
-		result = glm::vec2{ get_transform() * glm::vec4{ result.x, result.y, 0.0f, 1.0f } };
+		result = get_transform() * glm::vec4{ result.x, result.y, 0.0f, 1.0f };
 		
 		return result;
 	}

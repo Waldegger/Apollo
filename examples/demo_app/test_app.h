@@ -55,15 +55,27 @@ private:
         age::vertex_2d{ glm::vec2{ 0.0f, 0.045f }, age::color{255, 255, 255, 255 }, glm::vec2{0.0f, 136.0f} }
     };
 
-    std::array<uint32_t, 6> m_indizes = {
+    std::array<uint32_t, 6> m_indizes =
+    {
         0, 1, 2,
         2, 3, 0
+    };
+
+    std::array<age::vertex_2d, 6> m_text_test_vertices =
+    {
+        age::vertex_2d{ glm::vec2{ 3.0f, 17.0f }, age::color{255, 255, 255, 255 }, glm::vec2{275.0f, 204.0f} },
+        age::vertex_2d{ glm::vec2{ 43.0f, 17.0f }, age::color{255, 255, 255, 255 }, glm::vec2{313.0f, 204.0f} },
+        age::vertex_2d{ glm::vec2{ 3.0f, 66.0f }, age::color{255, 255, 255, 255 }, glm::vec2{275.0f, 251.0f} },
+        age::vertex_2d{ glm::vec2{ 3.0f, 66.0f }, age::color{255, 255, 255, 255 }, glm::vec2{275.0f, 251.0f} },
+        age::vertex_2d{ glm::vec2{ 43.0f, 17.0f }, age::color{255, 255, 255, 255 }, glm::vec2{313.0f, 204.0f} },
+        age::vertex_2d{ glm::vec2{ 43.0f, 66.0f }, age::color{255, 255, 255, 255 }, glm::vec2{313.0f, 251.0f} }
     };
 
     glm::mat4 m_rect_matrix{ 1.0f };
 
     age::shader_program m_background_program;
     age::texture m_test_texture;
+    age::texture m_test_font_texture;
 
     int32_t m_background_program_time_location = -1;
 
@@ -76,7 +88,7 @@ private:
     age::rectangle_shape m_test_rectangle_shape{ glm::vec2{0.25f, 0.25f} };
     age::circle_shape m_test_circle_shape{ 0.2f, 3 };
 
-    std::basic_stringstream<char32_t> m_fps_stringstream;
+    std::stringstream m_fps_stringstream;
     std::u32string m_fps_string;
 
     age::sound_buffer m_test_buffer;
