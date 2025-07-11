@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
 
 #include "../utility/utility.h"
 
@@ -11,8 +12,10 @@ namespace age
 	public:
 		enum class target : uint32_t
 		{
-			array,
-			element_array
+			array = 0,
+			element_array,
+
+			num_elements
 		};
 
 		enum class usage : uint32_t
@@ -40,7 +43,8 @@ namespace age
 		static uint32_t convert_target(target target_to_convert);
 		static uint32_t convert_usage(usage usage_to_convert);
 
-		inline static uint32_t m_current_bound_buffer;
+		inline static std::array<uint32_t, static_cast<uint32_t>(target::num_elements)> m_current_bound_buffer{0};
+		//inline static uint32_t m_current_bound_buffer[target::num_elements];
 
 		uint32_t get_handle() const { return m_handle; }
 
@@ -50,7 +54,10 @@ namespace age
 
 		target m_target;
 
-		size_t m_last_buffer_size{};
-		usage m_last_buffer_usage = usage::static_draw;
+		std::array<size_t, static_cast<uint32_t>(target::num_elements)> m_last_buffer_size{0};
+		std::array<usage, static_cast<uint32_t>(target::num_elements)> m_last_buffer_usage{usage::static_draw};
+
+		//size_t m_last_buffer_size{};
+		//usage m_last_buffer_usage = usage::static_draw;
 	};
 }

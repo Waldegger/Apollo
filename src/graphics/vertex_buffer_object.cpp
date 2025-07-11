@@ -14,12 +14,13 @@ namespace age
 	void vertex_buffer_object::bind() const
 	{
 		auto handle = get_handle();
+		auto& current_bound_buffer = m_current_bound_buffer[static_cast<uint32_t>(m_target)];
 
-		if (m_current_bound_buffer != handle)
+		if (current_bound_buffer != handle)
 		{
 			glBindBuffer(convert_target(m_target), get_handle());
 
-			m_current_bound_buffer = handle;
+			current_bound_buffer = handle;
 		}
 	}
 
@@ -29,8 +30,8 @@ namespace age
 
 		glBufferData(convert_target(m_target), size_in_bytes, data, convert_usage(usage));
 
-		m_last_buffer_size = size_in_bytes;
-		m_last_buffer_usage = usage;
+		m_last_buffer_size[static_cast<uint32_t>(m_target)] = size_in_bytes;
+		m_last_buffer_usage[static_cast<uint32_t>(m_target)] = usage;
 	}
 
 	void vertex_buffer_object::update_data(const void* data, size_t size_in_bytes, usage usage)
@@ -39,11 +40,11 @@ namespace age
 
 		auto target = convert_target(m_target);
 
-		glBufferData(target, m_last_buffer_size, nullptr, convert_usage(m_last_buffer_usage));
+		glBufferData(target, m_last_buffer_size[static_cast<uint32_t>(m_target)], nullptr, convert_usage(m_last_buffer_usage[static_cast<uint32_t>(m_target)]));
 		glBufferData(target, size_in_bytes, data, convert_usage(usage));
 
-		m_last_buffer_size = size_in_bytes;
-		m_last_buffer_usage = usage;
+		m_last_buffer_size[static_cast<uint32_t>(m_target)] = size_in_bytes;
+		m_last_buffer_usage[static_cast<uint32_t>(m_target)] = usage;
 	}
 
 	void vertex_buffer_object::buffer_sub_data(const void* data, size_t offset, size_t size_in_bytes)

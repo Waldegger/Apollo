@@ -32,7 +32,6 @@ namespace age
 	public:
 		text();
 		text(std::string_view the_text, const font& the_font, uint32_t the_character_size = 30);
-		text(std::u32string_view the_text, const font& the_font, uint32_t the_character_size = 30);
 
 		text(const text& other);
 		text(text&& other) noexcept;
@@ -42,8 +41,7 @@ namespace age
 
 	public:
 		void set_string(std::string_view value);
-		void set_string(std::u32string_view value);
-		const std::u32string& get_string() const;
+		const std::string& get_string() const;
 
 		void set_font(const font& the_font);
 		const font* get_font() const;
@@ -82,8 +80,7 @@ namespace age
 
 		void ensure_geometry_is_updated() const;
 
-		std::u32string m_string;
-		std::u32string m_tmp_convert_string;
+		std::string m_string;
 		const font* m_font;
 		uint32_t m_character_size;
 		float m_letter_spacing_factor;

@@ -147,11 +147,11 @@ namespace age
 			"{\n"
 			"	mat4 tex_m;\n"
 			"};\n"
-			"attribute vec2 a_position;\n"
-			"attribute vec4 a_color;\n"
-			"attribute vec2 a_tex_coords;\n"
-			"varying vec4 v_color;\n"
-			"varying vec2 v_tex_coords;\n"
+			"in vec2 a_position;\n"
+			"in vec4 a_color;\n"
+			"in vec2 a_tex_coords;\n"
+			"out vec4 v_color;\n"
+			"out vec2 v_tex_coords;\n"
 			"void main()\n"
 			"{\n"
 			"	gl_Position = vp_m * model_m * vec4(a_position, 0.0, 1.0);\n"
@@ -164,13 +164,14 @@ namespace age
 			"#version 330 core\n"
 			"precision mediump float;\n"
 			"uniform sampler2D u_texture;\n"
-			"varying vec4 v_color;\n"
-			"varying vec2 v_tex_coords;\n"
+			"in vec4 v_color;\n"
+			"in vec2 v_tex_coords;\n"
+			"out vec4 frag_color;\n"
 			"void main()\n"
 			"{\n"
 			"	vec4 texel = texture2D(u_texture, v_tex_coords);\n"
 			"	if(texel.a == 0.0) discard;\n"
-			"	gl_FragColor = v_color * texel;\n"
+			"	frag_color = v_color * texel;\n"
 			"}";
 
 		m_default_vertex_shader.compile(vertex_shader_source);
@@ -182,6 +183,23 @@ namespace age
 		m_default_shader_program.bind_attrib_location(get_a_color_index(), "a_color");
 		m_default_shader_program.bind_attrib_location(get_a_tex_coords_index(), "a_tex_coords");
 		m_default_shader_program.link();
+
+		/*
+		ToDo: later on gon with this approach. Have all the matrices separated and have 3 UBOs
+		layout(std140) uniform MVP {
+		mat4 model;
+		mat4 view;
+		mat4 projection;
+		};
+
+		layout(std140) uniform TexMatrix {
+		mat4 textureMatrix;
+		};
+
+		layout(std140) uniform Viewport {
+		vec4 viewport;
+		};
+		*/
 
 		m_default_shader_program.set_uniform("u_texture", 0);
 		m_default_shader_program.set_uniform_block_binding("viewprojection_matrix", get_vp_matrix_binding());

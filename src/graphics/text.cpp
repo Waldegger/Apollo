@@ -81,23 +81,6 @@ namespace age
 	{}
 
 	text::text(std::string_view the_text, const font& the_font, uint32_t the_character_size)
-		: m_string{ the_text.begin(), the_text.end() }
-		, m_font{ &the_font }
-		, m_character_size{ the_character_size }
-		, m_letter_spacing_factor{ 1.0f }
-		, m_line_spacing_factor{ 1.0f }
-		, m_style{ text_styles::regular }
-		, m_fill_color{ 255, 255, 255, 255 }
-		, m_outline_color{ 0, 0, 0, 0 }
-		, m_outline_thickness{ 0.0f }
-		, m_last_texture_size{}
-		, m_last_texture_id{ 0 }
-		, m_vertices{}
-		, m_outline_vertices{}
-		, m_geometry_needs_update{ true }
-	{}
-
-	text::text(std::u32string_view the_text, const font& the_font, uint32_t the_character_size)
 		: m_string{ the_text }
 		, m_font{ &the_font }
 		, m_character_size{ the_character_size }
@@ -116,32 +99,15 @@ namespace age
 
 	void text::set_string(std::string_view value)
 	{
-		if (value.length() == m_string.length())
-		{
-			for (size_t i = 0; i < value.length(); ++i)
-			{
-				if (value[i] != m_string[i])
-					goto do_update;
-			}
-
+		if (m_string == value)
 			return;
-		}
 
-		do_update:
-		m_string.assign(value.begin(), value.end());
+		m_string = value;
 		m_geometry_needs_update = true;
 	}
 
-	void text::set_string(std::u32string_view value)
-	{
-		if (m_string != value)
-		{
-			m_string = value;
-			m_geometry_needs_update = true;
-		}
-	}
 
-	const std::u32string& text::get_string() const
+	const std::string& text::get_string() const
 	{
 		return m_string;
 	}

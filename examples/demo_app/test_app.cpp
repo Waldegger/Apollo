@@ -56,9 +56,9 @@ void test_app::on_create()
     
     uint32_t text_size = 64;
     m_test_font.load("./test_data/comic.ttf");
-    m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 some special chars !\"�$%/()=? and don't forget about Zonk or zuzu! Yolo ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", text_size, false, 0.0f);
-    auto font_image = m_test_font.get_texture(text_size).copy_to_image();
-    font_image.save("./test_data/font_texture.png");
+    //m_test_font.pre_cache_glyphs(U"I am a wildfire and I can save this thing into a texure also with number 0123456789 some special chars !\"�$%/()=? and don't forget about Zonk or zuzu! Yolo ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", text_size, false, 0.0f);
+    //auto font_image = m_test_font.get_texture(text_size).copy_to_image();
+    //font_image.save("./test_data/font_texture.png");
 
     m_test_text.set_character_size(64);
     m_test_text.set_font(m_test_font);
@@ -149,7 +149,7 @@ void test_app::on_update()
     //Draw Stuff
     get_render_window().draw(m_vertices.data(), m_vertices.size(), m_indizes.data(), m_indizes.size(), age::render_states{ m_background_program, m_test_texture, background_matrix });
     get_render_window().draw(m_rect_vertices.data(), m_vertices.size(), m_indizes.data(), m_indizes.size(), age::render_states{engine::get_instance()->get_default_shader_program(), m_test_texture, m_rect_matrix});
-    //get_render_window().draw(m_test_text, age::render_states{});
+    get_render_window().draw(m_test_text, age::render_states{});
     get_render_window().draw(m_fps_text, age::render_states{});
     //get_render_window().draw(m_test_rectangle_shape, age::render_states{});
     //get_render_window().draw(m_test_circle_shape, age::render_states{});
@@ -263,6 +263,29 @@ void test_app::on_process_event(SDL_Event& e)
             case SDLK_x:
             {
                 age::audio_device::get().stop_all_sounds();
+            }
+            break;
+            case SDLK_1:
+            {
+                switch (m_text_counter % 4)
+                {
+                    case 0:
+                        m_test_text.set_string("Hello my Name\nis Jimmy Pop");
+                    break;
+                    case 1:
+                        m_test_text.set_string("And I'm a dump\nwhite guy");
+                    break;
+                    case 2:
+                        m_test_text.set_string("The roof,\nthe roof");
+                    break;
+                    case 3:
+                        m_test_text.set_string("The roof\nis on fire");
+                    break;
+                    default:
+                        m_test_text.set_string("Ullibububuauaaddad");
+                }
+
+                m_text_counter++;
             }
             break;
         }

@@ -16,6 +16,8 @@ uniform samplerXX iChannel0..3;          // input channel. XX = 2D/Cube
 uniform vec4      iDate;                 // (year, month, day, time in seconds)
 */
 
+out vec4 FragColor;
+
 // http://www.fractalforums.com/new-theories-and-research/very-simple-formula-for-fractal-patterns/
 float field(in vec3 p,float s) {
 	float strength = 7. + .03 * log(1.e-6 + fract(sin(iTime) * 4373.11));
@@ -112,5 +114,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 
 void main()
 {
-    mainImage(gl_FragColor, gl_FragCoord.xy);
+    mainImage(FragColor, gl_FragCoord.xy);
 }

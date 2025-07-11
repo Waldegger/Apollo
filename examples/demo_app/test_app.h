@@ -96,6 +96,8 @@ private:
 
     age::music m_test_music;
 
+    size_t m_text_counter = 0;
+
     float m_delta_time = 0.0;
     float m_elapsed_time = 0.0f;
 
