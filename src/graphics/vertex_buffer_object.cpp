@@ -4,6 +4,8 @@
 
 #include <stdexcept>
 
+#include "utility/gl_check.h"
+
 namespace age
 {
 	vertex_buffer_object::vertex_buffer_object(target target)
@@ -18,7 +20,7 @@ namespace age
 
 		if (current_bound_buffer != handle)
 		{
-			glBindBuffer(convert_target(m_target), get_handle());
+			GL_CALL(glBindBuffer(convert_target(m_target), get_handle()));
 
 			current_bound_buffer = handle;
 		}
@@ -28,7 +30,7 @@ namespace age
 	{
 		bind();
 
-		glBufferData(convert_target(m_target), size_in_bytes, data, convert_usage(usage));
+		GL_CALL(glBufferData(convert_target(m_target), size_in_bytes, data, convert_usage(usage)));
 
 		m_last_buffer_size[static_cast<uint32_t>(m_target)] = size_in_bytes;
 		m_last_buffer_usage[static_cast<uint32_t>(m_target)] = usage;
@@ -40,8 +42,8 @@ namespace age
 
 		auto target = convert_target(m_target);
 
-		glBufferData(target, m_last_buffer_size[static_cast<uint32_t>(m_target)], nullptr, convert_usage(m_last_buffer_usage[static_cast<uint32_t>(m_target)]));
-		glBufferData(target, size_in_bytes, data, convert_usage(usage));
+		GL_CALL(glBufferData(target, m_last_buffer_size[static_cast<uint32_t>(m_target)], nullptr, convert_usage(m_last_buffer_usage[static_cast<uint32_t>(m_target)])));
+		GL_CALL(glBufferData(target, size_in_bytes, data, convert_usage(usage)));
 
 		m_last_buffer_size[static_cast<uint32_t>(m_target)] = size_in_bytes;
 		m_last_buffer_usage[static_cast<uint32_t>(m_target)] = usage;
@@ -51,7 +53,7 @@ namespace age
 	{
 		bind();
 
-		glBufferSubData(convert_target(m_target), offset, size_in_bytes, data);
+		GL_CALL(glBufferSubData(convert_target(m_target), offset, size_in_bytes, data));
 	}
 
 	uint32_t vertex_buffer_object::convert_target(target target_to_convert)
@@ -85,13 +87,13 @@ namespace age
 	uint32_t vertex_buffer_object::create_handle()
 	{
 		GLuint handle{};
-		glGenBuffers(1, &handle);
+		GL_CALL(glGenBuffers(1, &handle));
 
 		return handle;
 	}
 
 	void vertex_buffer_object::delete_handle(uint32_t handle)
 	{
-		glDeleteBuffers(1, &handle);
+		GL_CALL(glDeleteBuffers(1, &handle));
 	}
 }

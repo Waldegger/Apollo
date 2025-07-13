@@ -45,7 +45,7 @@ namespace age
 		void apply_view(const view_2d& view);
 		const glm::vec2& get_view_size() const;
 
-		void draw(const drawable& drawbable_object, const render_states& states);
+		void draw(const drawable& drawable_object, const render_states& states);
 		void draw(const vertex_2d vertices[], size_t num_vertices, const uint32_t indices[], size_t num_indices, const render_states& states);
 		void draw(const vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states);
 

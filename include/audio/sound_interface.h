@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/vec3.hpp>
+#include "sound_properties.h"
 
 namespace age
 {
@@ -13,7 +14,7 @@ namespace age
 		friend class audio_device;
 		friend class sound_source;
 
-		sound_interface();
+		sound_interface() = default;
 		sound_interface(const sound_interface& other);
 		sound_interface(sound_interface&& other) noexcept;
 
@@ -29,6 +30,7 @@ namespace age
 
 		void update_source(sound_source& source, bool looped) const;
 
+		//ToDo: Maybe add here set_position and update_position with a glm::vec3 too
 		void set_position(const glm::vec3& value);
 		void update_position(const glm::vec3& value);
 		const glm::vec3& get_position() const;
@@ -60,15 +62,11 @@ namespace age
 		sound_source* get_attached_source() const;
 		void detach_source() const;
 
+		const sound_properties& get_properties() const;
+
 	private:
+		sound_properties m_properties;
 
-		glm::vec3 m_position;
-		mutable sound_source* m_attached_source;
-
-		float m_pitch;
-		float m_volume;
-		float m_min_distance;
-		float m_attenuation;
-		bool m_relative_to_listener;
+		mutable sound_source* m_attached_source{nullptr};
 	};
 }

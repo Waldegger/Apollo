@@ -3,12 +3,14 @@
 #include <exception>
 #include <sstream>
 #include <cassert>
+#include <SDL.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <GL/glew.h>
 
 #include "engine.h"
+#include "utility/gl_check.h"
 
 namespace age
 {
@@ -33,7 +35,10 @@ namespace age
 
 		if (handle != m_current_bound_texture)
 		{
-			glBindTexture(GL_TEXTURE_2D, handle);
+			std::cout << "current context: " << SDL_GL_GetCurrentContext() << std::endl;
+			std::cout << "texture handle: " << handle << std::endl;
+
+			GL_CALL(glBindTexture(GL_TEXTURE_2D, handle));
 			
 			const glm::u32vec2& size = get_size();
 
@@ -68,7 +73,7 @@ namespace age
 	
 		bind();
 
-		glTexImage2D(
+		GL_CALL(glTexImage2D(
 			GL_TEXTURE_2D, 
 			0,
 			GL_RGBA,
@@ -77,20 +82,20 @@ namespace age
 			0,
 			GL_RGBA,
 			GL_UNSIGNED_BYTE,
-			nullptr);
+			nullptr));
 
-		glTexParameteri(
+		GL_CALL(glTexParameteri(
 			GL_TEXTURE_2D,
 			GL_TEXTURE_WRAP_S,
-			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE));
 
-		glTexParameteri(
+		GL_CALL(glTexParameteri(
 			GL_TEXTURE_2D,
 			GL_TEXTURE_WRAP_T,
-			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE));
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
+		GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
+		GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
 
 		m_has_mipmap = false;
 	}
@@ -147,10 +152,10 @@ namespace age
 
 		for (int32_t i = 0; i < rectangle.height; ++i)
 		{
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, rectangle.width, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+			GL_CALL(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, rectangle.width, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
 			pixels += 4 * width;
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
+			GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
 			m_has_mipmap = false;
 
 			//If there should be multithreading one day a glFlush will be necessary
@@ -171,7 +176,7 @@ namespace age
 		{
 			bind();
 
-			glTexSubImage2D(GL_TEXTURE_2D,
+			GL_CALL(glTexSubImage2D(GL_TEXTURE_2D,
 				0,
 				static_cast<GLint>(area.left),
 				static_cast<GLint>(area.top),
@@ -179,9 +184,9 @@ namespace age
 				static_cast<GLsizei>(area.height),
 				GL_RGBA,
 				GL_UNSIGNED_BYTE,
-				pixels);
+				pixels));
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
+			GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
 			m_has_mipmap = false;
 
 			//If there should be multithreading one day a glFlush will be necessary
@@ -233,21 +238,21 @@ namespace age
 		image result{};
 
 		GLuint framebuffer;
-		glGenFramebuffers(1, &framebuffer);
+		GL_CALL(glGenFramebuffers(1, &framebuffer));
 
 		if (framebuffer)
 		{
 			std::vector<std::uint8_t> pixels(static_cast<std::size_t>(m_size.x) * static_cast<std::size_t>(m_size.y) * 4);
 
-			GLint previousFrameBuffer;
-			glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFrameBuffer);
+			GLint previous_frame_buffer;
+			GL_CALL(glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previous_frame_buffer));
 
-			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, get_handle(), 0);
-			glReadPixels(0, 0, m_size.x, m_size.y, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
+			GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer));
+			GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, get_handle(), 0));
+			GL_CALL(glReadPixels(0, 0, m_size.x, m_size.y, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
 
-			glDeleteFramebuffers(1, &framebuffer);
-			glBindFramebuffer(GL_FRAMEBUFFER_BINDING, previousFrameBuffer);
+			GL_CALL(glDeleteFramebuffers(1, &framebuffer));
+			GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, previous_frame_buffer));
 
 			result.create(m_size, pixels.data());
 		}
@@ -262,16 +267,16 @@ namespace age
 			m_smooth = value;
 
 			bind();
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
+			GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
 			if (m_has_mipmap)
 			{
-				glTexParameteri(GL_TEXTURE_2D,
+				GL_CALL(glTexParameteri(GL_TEXTURE_2D,
 					GL_TEXTURE_MIN_FILTER,
-					m_smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR);
+					m_smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR));
 			}
 			else
 			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
+				GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
 			}
 		}
 	}
@@ -295,13 +300,13 @@ namespace age
 	{
 		bind();
 
-		glTexParameteri(GL_TEXTURE_2D,
+		GL_CALL(glTexParameteri(GL_TEXTURE_2D,
 			GL_TEXTURE_WRAP_S,
-			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE));
 
-		glTexParameteri(GL_TEXTURE_2D,
+		GL_CALL(glTexParameteri(GL_TEXTURE_2D,
 			GL_TEXTURE_WRAP_T,
-			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+			m_repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE));
 	}
 
 	bool texture::get_repeat() const
@@ -313,11 +318,11 @@ namespace age
 	{
 		bind();
 
-		glGenerateMipmap(GL_TEXTURE_2D);
+		GL_CALL(glGenerateMipmap(GL_TEXTURE_2D));
 
-		glTexParameteri(GL_TEXTURE_2D,
+		GL_CALL(glTexParameteri(GL_TEXTURE_2D,
 			GL_TEXTURE_MIN_FILTER,
-			m_smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR);
+			m_smooth ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR));
 
 		m_has_mipmap = true;
 	}
@@ -326,7 +331,7 @@ namespace age
 	{
 		bind();
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST);
+		GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_smooth ? GL_LINEAR : GL_NEAREST));
 		m_has_mipmap = false;
 	}
 
@@ -345,7 +350,7 @@ namespace age
 
 		if (m_current_bound_texture != 0)
 		{
-			glBindTexture(GL_TEXTURE_2D, 0);
+			GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
 			m_current_bound_texture = 0;
 		}
 	}
@@ -360,7 +365,7 @@ namespace age
 			checked = true;
 
 			GLint size;
-			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &size);
+			GL_CALL(glGetIntegerv(GL_MAX_TEXTURE_SIZE, &size));
 
 			result = size;
 		}
@@ -371,13 +376,13 @@ namespace age
 	uint32_t texture::gen_handle()
 	{
 		GLuint handle;
-		glGenTextures(1, &handle);
+		GL_CALL(glGenTextures(1, &handle));
 
 		return handle;
 	}
 
 	void texture::delete_handle(uint32_t handle)
 	{
-		glDeleteTextures(1, &handle);
+		GL_CALL(glDeleteTextures(1, &handle));
 	}
 }

@@ -76,7 +76,7 @@ namespace age
 	protected:
 
 	private:
-		virtual void draw(render_target& target, const render_states& states) const override;
+		void draw(render_target& target, const render_states& states) const override;
 
 		void ensure_geometry_is_updated() const;
 

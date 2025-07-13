@@ -13,7 +13,7 @@ namespace age
 	{
 	public:
 		shader_program();
-		
+
 	public:
 		void attach_shader(const shader& shader);
 		void detach_shader(const shader& shader);
@@ -54,8 +54,8 @@ namespace age
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 2>& v) const;
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 3>& v) const;
 		void set_uniform(int32_t location, uint32_t count, const std::array<uint32_t, 4>& v) const;
-		void set_uniform(int32_t location, const glm::mat4x4& v, bool transpose = false) const;
-		void set_uniform(int32_t location, const glm::mat4x4* v[], size_t size, bool transpose = false) const;
+		void set_uniform(int32_t location, const glm::mat4& v, bool transpose = false) const;
+		void set_uniform(int32_t location, const glm::mat4* v[], size_t size, bool transpose = false) const;
 		//If necessary add more uniforms for matrices: https://registry.khronos.org/OpenGL-Refpages/gl4/html/glUniform.xhtml
 
 		void set_uniform(std::string_view name, float v0) const;
@@ -85,13 +85,13 @@ namespace age
 		void set_uniform(std::string_view name, const glm::mat4x4& v, bool transpose = false) const;
 		void set_uniform(std::string_view name, const glm::mat4x4* v[], size_t size, bool transpose = false) const;
 
+		uint32_t get_handle() const { return m_handle; }
+
 	protected:
 
 	private:
 		inline static uint32_t m_current_bound_program;
 		static void delete_handle(uint32_t handle);
-
-		uint32_t get_handle() const { return m_handle; }
 
 		std::vector<uint32_t> m_attached_shaders;
 		unique_handle <uint32_t, delete_handle> m_handle;

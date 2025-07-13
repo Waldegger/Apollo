@@ -6,6 +6,7 @@
 #include <string_view>
 #include <mutex>
 
+#include "sound_properties.h"
 #include "sound_source.h"
 #include <glm/vec3.hpp>
 
@@ -37,6 +38,8 @@ namespace age
 
 		static void set_listener_up_vector(const glm::vec3& value);
 		static const glm::vec3& get_listener_up_vector();
+
+		sound_source* play_buffer(const sound_buffer& buffer, const sound_properties& properties) const;
 
 		sound_source* get_free_source(bool for_permanent_use = false) const;
 		void make_source_available(const sound_source* value);

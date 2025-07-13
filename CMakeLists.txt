@@ -48,6 +48,7 @@ add_library(${LIB_NAME} STATIC
     src/system/background_worker.cpp
     src/system/clock.cpp
     src/system/memstream.cpp
+    src/system/transient_context_lock.cpp
     src/utility/utility.cpp
     src/engine.cpp
 )

@@ -17,6 +17,8 @@ namespace age
 	{
 	public:
 		friend class engine;
+		friend class transient_context_lock;
+
 		virtual ~render_window() = default;
 
 		render_window(const render_window& other) = delete;

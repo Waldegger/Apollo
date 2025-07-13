@@ -5,34 +5,14 @@
 
 namespace age
 {
-	sound_interface::sound_interface()
-		: m_position{}
-		, m_attached_source{ nullptr }
-		, m_pitch{ 1.0f }
-		, m_volume{ 1.0f }
-		, m_min_distance{ 1.0f }
-		, m_attenuation{ 1.0f }
-		, m_relative_to_listener{ false }
-	{}
-
 	sound_interface::sound_interface(const sound_interface& other)
-		: m_position{ other.m_position }
+		: m_properties{ other.m_properties }
 		, m_attached_source{ nullptr }
-		, m_pitch{ other.m_pitch }
-		, m_volume{ other.m_volume }
-		, m_min_distance{ other.m_min_distance }
-		, m_attenuation{ other.m_attenuation }
-		, m_relative_to_listener{ other.m_relative_to_listener }
 	{}
 
 	sound_interface::sound_interface(sound_interface&& other) noexcept
-		: m_position{ other.m_position }
+		: m_properties{ other.m_properties }
 		, m_attached_source{ other.m_attached_source }
-		, m_pitch{ other.m_pitch }
-		, m_volume{ other.m_volume }
-		, m_min_distance{ other.m_min_distance }
-		, m_attenuation{ other.m_attenuation }
-		, m_relative_to_listener{ other.m_relative_to_listener }
 	{
 		other.m_attached_source = nullptr;
 
@@ -42,25 +22,15 @@ namespace age
 
 	sound_interface& sound_interface::operator = (const sound_interface& other)
 	{
-		m_position = other.m_position;
-		m_pitch = other.m_pitch;
-		m_volume = other.m_volume;
-		m_min_distance = other.m_min_distance;
-		m_attenuation = other.m_attenuation;
-		m_relative_to_listener = other.m_relative_to_listener;
+		m_properties = other.m_properties;
 
 		return *this;
 	}
 
 	sound_interface& sound_interface::operator = (sound_interface&& other) noexcept
 	{
-		m_position = other.m_position;
+		m_properties = other.m_properties;
 		m_attached_source = other.m_attached_source;
-		m_pitch = other.m_pitch;
-		m_volume = other.m_volume;
-		m_min_distance = other.m_min_distance;
-		m_attenuation = other.m_attenuation;
-		m_relative_to_listener = other.m_relative_to_listener;
 
 		other.m_attached_source = nullptr;
 		if (m_attached_source)
@@ -84,23 +54,23 @@ namespace age
 
 	void sound_interface::update_source(sound_source& source, bool looped) const
 	{
-		source.set_position(m_position);
-		source.set_pitch(m_pitch);
-		source.set_volume(m_volume);
-		source.set_min_distance(m_min_distance);
-		source.set_attenuation(m_attenuation);
-		source.set_relative_to_listener(m_relative_to_listener);
+		source.set_position(m_properties.position);
+		source.set_pitch(m_properties.pitch);
+		source.set_volume(m_properties.volume);
+		source.set_min_distance(m_properties.min_distance);
+		source.set_attenuation(m_properties.attenuation);
+		source.set_relative_to_listener(m_properties.relative_to_listener);
 		source.set_looping(looped);
 	}
 
 	void sound_interface::set_position(const glm::vec3& value)
 	{
-		m_position = value;
+		m_properties.position = value;
 	}
 
 	void sound_interface::update_position(const glm::vec3& value)
 	{
-		if (m_position != value)
+		if (m_properties.position != value)
 		{
 			set_position(value);
 			if (m_attached_source) m_attached_source->set_position(value);
@@ -109,17 +79,17 @@ namespace age
 
 	const glm::vec3& sound_interface::get_position() const
 	{
-		return m_position;
+		return m_properties.position;
 	}
 
 	void sound_interface::set_pitch(float value)
 	{
-		m_pitch = value;
+		m_properties.pitch = value;
 	}
 
 	void sound_interface::update_pitch(float value)
 	{
-		if (m_pitch != value)
+		if (m_properties.pitch != value)
 		{
 			set_pitch(value);
 			if (m_attached_source) m_attached_source->set_pitch(value);
@@ -128,17 +98,17 @@ namespace age
 
 	float sound_interface::get_pitch() const
 	{
-		return m_pitch;
+		return m_properties.pitch;
 	}
 
 	void sound_interface::set_volume(float value)
 	{
-		m_volume = value;
+		m_properties.volume = value;
 	}
 
 	void sound_interface::update_volume(float value)
 	{
-		if (m_volume != value)
+		if (m_properties.volume != value)
 		{
 			set_volume(value);
 			if (m_attached_source) m_attached_source->set_pitch(value);
@@ -147,17 +117,17 @@ namespace age
 
 	float sound_interface::get_volume() const
 	{
-		return m_volume;
+		return m_properties.volume;
 	}
 
 	void sound_interface::set_min_distance(float value)
 	{
-		m_min_distance = value;
+		m_properties.min_distance = value;
 	}
 
 	void sound_interface::update_min_distance(float value)
 	{
-		if (m_min_distance != value)
+		if (m_properties.min_distance != value)
 		{
 			set_min_distance(value);
 			if (m_attached_source) m_attached_source->set_min_distance(value);
@@ -166,17 +136,17 @@ namespace age
 
 	float sound_interface::get_min_distance() const
 	{
-		return m_min_distance;
+		return m_properties.min_distance;
 	}
 
 	void sound_interface::set_attenuation(float value)
 	{
-		m_attenuation = value;
+		m_properties.attenuation = value;
 	}
 
 	void sound_interface::update_attenuation(float value)
 	{
-		if (m_attenuation != value)
+		if (m_properties.attenuation != value)
 		{
 			set_attenuation(value);
 			if (m_attached_source) m_attached_source->set_attenuation(value);
@@ -185,17 +155,17 @@ namespace age
 
 	float sound_interface::get_attenuation() const
 	{
-		return m_attenuation;
+		return m_properties.attenuation;
 	}
 
 	void sound_interface::set_relative_to_listener(bool value)
 	{
-		m_relative_to_listener = value;
+		m_properties.relative_to_listener = value;
 	}
 
 	void sound_interface::update_relative_to_listener(bool value)
 	{
-		if (m_relative_to_listener != value)
+		if (m_properties.relative_to_listener != value)
 		{
 			set_relative_to_listener(value);
 			if (m_attached_source) m_attached_source->set_relative_to_listener(value);
@@ -204,7 +174,7 @@ namespace age
 
 	bool sound_interface::get_relative_to_listener() const
 	{
-		return m_relative_to_listener;
+		return m_properties.relative_to_listener;
 	}
 
 	bool sound_interface::get_looping() const
@@ -237,5 +207,10 @@ namespace age
 			m_attached_source->set_attached_sound(nullptr);
 			m_attached_source = nullptr;
 		}
+	}
+
+	const sound_properties & sound_interface::get_properties() const
+	{
+		return m_properties;
 	}
 }

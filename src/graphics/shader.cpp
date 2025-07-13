@@ -5,11 +5,13 @@
 #include <stdexcept>
 #include <SDL.h>
 
+#include "utility/gl_check.h"
+
 namespace age
 {
 	shader::shader(shader_type type)
 		: m_type{ type }
-		, m_handle{ glCreateShader(convert_type(type)) }
+		, m_handle{ GL_CALL(glCreateShader(convert_type(type))) }
 	{
 		if (!m_handle)
 		{
@@ -21,28 +23,28 @@ namespace age
 	{
 		const GLchar* data = shader_source.data();
 
-		glShaderSource(m_handle, 1, &data, NULL);
-		glCompileShader(m_handle);
+		GL_CALL(glShaderSource(m_handle, 1, &data, NULL));
+		GL_CALL(glCompileShader(m_handle));
 
 		GLint success;
-		glGetShaderiv(m_handle, GL_COMPILE_STATUS, &success);
+		GL_CALL(glGetShaderiv(m_handle, GL_COMPILE_STATUS, &success));
 		if (!success)
 		{
 			static constexpr size_t logSize = 512;
 			char infoLog[logSize];
 
-			glGetShaderInfoLog(m_handle, logSize, NULL, infoLog);
+			GL_CALL(glGetShaderInfoLog(m_handle, logSize, NULL, infoLog));
 			throw std::runtime_error{ std::string{ "ERROR::SHADER::COMPILATION_FAILED\n" } + infoLog };
 		};
 
 		GLint log_length;
-		glGetShaderiv(m_handle, GL_INFO_LOG_LENGTH, &log_length);
+		GL_CALL(glGetShaderiv(m_handle, GL_INFO_LOG_LENGTH, &log_length));
 		if (log_length)
 		{
 			static constexpr size_t logSize = 512;
 			char infoLog[logSize];
 
-			glGetShaderInfoLog(m_handle, logSize, NULL, infoLog);
+			GL_CALL(glGetShaderInfoLog(m_handle, logSize, NULL, infoLog));
 			SDL_Log(infoLog);
 		}
 	}
@@ -67,6 +69,6 @@ namespace age
 
 	void shader::delete_handle(uint32_t handle)
 	{
-		glDeleteShader(handle);
+		GL_CALL(glDeleteShader(handle));
 	}
 }

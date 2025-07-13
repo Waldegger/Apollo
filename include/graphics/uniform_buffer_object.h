@@ -22,7 +22,7 @@ namespace age
 	protected:
 
 	private:
-		inline static uint32_t m_current_bound_unfiform_buffer_object;
+		inline static thread_local uint32_t m_current_bound_unfiform_buffer_object;
 
 		static uint32_t gen_handle();
 		static void delete_handle(uint32_t handle);

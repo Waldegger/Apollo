@@ -11,6 +11,8 @@
 #include <stdexcept>
 #include <array>
 
+#include "utility/gl_check.h"
+
 namespace age
 {
 	engine::engine()
@@ -224,13 +226,13 @@ namespace age
 		m_model_matrix_ubo.bind_buffer_base(get_model_matrix_binding());
 		m_texture_matrix_ubo.bind_buffer_base(get_texture_matrix_binding());
 
-		glEnableVertexAttribArray(get_a_position_index());
-		glEnableVertexAttribArray(get_a_color_index());
-		glEnableVertexAttribArray(get_a_tex_coords_index());
+		GL_CALL(glEnableVertexAttribArray(get_a_position_index()));
+		GL_CALL(glEnableVertexAttribArray(get_a_color_index()));
+		GL_CALL(glEnableVertexAttribArray(get_a_tex_coords_index()));
 
-		glVertexAttribPointer(get_a_position_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), reinterpret_cast<void*>(0));
-		glVertexAttribPointer(get_a_color_index(), 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), reinterpret_cast<void*>(8));
-		glVertexAttribPointer(get_a_tex_coords_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), reinterpret_cast<void*>(12));
+		GL_CALL(glVertexAttribPointer(get_a_position_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), reinterpret_cast<void*>(0)));
+		GL_CALL(glVertexAttribPointer(get_a_color_index(), 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(vertex_2d), reinterpret_cast<void*>(8)));
+		GL_CALL(glVertexAttribPointer(get_a_tex_coords_index(), 2, GL_FLOAT, GL_FALSE, sizeof(vertex_2d), reinterpret_cast<void*>(12)));
 		
 		//m_default_vertex_array_object.release();
 	}

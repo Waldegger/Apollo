@@ -8,22 +8,24 @@
 #include "graphics/texture.h"
 #include "graphics/drawable.h"
 
+#include "utility/gl_check.h"
+
 namespace age
 {
 	constexpr inline uint32_t factor_to_GL_constant(blend_mode::factor factor)
 	{
 		switch (factor)
 		{
-		case blend_mode::factor::zero:					return GL_ZERO;
-		case blend_mode::factor::one:					return GL_ONE;
-		case blend_mode::factor::src_color:				return GL_SRC_COLOR;
-		case blend_mode::factor::one_minus_src_color:	return GL_ONE_MINUS_SRC_COLOR;
-		case blend_mode::factor::dst_color:				return GL_DST_COLOR;
-		case blend_mode::factor::one_minus_dst_color:	return GL_ONE_MINUS_DST_COLOR;
-		case blend_mode::factor::src_alpha:				return GL_SRC_ALPHA;
-		case blend_mode::factor::one_minus_src_alpha:	return GL_ONE_MINUS_SRC_ALPHA;
-		case blend_mode::factor::dst_alpha:				return GL_DST_ALPHA;
-		case blend_mode::factor::one_minus_dst_alpha:	return GL_ONE_MINUS_DST_ALPHA;
+			case blend_mode::factor::zero:					return GL_ZERO;
+			case blend_mode::factor::one:					return GL_ONE;
+			case blend_mode::factor::src_color:				return GL_SRC_COLOR;
+			case blend_mode::factor::one_minus_src_color:	return GL_ONE_MINUS_SRC_COLOR;
+			case blend_mode::factor::dst_color:				return GL_DST_COLOR;
+			case blend_mode::factor::one_minus_dst_color:	return GL_ONE_MINUS_DST_COLOR;
+			case blend_mode::factor::src_alpha:				return GL_SRC_ALPHA;
+			case blend_mode::factor::one_minus_src_alpha:	return GL_ONE_MINUS_SRC_ALPHA;
+			case blend_mode::factor::dst_alpha:				return GL_DST_ALPHA;
+			case blend_mode::factor::one_minus_dst_alpha:	return GL_ONE_MINUS_DST_ALPHA;
 		}
 
 		return GL_ZERO;
@@ -33,14 +35,14 @@ namespace age
 	{
 		switch (equation)
 		{
-		case blend_mode::equation::add:					return GL_FUNC_ADD;
-		case blend_mode::equation::subtract:			return GL_FUNC_SUBTRACT;
-		case blend_mode::equation::reverse_subtract:	return GL_FUNC_REVERSE_SUBTRACT;
-		/*
-		* OpenGL ES 3
-		case blend_mode::equation::min:					return GL_MIN;
-		case blend_mode::equation::max:					return GL_MAX;
-		*/
+			case blend_mode::equation::add:					return GL_FUNC_ADD;
+			case blend_mode::equation::subtract:			return GL_FUNC_SUBTRACT;
+			case blend_mode::equation::reverse_subtract:	return GL_FUNC_REVERSE_SUBTRACT;
+			/*
+			* OpenGL ES 3
+			case blend_mode::equation::min:					return GL_MIN;
+			case blend_mode::equation::max:					return GL_MAX;
+			*/
 		}
 
 		return GL_FUNC_ADD;
@@ -86,7 +88,7 @@ namespace age
 
 		// Then convert to viewport coordinates
 		glm::i32vec2  pixel;
-		float_rect viewport = float_rect(m_viewport);
+		auto viewport = float_rect{m_viewport};
 		pixel.x = static_cast<int>((normalized.x + 1.f) / 2.f * viewport.width + viewport.left);
 		pixel.y = static_cast<int>((-normalized.y + 1.f) / 2.f * viewport.height + viewport.top);
 
@@ -98,7 +100,7 @@ namespace age
 		// Set the viewport
 		m_viewport = get_viewport(value);
 		int top = static_cast<int>(get_size().y) - (m_viewport.top + m_viewport.height);
-		glViewport(m_viewport.left, top, m_viewport.width, m_viewport.height);
+		GL_CALL(glViewport(m_viewport.left, top, m_viewport.width, m_viewport.height));
 
 		// Set the projection matrix
 		m_projection_matrix = value.get_transform();
@@ -126,7 +128,7 @@ namespace age
 			return;
 
 		prepare_draw(vertices, num_vertices, indices, num_indices, states);
-		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, 0);
+		GL_CALL(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_indices), GL_UNSIGNED_INT, 0));
 	}
 
 	void render_target::draw(const vertex_2d vertices[], size_t num_vertices, primitive_type type, const render_states& states)
@@ -135,12 +137,12 @@ namespace age
 			return;
 
 		prepare_draw(vertices, num_vertices, states);
-		glDrawArrays(primitive_type_to_GL_constant(type), 0, static_cast<GLsizei>(num_vertices));
+		GL_CALL(glDrawArrays(primitive_type_to_GL_constant(type), 0, static_cast<GLsizei>(num_vertices)));
 	}
 
 	void render_target::init()
 	{
-		glEnable(GL_BLEND);
+		GL_CALL(glEnable(GL_BLEND));
 		apply_blend_mode(blend_mode::blend_alpha);
 	}
 
@@ -170,13 +172,13 @@ namespace age
 	{
 		if (mode != m_states_cache.last_blend_mode)
 		{
-			glBlendFuncSeparate(factor_to_GL_constant(mode.color_src_factor),
+			GL_CALL(glBlendFuncSeparate(factor_to_GL_constant(mode.color_src_factor),
 				factor_to_GL_constant(mode.color_dst_factor),
 				factor_to_GL_constant(mode.alpha_src_factor),
-				factor_to_GL_constant(mode.alpha_dst_factor));
+				factor_to_GL_constant(mode.alpha_dst_factor)));
 
-			glBlendEquationSeparate(equation_to_GL_constant(mode.color_equation),
-				equation_to_GL_constant(mode.alpha_equation));
+			GL_CALL(glBlendEquationSeparate(equation_to_GL_constant(mode.color_equation),
+				equation_to_GL_constant(mode.alpha_equation)));
 
 			m_states_cache.last_blend_mode = mode;
 		}

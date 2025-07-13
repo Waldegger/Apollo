@@ -9,6 +9,8 @@
 #include <string_view>
 #include <stdexcept>
 
+#include <utility/gl_check.h>
+
 namespace age
 {
 	render_window::render_window()
@@ -18,6 +20,7 @@ namespace age
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		//SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1); // Optional, sometimes helps
 
 		//OpenGL ES profile - only a subset of the base OpenGL functionality is available
 		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
@@ -89,7 +92,7 @@ namespace age
 
 	void render_window::clear()
 	{
-		glClear(m_clear_flags);
+		GL_CALL(glClear(m_clear_flags));
 	}
 
 	void render_window::display()

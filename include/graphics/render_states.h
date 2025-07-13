@@ -58,8 +58,8 @@ namespace age
 		inline blend_mode& get_blend_mode() { return m_blend_mode; }
 
 		inline void set_transform(const glm::mat4x4& value) { m_transform = value; }
-		inline const glm::mat4x4& get_transform() const { return m_transform; }
-		inline glm::mat4x4& get_transform() { return m_transform; }
+		inline const glm::mat4& get_transform() const { return m_transform; }
+		inline glm::mat4& get_transform() { return m_transform; }
 
 		inline static const render_states& get_default();
 
@@ -70,7 +70,7 @@ namespace age
 		const shader_program* m_shader_program = &engine::get_instance()->get_default_shader_program();
 
 		blend_mode m_blend_mode = blend_mode::blend_alpha;
-		glm::mat4x4 m_transform{ 1.0f };
+		glm::mat4 m_transform{ 1.0f };
 	};
 
 	const render_states& render_states::get_default()

@@ -54,13 +54,10 @@ namespace age
 			}
 		}
 
-		sound_source* new_source = audio_device::get().get_free_source(looped);
+		sound_source* new_source = audio_device::get().play_buffer(*m_buffer, get_properties());
+		//sound_source* new_source = audio_device::get().get_free_source(looped);
 		if (new_source)
 		{
-			update_source(*new_source, looped);
-			new_source->set_buffer(*m_buffer);
-			new_source->play();
-
 			attach_source(new_source);
 		}
 	}

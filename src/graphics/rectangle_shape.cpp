@@ -170,9 +170,9 @@ namespace age
 	{
 		auto texture_size = m_texture->get_size();
 
-		m_vertices[0].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
-		m_vertices[1].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top) / static_cast<float>(texture_size.y) };
-		m_vertices[2].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left + m_texture_rect.width) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
-		m_vertices[3].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left) / static_cast<float>(texture_size.x), static_cast<float>(m_texture_rect.top + m_texture_rect.height) / static_cast<float>(texture_size.y) };
+		m_vertices[0].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left), static_cast<float>(m_texture_rect.top) };
+		m_vertices[1].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left + m_texture_rect.width), static_cast<float>(m_texture_rect.top) };
+		m_vertices[2].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left + m_texture_rect.width), static_cast<float>(m_texture_rect.top + m_texture_rect.height) };
+		m_vertices[3].tex_coords = glm::vec2{ static_cast<float>(m_texture_rect.left), static_cast<float>(m_texture_rect.top + m_texture_rect.height) };
 	}
 }

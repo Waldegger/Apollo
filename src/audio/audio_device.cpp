@@ -189,6 +189,26 @@ namespace age
 		return m_listener_up_vector;
 	}
 
+	sound_source * audio_device::play_buffer(const sound_buffer &buffer, const sound_properties &properties) const
+	{
+		auto source = get_free_source(properties.looping);
+
+		if (nullptr == source) return nullptr;
+
+		source->set_buffer(buffer);
+		source->set_position(properties.position);
+		source->set_relative_to_listener(properties.relative_to_listener);
+		source->set_volume(properties.volume);
+		source->set_pitch(properties.pitch);
+		source->set_attenuation(properties.attenuation);
+		source->set_min_distance(properties.min_distance);
+		source->set_looping(properties.looping);
+
+		source->play();
+
+		return source;
+	}
+
 	void audio_device::init(const char* device_name)
 	{
 		destroy_context_and_close_device();
@@ -265,7 +285,7 @@ namespace age
 	void audio_device::setup_sources()
 	{
 		for (uint32_t i = 0; i < MAX_SOURCES; ++i)
-			m_sound_sources.push_back(sound_source{});
+			m_sound_sources.emplace_back();
 
 		std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
 		for (auto& source : m_sound_sources)

@@ -66,8 +66,9 @@ namespace age
 	protected:
 
 	private:
-		
-		inline static uint32_t m_current_bound_texture;
+
+		//ToDo: I want to have 1 context per thread, this seems the best solution to share the states between threads
+		inline static thread_local uint32_t m_current_bound_texture;
 
 		static uint32_t gen_handle();
 		static void delete_handle(uint32_t handle);

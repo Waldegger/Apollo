@@ -463,7 +463,7 @@ namespace age
 		if (FT_Load_Char(face, code_point, flags) != 0)
 			return result;
 
-		glyph_handle glyph_desc;
+		glyph_handle glyph_desc{};
 		if (FT_Get_Glyph(face->glyph, &glyph_desc.get_glyph()) != 0)
 			return result;
 
@@ -536,20 +536,6 @@ namespace age
 			result.texture_rect.top += static_cast<int>(padding);
 			result.texture_rect.width -= static_cast<int>(2 * padding);
 			result.texture_rect.height -= static_cast<int>(2 * padding);
-
-			//Precache tex coordinated for rendering
-			/*
-			{
-				auto& render_tex_rect = result.render_texture_rect;
-				auto& tex_rect = result.texture_rect;
-				auto& texture_size = cur_page.texture.get_size();
-
-				render_tex_rect.left = static_cast<float>(tex_rect.left) / static_cast<float>(texture_size.x);
-				render_tex_rect.top = static_cast<float>(tex_rect.top) / static_cast<float>(texture_size.y);
-				render_tex_rect.width = static_cast<float>(tex_rect.width) / static_cast<float>(texture_size.x);
-				render_tex_rect.height = static_cast<float>(tex_rect.height) / static_cast<float>(texture_size.y);
-			}
-			*/
 
 			// Compute the glyph's bounding box
 			result.bounds.left = static_cast<float>(bitmap_glyph->left);
@@ -685,20 +671,6 @@ namespace age
 				page.texture.swap(newTexture);
 				*/
 				page.texture = std::move(new_texture);
-			
-				//Update all the render_texture_rect of the glpyhs in the current page
-				/*
-				for (auto& g : page.glyphs)
-				{
-					auto& render_tex_rect = g.second.render_texture_rect;
-					auto& tex_rect = g.second.texture_rect;
-
-					render_tex_rect.left = static_cast<float>(tex_rect.left) / static_cast<float>(texture_size.x);
-					render_tex_rect.top = static_cast<float>(tex_rect.top) / static_cast<float>(texture_size.y);
-					render_tex_rect.width = static_cast<float>(tex_rect.width) / static_cast<float>(texture_size.x);
-					render_tex_rect.height = static_cast<float>(tex_rect.height) / static_cast<float>(texture_size.y);
-				}
-				*/
 			}
 
 			// We can now create the new row

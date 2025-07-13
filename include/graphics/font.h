@@ -69,8 +69,9 @@ namespace age
 		{
 			row(unsigned int row_top, unsigned int row_height) 
 				: width{ 0 }
-				, top{ row_top }
 				, height{ row_height }
+				, top{ row_top }
+
 			{}
 
 			uint32_t width{};
