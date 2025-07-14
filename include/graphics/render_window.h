@@ -31,14 +31,14 @@ namespace age
 		void clear();
 		void display();
 
-		virtual glm::u32vec2 get_size() const override;
-
+		glm::u32vec2 get_size() const override;
 	protected:
 
 	private:
 		render_window();
 
 		void open(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags);
+		void* get_shared_context() const;
 
 		static void destroy_window_lib(void* window);
 		static void delete_context_lib(void* context);
@@ -49,6 +49,7 @@ namespace age
 		using gl_context_type = void;
 		using gl_context_deleter = deleter<gl_context_type, delete_context_lib>;
 		std::unique_ptr<gl_context_type, gl_context_deleter> m_GL_context;
+		std::unique_ptr<gl_context_type, gl_context_deleter> m_GL_shared_context;
 
 		uint32_t m_clear_flags = 0;
 	};

@@ -3,7 +3,6 @@
 #include <exception>
 #include <sstream>
 #include <cassert>
-#include <SDL.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -35,9 +34,6 @@ namespace age
 
 		if (handle != m_current_bound_texture)
 		{
-			std::cout << "current context: " << SDL_GL_GetCurrentContext() << std::endl;
-			std::cout << "texture handle: " << handle << std::endl;
-
 			GL_CALL(glBindTexture(GL_TEXTURE_2D, handle));
 			
 			const glm::u32vec2& size = get_size();
@@ -159,6 +155,7 @@ namespace age
 			m_has_mipmap = false;
 
 			//If there should be multithreading one day a glFlush will be necessary
+			//glFlush();
 		}
 	}
 
@@ -190,6 +187,7 @@ namespace age
 			m_has_mipmap = false;
 
 			//If there should be multithreading one day a glFlush will be necessary
+			//glFlush();
 		}
 	}
 

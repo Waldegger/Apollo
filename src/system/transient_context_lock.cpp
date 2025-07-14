@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <stdexcept>
 #include <string>
+#include <gl/glew.h>
 
 #include "engine.h"
 #include "graphics/render_window.h"
@@ -17,44 +18,31 @@ age::transient_context_lock::transient_context_lock()
     }
 
     m_window = age::engine::get_instance()->get_render_window().m_windowhandle.get();
-    m_main_context = age::engine::get_instance()->get_render_window().m_GL_context.get();
+    m_main_context = age::engine::get_instance()->get_render_window().get_shared_context();
 
-    if (m_window == nullptr)
+    if (m_window == nullptr || m_main_context == nullptr)
     {
-        throw std::runtime_error(std::string("No window. Is Engine Initialized?"));
+        throw std::runtime_error(std::string("No window or main_context. Is Engine Initialized?"));
     }
 
     static std::mutex s_mutex;
-    std::unique_lock<std::mutex> lock(s_mutex);
+    std::lock_guard lock(s_mutex);
 
-    auto tid = std::this_thread::get_id();
-    auto it = s_thread_contexts.find(tid);
-    if (it != s_thread_contexts.end())
+    if (!s_thread_context)
     {
-        m_context = it->second;
-    }
-    else
-    {
+        SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_window), m_main_context);
+
         SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
-
-        m_context = SDL_GL_CreateContext(static_cast<SDL_Window*>(m_window));
-        if (!m_context)
+        s_thread_context = SDL_GL_CreateContext(static_cast<SDL_Window*>(m_window));
+        if (!s_thread_context)
         {
             throw std::runtime_error(std::string("Failed to create SDL GL context") + SDL_GetError());
         }
 
-        /*
-        if (!wglShareLists(static_cast<HGLRC>(m_main_context), static_cast<HGLRC>(m_context)))
-        {
-            SDL_GL_DeleteContext(m_context);
-            throw std::runtime_error("Failed to share GL contexts");
-        }
-        */
-
-        s_thread_contexts[tid] = m_context;
+        return;
     }
 
-    if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_window), static_cast<SDL_GLContext>(m_context)) != 0)
+    if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_window), static_cast<SDL_GLContext>(s_thread_context)) != 0)
     {
         throw std::runtime_error(std::string("SDL_GL_MakeCurrent failed") + SDL_GetError());
     }
@@ -64,6 +52,8 @@ age::transient_context_lock::transient_context_lock()
 
 age::transient_context_lock::~transient_context_lock()
 {
+    glFlush();
+
     if (m_owns_context)
     {
         SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_window), nullptr);
@@ -76,23 +66,17 @@ age::transient_context_lock& age::transient_context_lock::operator=(transient_co
         return *this;
 
     this->m_window = right.m_window;
-    this->m_context = right.m_context;
     this->m_owns_context = right.m_owns_context;
 
     right.m_window = nullptr;
-    right.m_context = nullptr;
     right.m_owns_context = false;
 
     return *this;
 }
 
 age::transient_context_lock::transient_context_lock(transient_context_lock &&other) noexcept
-    : m_window(other.m_window)
-    , m_context(other.m_context)
-    , m_owns_context(other.m_owns_context)
+    : m_window(std::exchange(other.m_window, nullptr))
+    , m_owns_context(std::exchange(other.m_owns_context, false))
 {
-    other.m_window = nullptr;
-    other.m_context = nullptr;
-    other.m_owns_context = false;
 }
 

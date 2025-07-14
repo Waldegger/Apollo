@@ -14,11 +14,11 @@ namespace age
 	{
 		auto handle = get_handle();
 
-		if (handle != m_current_bound_unfiform_buffer_object)
+		if (handle != m_current_bound_uniform_buffer_object)
 		{
 			GL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, handle));
 
-			m_current_bound_unfiform_buffer_object = handle;
+			m_current_bound_uniform_buffer_object = handle;
 		}
 	}
 

@@ -20,7 +20,6 @@ namespace age
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		//SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1); // Optional, sometimes helps
 
 		//OpenGL ES profile - only a subset of the base OpenGL functionality is available
 		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
@@ -34,14 +33,12 @@ namespace age
 		}
 
 		m_windowhandle.reset(SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL));
-
 		if (!m_windowhandle)
 		{
 			throw std::runtime_error{ std::string{ "Failed to create window\nSDL2 Error: " } + SDL_GetError() };
 		}
 
 		m_GL_context.reset(SDL_GL_CreateContext(static_cast<SDL_Window*>(m_windowhandle.get())));
-
 		if (!m_GL_context)
 		{
 			throw std::runtime_error{ std::string{ "Failed to create context\nSDL2 Error: " } + SDL_GetError() };
@@ -51,6 +48,22 @@ namespace age
 		if (SDL_GL_SetSwapInterval(1) < 0)
 		{
 			SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+		}
+
+		//Create the shared_context which we will use to share resources in threads
+		SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
+		SDL_GLContext shared_context = SDL_GL_CreateContext(static_cast<SDL_Window*>(m_windowhandle.get()));
+		if (!shared_context)
+		{
+			throw std::runtime_error{ std::string{ "Failed to create shared context\nSDL2 Error: " } + SDL_GetError() };
+		}
+
+		m_GL_shared_context.reset(shared_context);
+
+		//SDL_GL_CreateContext makes the new context current. So lets reset it to the old one
+		if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_windowhandle.get()), m_GL_context.get()) != 0)
+		{
+			throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
 		}
 
 		glewInit();
@@ -88,6 +101,11 @@ namespace age
 		view_2d view{ view_size * 0.5f, view_size };
 
 		apply_view(view);
+	}
+
+	void * render_window::get_shared_context() const
+	{
+		return m_GL_shared_context.get();
 	}
 
 	void render_window::clear()

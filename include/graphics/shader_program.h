@@ -90,7 +90,7 @@ namespace age
 	protected:
 
 	private:
-		inline static uint32_t m_current_bound_program;
+		inline static thread_local uint32_t m_current_bound_program{};
 		static void delete_handle(uint32_t handle);
 
 		std::vector<uint32_t> m_attached_shaders;

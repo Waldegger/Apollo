@@ -28,10 +28,8 @@ namespace age
         void* m_window{nullptr};
         void* m_main_context{nullptr};
 
-        void* m_context{nullptr};
-
         bool m_owns_context{false};
 
-        static inline std::unordered_map<std::thread::id, void*> s_thread_contexts;
+        static inline thread_local void* s_thread_context{nullptr};
     };
 }
