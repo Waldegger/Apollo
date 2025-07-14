@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include "graphics/render_states.h"
 #include "graphics/texture.h"

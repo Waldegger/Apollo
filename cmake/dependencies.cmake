@@ -4,6 +4,7 @@ include(FetchContent)
 # OpenGL
 # ------------------------------
 find_package(OpenGL REQUIRED)
+set(OpenGL_GL_LIBRARY OpenGL::GL)
 
 # ------------------------------
 # FreeType
@@ -23,33 +24,6 @@ if(NOT Freetype_FOUND)
 else()
     message(STATUS "Using system-installed FreeType")
     set(FREETYPE_TARGET Freetype::Freetype)
-endif()
-
-# ------------------------------
-# GLEW (exchange with GLAD in future)
-# ------------------------------
-find_package(GLEW QUIET)
-if(NOT GLEW_FOUND)
-    message(STATUS "GLEW not found, fetching...")
-
-    FetchContent_Declare(
-            glew
-            URL https://sourceforge.net/projects/glew/files/glew/2.2.0/glew-2.2.0.zip
-    )
-    FetchContent_MakeAvailable(glew)
-
-    add_library(glew STATIC ${glew_SOURCE_DIR}/src/glew.c)
-    target_include_directories(glew PUBLIC ${glew_SOURCE_DIR}/include)
-    target_compile_definitions(glew PUBLIC GLEW_STATIC)
-
-    set(GLEW_LIB_TARGET glew)
-else()
-    message(STATUS "Found system GLEW")
-    set(GLEW_LIB_TARGET GLEW::GLEW)
-endif()
-
-if(WIN32)
-    target_link_libraries(${GLEW_LIB_TARGET} PRIVATE opengl32)
 endif()
 
 # ------------------------------

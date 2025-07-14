@@ -5,7 +5,7 @@
 #include <SDL.h>
 #include <stdexcept>
 #include <string>
-#include <gl/glew.h>
+#include <glad/glad.h>
 
 #include "engine.h"
 #include "graphics/render_window.h"

@@ -1,6 +1,6 @@
 #include "graphics/uniform_buffer_object.h"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include "utility/gl_check.h"
 

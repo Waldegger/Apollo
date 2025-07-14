@@ -1,6 +1,6 @@
 #include "graphics/vertex_buffer_object.h"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include <stdexcept>
 

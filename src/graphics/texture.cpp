@@ -6,7 +6,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include "engine.h"
 #include "utility/gl_check.h"

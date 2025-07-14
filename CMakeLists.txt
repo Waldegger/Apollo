@@ -51,6 +51,7 @@ add_library(${LIB_NAME} STATIC
     src/system/transient_context_lock.cpp
     src/utility/utility.cpp
     src/engine.cpp
+    extlibs/libs/glad/src/glad.c
 )
 
 # Also set explictily for project
@@ -65,6 +66,7 @@ target_include_directories(${LIB_NAME}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         ${CMAKE_CURRENT_SOURCE_DIR}/extlibs/headers/stb_image
         ${CMAKE_CURRENT_SOURCE_DIR}/extlibs/headers/glm
+        ${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libs/glad/include
         $<INSTALL_INTERFACE:include>
 )
 
@@ -72,9 +74,9 @@ target_include_directories(${LIB_NAME}
 # Dependencies are handled in file cmake/dependencies.cmake
 include(cmake/dependencies.cmake)
 target_link_libraries(${LIB_NAME} PRIVATE
-        ${OPENGL_gl_LIBRARY}
+        ${OpenGL_GL_LIBRARY}
         ${FREETYPE_TARGET}
-        ${GLEW_LIB_TARGET}
+        ${GLAD_TARGET}
         ${OGG_TARGET}
         ${VORBIS_TARGET}
         ${VORBISFILE_TARGET}

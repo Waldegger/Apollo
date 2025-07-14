@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #ifndef NDEBUG
 inline const char* gl_error_string(GLenum err)

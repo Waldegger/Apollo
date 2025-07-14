@@ -1,7 +1,7 @@
 #include "graphics/render_window.h"
 
 #include <SDL.h>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <SDL_opengl.h>
 
 #include <string>
@@ -66,7 +66,11 @@ namespace age
 			throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
 		}
 
-		glewInit();
+		if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+			// Failed to initialize glad
+			throw std::runtime_error{std::string{ "Failed to initialize GLAD" }};
+		}
+
 		init();
 	}
 
