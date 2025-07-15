@@ -11,6 +11,8 @@
 #include "audio/sound_file_wave.h"
 #include "system/assetstream.h"
 
+#include "utility/al_check.h"
+
 namespace age
 {
 	sound_buffer::sound_buffer()
@@ -85,10 +87,10 @@ namespace age
 
 		ALuint handle = get_handle();
 
-		alGetBufferi(handle, AL_SIZE, &size_in_bytes);
-		alGetBufferi(handle, AL_CHANNELS, &channels);
-		alGetBufferi(handle, AL_BITS, &bits);
-		alGetBufferi(handle, AL_FREQUENCY, &frequency);
+		AL_CALL(alGetBufferi(handle, AL_SIZE, &size_in_bytes));
+		AL_CALL(alGetBufferi(handle, AL_CHANNELS, &channels));
+		AL_CALL(alGetBufferi(handle, AL_BITS, &bits));
+		AL_CALL(alGetBufferi(handle, AL_FREQUENCY, &frequency));
 
 		auto length_in_samples = size_in_bytes * 8 / (channels * bits);
 
@@ -112,7 +114,7 @@ namespace age
 		}
 
 		ALuint name = 0;
-		alGenBuffers(1, &name);
+		AL_CALL(alGenBuffers(1, &name));
 
 		return name;
 	}
@@ -130,6 +132,6 @@ namespace age
 
 		ALuint name = handle;
 
-		alDeleteBuffers(1, &name);
+		AL_CALL(alDeleteBuffers(1, &name));
 	}
 }

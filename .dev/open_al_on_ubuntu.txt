@@ -1,0 +1,7 @@
+Fix for OpenAL Soft not picking up .alsoftrc
+One of those is needed depending on your configuration
+
+in file: ~/.config/alsoft.conf put:
+drivers = alsa
+drivers = pulse
+drivers = pipewire

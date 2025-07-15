@@ -9,6 +9,8 @@
 
 #include "audio/sound.h"
 
+#include "utility/al_check.h"
+
 namespace age
 {
 	audio_device::audio_device()
@@ -98,7 +100,7 @@ namespace age
 
 	std::vector<std::string_view> audio_device::get_device_names()
 	{
-		auto device_specifier_string = alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
+		auto device_specifier_string = AL_CALL(alcGetString(nullptr, ALC_DEVICE_SPECIFIER));
 		auto result = std::vector<std::string_view>{};
 		result.reserve(8);
 
@@ -133,7 +135,7 @@ namespace age
 	void audio_device::set_listener_volume(float value)
 	{
 		m_listener_volume = value;
-		alListenerf(AL_GAIN, m_listener_volume);
+		AL_CALL(alListenerf(AL_GAIN, m_listener_volume));
 	}
 
 	float audio_device::get_listener_volume()
@@ -144,7 +146,7 @@ namespace age
 	void audio_device::set_listener_position(const glm::vec3& value)
 	{
 		m_listener_position = value;
-		alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z);
+		AL_CALL(alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z));
 	}
 
 	const glm::vec3& audio_device::get_listener_position()
@@ -163,7 +165,7 @@ namespace age
 								m_listener_up_vector.y,
 								m_listener_up_vector.z };
 
-		alListenerfv(AL_ORIENTATION, orientation);
+		AL_CALL(alListenerfv(AL_ORIENTATION, orientation));
 	}
 
 	const glm::vec3& audio_device::get_listener_direction()
@@ -181,7 +183,7 @@ namespace age
 								m_listener_up_vector.y,
 								m_listener_up_vector.z };
 
-		alListenerfv(AL_ORIENTATION, orientation);
+		AL_CALL(alListenerfv(AL_ORIENTATION, orientation));
 	}
 
 	const glm::vec3& audio_device::get_listener_up_vector()
@@ -220,17 +222,19 @@ namespace age
 
 	void audio_device::open_device_and_create_context(const char* device_name)
 	{
-		m_device = alcOpenDevice(device_name);
+		const ALCchar* default_device = device_name ? device_name : alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
+		m_device = alcOpenDevice(default_device);
 
 		if (!m_device)
 		{
+			ALCenum error = alcGetError(nullptr);
 			std::stringstream ss;
-			ss << "Failed to open audio device";
+			ss << "Failed to open audio device, with error: " << error;
 
 			throw std::runtime_error{ ss.str() };
 		}
 
-		std::array<ALCint, 4> attributes = { ALC_MONO_SOURCES, MAX_SOURCES, ALC_STEREO_SOURCES, MAX_SOURCES };
+		std::array<ALCint, 5> attributes = { ALC_MONO_SOURCES, MAX_SOURCES, ALC_STEREO_SOURCES, MAX_SOURCES, 0 };
 		m_context = alcCreateContext(static_cast<ALCdevice*>(m_device), attributes.data());
 
 		if (!m_context)
@@ -241,7 +245,7 @@ namespace age
 			throw std::runtime_error{ ss.str() };
 		}
 
-		alcMakeContextCurrent(static_cast<ALCcontext*>(m_context));
+		AL_CALL(alcMakeContextCurrent(static_cast<ALCcontext*>(m_context)));
 
 		// Apply the listener properties the user might have set
 		float orientation[] = {m_listener_direction.x,
@@ -250,9 +254,9 @@ namespace age
 								m_listener_up_vector.x,
 								m_listener_up_vector.y,
 								m_listener_up_vector.z};
-		alListenerf(AL_GAIN, m_listener_volume);
-		alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z);
-		alListenerfv(AL_ORIENTATION, orientation);
+		AL_CALL(alListenerf(AL_GAIN, m_listener_volume));
+		AL_CALL(alListener3f(AL_POSITION, m_listener_position.x, m_listener_position.y, m_listener_position.z));
+		AL_CALL(alListenerfv(AL_ORIENTATION, orientation));
 	}
 
 	void audio_device::destroy_context_and_close_device()

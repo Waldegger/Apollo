@@ -8,6 +8,8 @@ project(${LIB_NAME} VERSION 0.1 LANGUAGES C CXX)    # Project name, version, and
 set(CMAKE_CXX_STANDARD 17)                          # Use C++17
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                 # Enforce that standard
 
+add_compile_options(-Wno-error=changes-meaning)
+
 # Add your library target
 add_library(${LIB_NAME} STATIC
     src/audio/priv/ogg_stream.cpp
@@ -98,7 +100,13 @@ set_target_properties(${EXE_NAME} PROPERTIES
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-target_link_options(${EXE_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
+if(WIN32)
+    # On Windows, enable static linking options (needed for static runtime libs)
+    target_link_options(${EXE_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
+else()
+    # On non-Windows (e.g. Linux), do not use static linking to avoid linker errors
+    message(STATUS "Skipping static linking options on non-Windows platform")
+endif()
 
 target_link_libraries(${EXE_NAME}
         PRIVATE

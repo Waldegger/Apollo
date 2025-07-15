@@ -5,6 +5,8 @@
 #include "audio/sound_interface.h"
 #include "audio/sound_buffer.h"
 
+#include "utility/al_check.h"
+
 namespace age
 {
 	sound_source::sound_source()
@@ -19,132 +21,132 @@ namespace age
 
 	void sound_source::play()
 	{
-		alSourcePlay(m_handle);
+		AL_CALL(alSourcePlay(m_handle));
 	}
 
 	void sound_source::stop()
 	{
-		alSourceStop(m_handle);
+		AL_CALL(alSourceStop(m_handle));
 	}
 
 	void sound_source::pause()
 	{
-		alSourcePause(m_handle);
+		AL_CALL(alSourcePause(m_handle));
 	}
 
 	void sound_source::rewind()
 	{
-		alSourceRewind(m_handle);
+		AL_CALL(alSourceRewind(m_handle));
 	}
 
 	void sound_source::set_position(const glm::vec3& value)
 	{
-		alSource3f(m_handle, AL_POSITION, value.x, value.y, value.z);
+		AL_CALL(alSource3f(m_handle, AL_POSITION, value.x, value.y, value.z));
 	}
 
 	glm::vec3 sound_source::get_position() const
 	{
 		ALfloat value[3] = { 0.0f, 0.0f, 0.0f };
-		alGetSource3f(m_handle, AL_POSITION, &value[0], &value[1], &value[2]);
+		AL_CALL(alGetSource3f(m_handle, AL_POSITION, &value[0], &value[1], &value[2]));
 
 		return glm::vec3{ value[0], value[1], value[2] };
 	}
 
 	void sound_source::set_pitch(float value)
 	{
-		alSourcef(m_handle, AL_PITCH, value);
+		AL_CALL(alSourcef(m_handle, AL_PITCH, value));
 	}
 
 	float sound_source::get_pitch() const
 	{
 		ALfloat value{};
-		alGetSourcef(m_handle, AL_PITCH, &value);
+		AL_CALL(alGetSourcef(m_handle, AL_PITCH, &value));
 
 		return value;
 	}
 
 	void sound_source::set_volume(float value)
 	{
-		alSourcef(m_handle, AL_GAIN, value);
+		AL_CALL(alSourcef(m_handle, AL_GAIN, value));
 	}
 
 	float sound_source::get_volume() const
 	{
 		ALfloat value{};
-		alGetSourcef(m_handle, AL_GAIN, &value);
+		AL_CALL(alGetSourcef(m_handle, AL_GAIN, &value));
 
 		return value;
 	}
 
 	void sound_source::set_min_distance(float value)
 	{
-		alSourcef(m_handle, AL_REFERENCE_DISTANCE, value);
+		AL_CALL(alSourcef(m_handle, AL_REFERENCE_DISTANCE, value));
 	}
 
 	float sound_source::get_min_distance() const
 	{
 		ALfloat value{};
-		alGetSourcef(m_handle, AL_REFERENCE_DISTANCE, &value);
+		AL_CALL(alGetSourcef(m_handle, AL_REFERENCE_DISTANCE, &value));
 
 		return value;
 	}
 
 	void sound_source::set_attenuation(float value)
 	{
-		alSourcef(m_handle, AL_ROLLOFF_FACTOR, value);
+		AL_CALL(alSourcef(m_handle, AL_ROLLOFF_FACTOR, value));
 	}
 
 	float sound_source::get_attenuation() const
 	{
 		ALfloat value{};
-		alGetSourcef(m_handle, AL_ROLLOFF_FACTOR, &value);
+		AL_CALL(alGetSourcef(m_handle, AL_ROLLOFF_FACTOR, &value));
 
 		return value;
 	}
 
 	void sound_source::set_relative_to_listener(bool value)
 	{
-		alSourcei(m_handle, AL_SOURCE_RELATIVE, value ? 1 : 0);
+		AL_CALL(alSourcei(m_handle, AL_SOURCE_RELATIVE, value ? 1 : 0));
 	}
 
 	bool sound_source::get_relative_to_listener() const
 	{
 		ALint value{};
-		alGetSourcei(m_handle, AL_SOURCE_RELATIVE, &value);
+		AL_CALL(alGetSourcei(m_handle, AL_SOURCE_RELATIVE, &value));
 
 		return value == AL_TRUE;
 	}
 
 	void sound_source::set_looping(bool value)
 	{
-		alSourcei(m_handle, AL_LOOPING, value ? 1 : 0);
+		AL_CALL(alSourcei(m_handle, AL_LOOPING, value ? 1 : 0));
 	}
 
 	bool sound_source::get_looping() const
 	{
 		ALint value{};
-		alGetSourcei(m_handle, AL_LOOPING, &value);
+		AL_CALL(alGetSourcei(m_handle, AL_LOOPING, &value));
 
 		return value == AL_TRUE;
 	}
 
 	void sound_source::set_buffer(const sound_buffer& value)
 	{
-		alSourcei(m_handle, AL_BUFFER, value.get_handle());
+		AL_CALL(alSourcei(m_handle, AL_BUFFER, value.get_handle()));
 	}
 
 	void sound_source::queue_buffer(sound_queue_buffer value)
 	{
 		ALuint handle = value.get_handle();
 
-		alSourceQueueBuffers(m_handle, 1, &handle);
+		AL_CALL(alSourceQueueBuffers(m_handle, 1, &handle));
 	}
 
 	uint32_t sound_source::get_num_queued_buffers() const
 	{
 		ALint result = 0;
 
-		alGetSourcei(m_handle, AL_BUFFERS_QUEUED, &result);
+		AL_CALL(alGetSourcei(m_handle, AL_BUFFERS_QUEUED, &result));
 
 		return static_cast<uint32_t>(result);
 	}
@@ -153,7 +155,7 @@ namespace age
 	{
 		ALint result = 0;
 
-		alGetSourcei(m_handle, AL_BUFFERS_PROCESSED, &result);
+		AL_CALL(alGetSourcei(m_handle, AL_BUFFERS_PROCESSED, &result));
 
 		return static_cast<uint32_t>(result);
 	}
@@ -162,21 +164,21 @@ namespace age
 	{
 		ALuint handle = 0;
 
-		alSourceUnqueueBuffers(m_handle, 1, &handle);
+		AL_CALL(alSourceUnqueueBuffers(m_handle, 1, &handle));
 
 		return sound_queue_buffer{ handle };
 	}
 
 	void sound_source::clear_buffers()
 	{
-		alSourcei(m_handle, AL_BUFFER, AL_NONE);
+		AL_CALL(alSourcei(m_handle, AL_BUFFER, AL_NONE));
 	}
 
 	sound_state sound_source::get_state() const
 	{
 		ALint state = AL_INITIAL;
 
-		alGetSourcei(m_handle, AL_SOURCE_STATE, &state);
+		AL_CALL(alGetSourcei(m_handle, AL_SOURCE_STATE, &state));
 
 		switch (state)
 		{
@@ -214,13 +216,13 @@ namespace age
 	uint32_t sound_source::gen_handle()
 	{
 		ALuint name = 0;
-		alGenSources(1, &name);
+		AL_CALL(alGenSources(1, &name));
 
 		return name;
 	}
 
 	void sound_source::delete_handle(uint32_t handle)
 	{
-		alDeleteSources(1, &handle);
+		AL_CALL(alDeleteSources(1, &handle));
 	}
 }

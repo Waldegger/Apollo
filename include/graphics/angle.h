@@ -51,9 +51,9 @@ namespace age
 	inline constexpr angle& operator %= (angle& lhs, angle rhs);
 
 	inline constexpr angle operator "" _deg(long double angle);
-	inline constexpr angle operator "" _deg(uint64_t angle);
+	inline constexpr angle operator "" _deg(unsigned long long angle);
 	inline constexpr angle operator "" _rad(long double angle);
-	inline constexpr angle operator "" _rad(uint64_t angle);
+	inline constexpr angle operator "" _rad(unsigned long long angle);
 
 	namespace priv
 	{
@@ -212,7 +212,7 @@ namespace age
 		return degrees(static_cast<float>(angle));
 	}
 
-	constexpr angle operator"" _deg(uint64_t angle)
+	constexpr angle operator"" _deg(unsigned long long angle)
 	{
 		return degrees(static_cast<float>(angle));
 	}
@@ -222,7 +222,7 @@ namespace age
 		return radians(static_cast<float>(angle));
 	}
 
-	constexpr angle operator"" _rad(uint64_t angle)
+	constexpr angle operator"" _rad(unsigned long long angle)
 	{
 		return radians(static_cast<float>(angle));
 	}

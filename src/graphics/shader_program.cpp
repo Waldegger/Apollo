@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <array>
+#include <algorithm>
 
 #include "utility/gl_check.h"
 

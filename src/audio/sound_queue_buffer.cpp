@@ -2,6 +2,8 @@
 
 #include <AL/al.h>
 
+#include <utility/al_check.h>
+
 namespace age
 {
 	sound_queue_buffer::sound_queue_buffer(uint32_t handle)
@@ -14,6 +16,6 @@ namespace age
 
 	void sound_queue_buffer::buffer_data(sound_buffer::format the_format, const std::byte data[], size_t size_in_bytes, uint32_t frequency)
 	{
-		alBufferData(m_handle, sound_buffer::format_to_AL_enum(the_format), data, static_cast<ALsizei>(size_in_bytes), frequency);
+		AL_CALL(alBufferData(m_handle, sound_buffer::format_to_AL_enum(the_format), data, static_cast<ALsizei>(size_in_bytes), frequency));
 	}
 }
