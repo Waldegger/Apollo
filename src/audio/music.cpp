@@ -103,33 +103,50 @@ namespace age
 
 	void music::update_position(const glm::vec3& value)
 	{
+		sound_interface::set_position(value);
 
+		std::lock_guard source_lock{ m_source_mutex };
+		m_sound_source.set_position(value);
 	}
 
 	void music::update_pitch(float value)
 	{
+		sound_interface::set_pitch(value);
 
+		std::lock_guard source_lock{ m_source_mutex };
+		m_sound_source.set_pitch(value);
 	}
 
 	void music::update_volume(float value)
 	{
+		sound_interface::set_volume(value);
+
 		std::lock_guard source_lock{ m_source_mutex };
 		m_sound_source.set_volume(value);
 	}
 
 	void music::update_min_distance(float value)
 	{
+		sound_interface::set_min_distance(value);
 
+		std::lock_guard source_lock{ m_source_mutex };
+		m_sound_source.set_min_distance(value);
 	}
 
 	void music::update_attenuation(float value)
 	{
+		sound_interface::set_attenuation(value);
 
+		std::lock_guard source_lock{ m_source_mutex };
+		m_sound_source.set_attenuation(value);
 	}
 
 	void music::update_relative_to_listener(bool value)
 	{
+		sound_interface::set_relative_to_listener(value);
 
+		std::lock_guard source_lock{ m_source_mutex };
+		m_sound_source.set_relative_to_listener(value);
 	}
 
 	void music::open_from_stream(std::istream& is)
