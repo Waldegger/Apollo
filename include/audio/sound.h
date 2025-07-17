@@ -26,9 +26,9 @@ namespace age
 		virtual ~sound() override;
 
 	public:
-		virtual void play(bool looped = false) override;
-		virtual void stop() override;
-		virtual void pause() override;
+		void play(bool looped = false) override;
+		void stop() override;
+		void pause() override;
 
 		sound_state get_state() const;
 

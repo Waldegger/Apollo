@@ -228,6 +228,7 @@ void test_app::on_process_event(SDL_Event& e)
             break;
             case SDLK_p:
             {
+
                 switch (m_test_music.get_state())
                 {
                 case age::sound_state::playing:
@@ -241,6 +242,7 @@ void test_app::on_process_event(SDL_Event& e)
                 }
                 break;
                 }
+
             }
             break;
             case SDLK_t:
@@ -255,9 +257,11 @@ void test_app::on_process_event(SDL_Event& e)
             break;
             case SDLK_c:
             {
+
                 m_test_music.open("./test_data/track1.ogg");
                 m_test_music.set_volume(1.0f);
                 m_test_music.play(true);
+
             }
             break;
             case SDLK_x:

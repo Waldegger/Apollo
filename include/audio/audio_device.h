@@ -45,11 +45,14 @@ namespace age
 		void make_source_available(const sound_source* value);
 
 		void stop_all_sounds();
+		void remove_buffer_from_active_sources(const sound_buffer& buffer);
 
 		bool is_initialised() const;
 	protected:
 
 	private:
+		static inline std::mutex s_device_mutex;
+
 		inline static constexpr uint32_t MAX_SOURCES = 255;
 
 		inline static float m_listener_volume = 1.0f;
@@ -75,6 +78,7 @@ namespace age
 		mutable std::queue<sound_source*> m_available_sources;
 		mutable std::vector<sound_source*> m_unvailable_sources;
 		mutable std::mutex m_source_queue_mutex;
+
 
 		bool m_is_initialised;
 	};

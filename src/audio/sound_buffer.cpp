@@ -19,6 +19,25 @@ namespace age
 		: m_handle{ gen_handle() }
 	{}
 
+	sound_buffer::~sound_buffer()
+	{
+		if (m_handle)
+			audio_device::get().remove_buffer_from_active_sources(*this);
+	}
+
+	sound_buffer::sound_buffer(sound_buffer&& other) noexcept
+		: m_handle{std::exchange(other.m_handle, 0)}
+	{}
+
+	sound_buffer& sound_buffer::operator=(sound_buffer&& other) noexcept
+	{
+		if (this == &other) return *this;
+
+		this->m_handle = std::exchange(other.m_handle, 0);
+
+		return *this;
+	}
+
 	void sound_buffer::load(std::string_view fn)
 	{
 		assetistream is{ fn.data(), std::ios::binary };
@@ -105,14 +124,6 @@ namespace age
 
 	uint32_t sound_buffer::gen_handle()
 	{
-		m_num_buffers++;
-
-		if (m_num_buffers == 1)
-		{
-			if (!audio_device::get().is_initialised())
-				audio_device::get().init();
-		}
-
 		ALuint name = 0;
 		AL_CALL(alGenBuffers(1, &name));
 
@@ -121,17 +132,9 @@ namespace age
 
 	void sound_buffer::delete_handle(uint32_t handle)
 	{
-		m_num_buffers--;
-
-		if (!m_num_buffers)
-		{
-			if (audio_device::get().is_initialised())
-				audio_device::get().destroy();
-
-		}
-
 		ALuint name = handle;
 
-		AL_CALL(alDeleteBuffers(1, &name));
+		if (name)
+			AL_CALL(alDeleteBuffers(1, &name));
 	}
 }

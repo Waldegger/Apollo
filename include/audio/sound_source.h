@@ -1,6 +1,8 @@
 #pragma once
+#include "audio/audio_resource.h"
 
 #include <glm/vec3.hpp>
+
 #include "../utility/utility.h"
 #include "sound_queue_buffer.h"
 #include "sound_state.h"
@@ -10,7 +12,7 @@ namespace age
 	class sound_interface;
 	class sound_buffer;
 
-	class sound_source
+	class sound_source : public audio_resource
 	{
 	public:
 		friend class audio_device;
@@ -26,7 +28,7 @@ namespace age
 		sound_source& operator = (const sound_source& other) = delete;
 		sound_source& operator = (sound_source&& other) noexcept = default;
 
-		~sound_source() = default;
+		~sound_source() override = default;
 
 	public:
 		void play();
@@ -56,6 +58,9 @@ namespace age
 		bool get_looping() const;
 
 		void set_buffer(const sound_buffer& value);
+		bool has_buffer_attached(const sound_buffer& value) const;
+
+		void detach_buffer(const sound_buffer& value);
 
 		void queue_buffer(sound_queue_buffer value);
 		uint32_t get_num_queued_buffers() const;

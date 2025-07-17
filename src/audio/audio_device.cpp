@@ -38,7 +38,7 @@ namespace age
 			return result;
 		};
 
-		std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
+		std::lock_guard container_lock{ m_source_queue_mutex };
 
 		for (size_t i = 0; i < m_available_sources.size(); ++i)
 		{
@@ -87,6 +87,16 @@ namespace age
 		}
 	}
 
+	void audio_device::remove_buffer_from_active_sources(const sound_buffer& buffer)
+	{
+		std::lock_guard container_lock{ m_source_queue_mutex };
+
+		for (auto& source: m_sound_sources)
+		{
+			source.detach_buffer(buffer);
+		}
+	}
+
 	bool audio_device::is_initialised() const
 	{
 		return m_is_initialised;
@@ -119,16 +129,19 @@ namespace age
 
 	void audio_device::init()
 	{
+		std::lock_guard lock{ s_device_mutex };
 		get().init(nullptr);
 	}
 
 	void audio_device::init(std::string_view device_name)
 	{
+		std::lock_guard lock{ s_device_mutex };
 		get().init(device_name.data());
 	}
 
 	void audio_device::destroy()
 	{
+		std::lock_guard lock{ s_device_mutex };
 		get().destroy_context_and_close_device();
 	}
 

@@ -30,32 +30,32 @@ namespace age
 
 		void update_source(sound_source& source, bool looped) const;
 
-		//ToDo: Maybe add here set_position and update_position with a glm::vec3 too
-		void set_position(const glm::vec3& value);
-		void update_position(const glm::vec3& value);
-		const glm::vec3& get_position() const;
+		//ToDo: Maybe add here set_position and update_position with a glm::vec2 too
+		virtual void set_position(const glm::vec3& value);
+		virtual void update_position(const glm::vec3& value);
+		virtual const glm::vec3& get_position() const;
 
-		void set_pitch(float value);
-		void update_pitch(float value);
-		float get_pitch() const;
+		virtual void set_pitch(float value);
+		virtual void update_pitch(float value);
+		virtual float get_pitch() const;
 
-		void set_volume(float value);
-		void update_volume(float value);
-		float get_volume() const;
+		virtual void set_volume(float value);
+		virtual void update_volume(float value);
+		virtual float get_volume() const;
 
-		void set_min_distance(float value);
-		void update_min_distance(float value);
-		float get_min_distance() const;
+		virtual void set_min_distance(float value);
+		virtual void update_min_distance(float value);
+		virtual float get_min_distance() const;
 
-		void set_attenuation(float value);
-		void update_attenuation(float value);
-		float get_attenuation() const;
+		virtual void set_attenuation(float value);
+		virtual void update_attenuation(float value);
+		virtual float get_attenuation() const;
 
-		void set_relative_to_listener(bool value);
-		void update_relative_to_listener(bool value);
-		bool get_relative_to_listener() const;
+		virtual void set_relative_to_listener(bool value);
+		virtual void update_relative_to_listener(bool value);
+		virtual bool get_relative_to_listener() const;
 
-		bool get_looping() const;
+		virtual bool get_looping() const;
 
 	protected:
 		void attach_source(sound_source* value);

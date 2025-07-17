@@ -26,13 +26,13 @@ namespace age
 		music(music&& other) noexcept = default;
 
 		music& operator = (const music& other) = delete;
-		music& operator = (music&& other) noexcept = default;
+		music& operator = (music&& other) noexcept = delete;
 
-		virtual ~music() override;
+		~music() override;
 	public:
-		virtual void play(bool looped = false) override;
-		virtual void stop() override;
-		virtual void pause() override;
+		void play(bool looped = false) override;
+		void stop() override;
+		void pause() override;
 
 		void open(std::string_view fn);
 		void open(std::istream& is);
@@ -40,6 +40,14 @@ namespace age
 		void open(std::byte data[], size_t size);
 
 		sound_state get_state() const;
+
+		void update_position(const glm::vec3& value) override;
+		void update_pitch(float value) override;
+		void update_volume(float value) override;
+		void update_min_distance(float value) override;
+		void update_attenuation(float value) override;
+		void update_relative_to_listener(bool value) override;
+
 	protected:
 
 	private:
@@ -52,6 +60,9 @@ namespace age
 		void buffer_play_and_stream(bool looped = false);
 
 		mutable std::mutex m_source_mutex;
+		mutable std::mutex m_stream_mutex;
+
+		sound_source m_sound_source;
 
 		std::condition_variable m_buffer_cv;
 
@@ -64,6 +75,6 @@ namespace age
 		std::unique_ptr<std::istream> m_istream;
 		std::unique_ptr<sound_stream> m_sound_stream;
 
-		std::atomic<sound_state> m_state;
+		std::atomic<sound_state> m_requested_state;
 	};
 }

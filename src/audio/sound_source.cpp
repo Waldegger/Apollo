@@ -135,6 +135,28 @@ namespace age
 		AL_CALL(alSourcei(m_handle, AL_BUFFER, value.get_handle()));
 	}
 
+	bool sound_source::has_buffer_attached(const sound_buffer& value) const
+	{
+		ALint bound = 0;
+
+		AL_CALL(alGetSourcei(m_handle, AL_BUFFER, &bound));
+		if (bound == value.get_handle())
+			return true;
+
+		return false;
+	}
+
+	void sound_source::detach_buffer(const sound_buffer& value)
+	{
+		if (has_buffer_attached(value))
+		{
+			if (auto state = get_state(); state == sound_state::playing || state == sound_state::paused)
+				stop();
+
+			AL_CALL(alSourcei(m_handle, AL_BUFFER, AL_NONE));
+		}
+	}
+
 	void sound_source::queue_buffer(sound_queue_buffer value)
 	{
 		ALuint handle = value.get_handle();
@@ -171,6 +193,20 @@ namespace age
 
 	void sound_source::clear_buffers()
 	{
+		//stop if still playing
+		if (auto state = get_state(); state == sound_state::playing || state == sound_state::paused)
+			stop();
+
+		//Get rid off all the queued buffers
+		ALint queued = 0;
+		AL_CALL(alGetSourcei(m_handle, AL_BUFFERS_QUEUED, &queued));
+		while (queued--)
+		{
+			ALuint handle = 0;
+			AL_CALL(alSourceUnqueueBuffers(m_handle, 1, &handle));
+		}
+
+		//also get rid of an eventual bound buffer
 		AL_CALL(alSourcei(m_handle, AL_BUFFER, AL_NONE));
 	}
 

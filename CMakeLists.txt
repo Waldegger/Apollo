@@ -15,6 +15,7 @@ add_library(${LIB_NAME} STATIC
     src/audio/priv/ogg_stream.cpp
     src/audio/audio_device.cpp
     src/audio/audio_format.cpp
+    src/audio/audio_resource.cpp
     src/audio/listener.cpp
     src/audio/music.cpp
     src/audio/sound.cpp

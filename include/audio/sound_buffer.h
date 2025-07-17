@@ -1,8 +1,10 @@
 #pragma once
+#include "audio_resource.h"
 
 #include <string_view>
 #include <istream>
 #include <atomic>
+
 
 #include "../utility/utility.h"
 
@@ -10,7 +12,7 @@ namespace age
 {
 	class sound_queue_buffer;
 
-	class sound_buffer
+	class sound_buffer : public audio_resource
 	{
 	public:
 		friend class sound_queue_buffer;
@@ -24,6 +26,14 @@ namespace age
 		};
 
 		sound_buffer();
+		~sound_buffer() override;
+
+		sound_buffer(const sound_buffer&) = delete;
+		sound_buffer& operator=(const sound_buffer&) = delete;
+
+		sound_buffer(sound_buffer&& other) noexcept;
+		sound_buffer& operator=(sound_buffer&& other) noexcept;
+
 	public:
 		void load(std::string_view fn);
 		void load(std::istream& is);
@@ -36,7 +46,6 @@ namespace age
 
 	private:
 		friend class sound_source;
-		inline static std::atomic<size_t> m_num_buffers{};
 
 		inline uint32_t get_handle() const { return m_handle; }
 
