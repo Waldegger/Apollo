@@ -111,7 +111,7 @@ namespace age
 		if (m_properties.volume != value)
 		{
 			set_volume(value);
-			if (m_attached_source) m_attached_source->set_pitch(value);
+			if (m_attached_source) m_attached_source->set_volume(value);
 		}
 	}
 
