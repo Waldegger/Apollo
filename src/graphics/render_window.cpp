@@ -38,32 +38,12 @@ namespace age
 			throw std::runtime_error{ std::string{ "Failed to create window\nSDL2 Error: " } + SDL_GetError() };
 		}
 
-		m_GL_context.reset(SDL_GL_CreateContext(static_cast<SDL_Window*>(m_windowhandle.get())));
-		if (!m_GL_context)
-		{
-			throw std::runtime_error{ std::string{ "Failed to create context\nSDL2 Error: " } + SDL_GetError() };
-		}
+		m_context.create(*this);
 
 		//Use Vsync
 		if (SDL_GL_SetSwapInterval(1) < 0)
 		{
 			SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
-		}
-
-		//Create the shared_context which we will use to share resources in threads
-		SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
-		SDL_GLContext shared_context = SDL_GL_CreateContext(static_cast<SDL_Window*>(m_windowhandle.get()));
-		if (!shared_context)
-		{
-			throw std::runtime_error{ std::string{ "Failed to create shared context\nSDL2 Error: " } + SDL_GetError() };
-		}
-
-		m_GL_shared_context.reset(shared_context);
-
-		//SDL_GL_CreateContext makes the new context current. So lets reset it to the old one
-		if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_windowhandle.get()), m_GL_context.get()) != 0)
-		{
-			throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
 		}
 
 		if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
@@ -107,9 +87,19 @@ namespace age
 		apply_view(view);
 	}
 
-	void * render_window::get_shared_context() const
+	const context& render_window::get_context() const
 	{
-		return m_GL_shared_context.get();
+		return m_context;
+	}
+
+	context& render_window::get_context()
+	{
+		return m_context;
+	}
+
+	void* render_window::get_internal_handle() const
+	{
+		return m_windowhandle.get();
 	}
 
 	void render_window::clear()
@@ -135,10 +125,5 @@ namespace age
 	void render_window::destroy_window_lib(void* window)
 	{
 		SDL_DestroyWindow(static_cast<SDL_Window*>(window));
-	}
-
-	void render_window::delete_context_lib(void* context)
-	{
-		SDL_GL_DeleteContext(context);
 	}
 }

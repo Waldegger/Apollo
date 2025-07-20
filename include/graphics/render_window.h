@@ -8,6 +8,7 @@
 #include <string_view>
 
 #include <glm/vec2.hpp>
+#include <graphics/context.h>
 #include "../utility/utility.h"
 
 namespace age
@@ -26,6 +27,8 @@ namespace age
 
 		render_window& operator = (const render_window& other) = delete;
 		render_window& operator = (render_window&& other) = delete;
+
+		void* get_internal_handle() const;
 	
 	public:
 		void clear();
@@ -38,18 +41,15 @@ namespace age
 		render_window();
 
 		void open(const std::string_view& title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags);
-		void* get_shared_context() const;
+		const context& get_context() const;
+		context &get_context();
 
 		static void destroy_window_lib(void* window);
-		static void delete_context_lib(void* context);
+
+		context m_context;
 
 		using window_handle_deleter = deleter<void, destroy_window_lib>;
 		std::unique_ptr<void, window_handle_deleter> m_windowhandle;
-
-		using gl_context_type = void;
-		using gl_context_deleter = deleter<gl_context_type, delete_context_lib>;
-		std::unique_ptr<gl_context_type, gl_context_deleter> m_GL_context;
-		std::unique_ptr<gl_context_type, gl_context_deleter> m_GL_shared_context;
 
 		uint32_t m_clear_flags = 0;
 	};

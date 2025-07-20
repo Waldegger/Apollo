@@ -37,14 +37,14 @@ size_t background_worker::get_num_pending_jobs() const
 void background_worker::work()
 {
 	std::function<void()> job;
-	
+
 	while (true)
 	{
 		{
 			std::unique_lock lock{ m_queue_mutex };
 			m_queue_pending.wait(lock, [this]() -> bool { return m_exit || !m_job_queue.empty(); });
 
-			if (m_exit) return;
+			if (m_exit) break;
 
 			job = m_job_queue.front();
 			m_job_queue.pop();

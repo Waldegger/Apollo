@@ -28,7 +28,9 @@ private:
 	std::thread m_thread;
 	std::condition_variable m_queue_pending;
 	mutable std::mutex m_queue_mutex;
+
 	std::queue<std::function<void()>> m_job_queue;
+
 	bool m_exit = false;
 };
 

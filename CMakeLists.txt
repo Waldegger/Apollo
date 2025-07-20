@@ -29,6 +29,7 @@ add_library(${LIB_NAME} STATIC
     src/graphics/blend_mode.cpp
     src/graphics/circle_shape.cpp
     src/graphics/color.cpp
+    src/graphics/context.cpp
     src/graphics/font.cpp
     src/graphics/image.cpp
     src/graphics/rectangle_shape.cpp

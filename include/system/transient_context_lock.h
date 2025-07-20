@@ -1,8 +1,8 @@
 #pragma once
 
-#include <thread>
-#include <mutex>
-#include <unordered_map>
+#include <memory>
+
+#include "graphics/context.h"
 
 namespace age
 {
@@ -17,19 +17,20 @@ namespace age
         transient_context_lock(const transient_context_lock&) = delete;
         transient_context_lock& operator=(const transient_context_lock&) = delete;
 
-        transient_context_lock& operator = (transient_context_lock&& right) noexcept;
-        transient_context_lock(transient_context_lock&& other) noexcept;
+        static void flush();
 
     public:
 
     protected:
 
     private:
-        void* m_window{nullptr};
-        void* m_main_context{nullptr};
+        class thread_storage_cleaner
+        {
+            public:
+            ~thread_storage_cleaner();
+        };
 
-        bool m_owns_context{false};
-
-        static inline thread_local void* s_thread_context{nullptr};
+        static inline thread_local std::shared_ptr<context> s_thread_context{nullptr};
+        static inline thread_local thread_storage_cleaner s_thread_storage_cleaner{};
     };
 }

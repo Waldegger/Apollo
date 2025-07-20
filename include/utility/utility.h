@@ -29,10 +29,18 @@ namespace age
 		}
 	
 		initializer(const initializer& other) = delete;
-		initializer(initializer&& other) = delete;
+		initializer(initializer&& other) noexcept
+  			: m_result{std::exchange(other.m_result, init_return_type{})}
+		{}
 
 		initializer& operator = (const initializer& other) = delete;
-		initializer& operator = (initializer&& other) = delete;
+		initializer& operator = (initializer&& other) noexcept
+  		{
+			if (this == other) return *this;
+
+			m_result = std::exchange(other.m_result, init_return_type{});
+			return *this;
+		}
 
 	public:
 		using init_return_type = decltype(fn_init(std::declval<init_params...>()));
