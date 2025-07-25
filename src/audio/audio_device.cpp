@@ -280,7 +280,7 @@ namespace age
 				source.detach_sound();
 
 			{
-				std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
+				std::lock_guard container_lock{ m_source_queue_mutex };
 
 				while (!m_available_sources.empty()) m_available_sources.pop();
 				m_unvailable_sources.clear();
@@ -304,7 +304,7 @@ namespace age
 		for (uint32_t i = 0; i < MAX_SOURCES; ++i)
 			m_sound_sources.emplace_back();
 
-		std::scoped_lock<std::mutex> container_lock{ m_source_queue_mutex };
+		std::lock_guard container_lock{ m_source_queue_mutex };
 		for (auto& source : m_sound_sources)
 			m_available_sources.push(&source);
 	}

@@ -1,6 +1,4 @@
 #pragma once
-#include "audio/audio_resource.h"
-
 #include <glm/vec3.hpp>
 
 #include "../utility/utility.h"
@@ -12,7 +10,7 @@ namespace age
 	class sound_interface;
 	class sound_buffer;
 
-	class sound_source : public audio_resource
+	class sound_source
 	{
 	public:
 		friend class audio_device;
@@ -27,8 +25,6 @@ namespace age
 
 		sound_source& operator = (const sound_source& other) = delete;
 		sound_source& operator = (sound_source&& other) noexcept = default;
-
-		~sound_source() override = default;
 
 	public:
 		void play();

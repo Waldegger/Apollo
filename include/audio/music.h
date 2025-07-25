@@ -62,8 +62,6 @@ namespace age
 		mutable std::mutex m_source_mutex;
 		mutable std::mutex m_stream_mutex;
 
-		sound_source m_sound_source;
-
 		std::condition_variable m_buffer_cv;
 
 		std::array<sound_buffer, NUM_BUFFERS> m_buffers;

@@ -150,6 +150,7 @@ namespace age
         {
             if (v.use_count() == 1)
             {
+                v->set_active(true);
                 v->reset_GL_state();
 
                 return v;

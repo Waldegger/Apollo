@@ -184,11 +184,11 @@ namespace age
 
 	sound_queue_buffer sound_source::unqueue_buffer()
 	{
-		ALuint handle = 0;
+		ALuint buffer = 0;
 
-		AL_CALL(alSourceUnqueueBuffers(m_handle, 1, &handle));
+		AL_CALL(alSourceUnqueueBuffers(m_handle, 1, &buffer));
 
-		return sound_queue_buffer{ handle };
+		return sound_queue_buffer{ buffer };
 	}
 
 	void sound_source::clear_buffers()
@@ -197,16 +197,7 @@ namespace age
 		if (auto state = get_state(); state == sound_state::playing || state == sound_state::paused)
 			stop();
 
-		//Get rid off all the queued buffers
-		ALint queued = 0;
-		AL_CALL(alGetSourcei(m_handle, AL_BUFFERS_QUEUED, &queued));
-		while (queued--)
-		{
-			ALuint handle = 0;
-			AL_CALL(alSourceUnqueueBuffers(m_handle, 1, &handle));
-		}
-
-		//also get rid of an eventual bound buffer
+		//get rid of an eventual bound buffer
 		AL_CALL(alSourcei(m_handle, AL_BUFFER, AL_NONE));
 	}
 

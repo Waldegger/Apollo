@@ -16,7 +16,6 @@ namespace age
 	{
 		m_samples_buffer.resize(BUFFER_SAMPLES);
 		sound_interface::set_relative_to_listener(true);
-		attach_source(&m_sound_source);
 	}
 
 	music::~music()
@@ -30,6 +29,16 @@ namespace age
 		{
 			case sound_state::stopped:
 			{
+				//First lets get a sound_source for permanent use
+				std::lock_guard source_lock{ m_source_mutex };
+
+				auto new_source = audio_device::get().get_free_source(true);
+				if (nullptr == new_source)
+					return;
+
+				new_source->clear_buffers();
+				attach_source(new_source);
+
 				m_requested_state = sound_state::playing;
 				m_background_worker.add_job([this, looped]() -> void { buffer_play_and_stream(looped); });
 			}
@@ -41,7 +50,12 @@ namespace age
 				m_buffer_cv.notify_one();
 
 				std::lock_guard source_lock{ m_source_mutex };
-				m_sound_source.play();
+
+				auto current_source = get_attached_source();
+				if (!current_source)
+					return;
+
+				current_source->play();
 			}
 			break;
 
@@ -55,6 +69,13 @@ namespace age
 
 	void music::stop()
 	{
+		std::lock_guard source_lock{ m_source_mutex };
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->stop();
+
 		m_requested_state = sound_state::stopped;
 		m_buffer_cv.notify_one();
 	}
@@ -65,7 +86,12 @@ namespace age
 		m_buffer_cv.notify_one();
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.pause();
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->pause();
 	}
 
 	void music::open(std::string_view fn)
@@ -106,7 +132,12 @@ namespace age
 		sound_interface::set_position(value);
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.set_position(value);
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->set_position(value);
 	}
 
 	void music::update_pitch(float value)
@@ -114,7 +145,12 @@ namespace age
 		sound_interface::set_pitch(value);
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.set_pitch(value);
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->set_pitch(value);
 	}
 
 	void music::update_volume(float value)
@@ -122,7 +158,12 @@ namespace age
 		sound_interface::set_volume(value);
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.set_volume(value);
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->set_volume(value);
 	}
 
 	void music::update_min_distance(float value)
@@ -130,7 +171,12 @@ namespace age
 		sound_interface::set_min_distance(value);
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.set_min_distance(value);
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->set_min_distance(value);
 	}
 
 	void music::update_attenuation(float value)
@@ -138,7 +184,12 @@ namespace age
 		sound_interface::set_attenuation(value);
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.set_attenuation(value);
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->set_attenuation(value);
 	}
 
 	void music::update_relative_to_listener(bool value)
@@ -146,7 +197,12 @@ namespace age
 		sound_interface::set_relative_to_listener(value);
 
 		std::lock_guard source_lock{ m_source_mutex };
-		m_sound_source.set_relative_to_listener(value);
+
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		current_source->set_relative_to_listener(value);
 	}
 
 	void music::open_from_stream(std::istream& is)
@@ -170,16 +226,22 @@ namespace age
 	{
 		if (!m_sound_stream_info.sample_count) return;
 
-		auto stop_source = [this]() -> void
+		auto current_source = get_attached_source();
+		if (!current_source)
+			return;
+
+		auto stop_source = [this, current_source]() -> void
 		{
-			m_sound_source.stop();
-			m_sound_source.clear_buffers();
+			current_source->stop();
+			current_source->clear_buffers();
+
+			audio_device::get().make_source_available(current_source);
 		};
 
 		{
 			std::lock_guard source_lock{ m_source_mutex };
 
-			update_source(m_sound_source, false);
+			update_source(*current_source, false);
 
 
 			//Buffer some data and start playing the music
@@ -199,12 +261,6 @@ namespace age
 						return;
 					}
 					break;
-				case sound_state::paused:
-					{
-						if (m_sound_source.get_state() != sound_state::paused)
-							m_sound_source.pause();
-					}
-					break;
 				default:
 					{
 
@@ -218,7 +274,7 @@ namespace age
 				if (!bytes_read) break;
 				buffer.buffer_data(format, &m_samples_buffer[0], bytes_read, m_sound_stream_info.sample_rate);
 
-				m_sound_source.queue_buffer(buffer);
+				current_source->queue_buffer(buffer);
 
 				++filled_buffers;
 			}
@@ -230,7 +286,7 @@ namespace age
 		{
 			{
 				std::lock_guard source_lock{ m_source_mutex };
-				m_sound_source.play();
+				current_source->play();
 			}
 
 			std::mutex wait_mutex;
@@ -257,7 +313,7 @@ namespace age
 				uint32_t processed_buffers = 0;
 				{
 					std::lock_guard source_lock{ m_source_mutex };
-					processed_buffers = m_sound_source.get_num_processed_buffers();
+					processed_buffers = current_source->get_num_processed_buffers();
 				}
 
 				while (processed_buffers--)
@@ -281,10 +337,10 @@ namespace age
 							//nice loop until the last buffer stops playing
 							while (true)
 							{
-								std::this_thread::sleep_for(std::chrono::milliseconds{ 100 });
+								m_buffer_cv.wait_for(wait_lock, std::chrono::milliseconds{ 100 }, [this]() -> bool { return m_requested_state == sound_state::stopped; });
 
 								std::lock_guard source_lock{ m_source_mutex };
-								if (m_sound_source.get_state() == sound_state::stopped)
+								if (current_source->get_state() == sound_state::stopped)
 								{
 									stop_source();
 									return;
@@ -300,17 +356,17 @@ namespace age
 
 					{
 						std::lock_guard source_lock{ m_source_mutex };
-						auto processed_buffer = m_sound_source.unqueue_buffer();
+						auto processed_buffer = current_source->unqueue_buffer();
 
 						sound_buffer::format format = m_sound_stream_info.channel_count == 1 ? sound_buffer::format::mono_16 : sound_buffer::format::stereo_16;
 						processed_buffer.buffer_data(format, &m_samples_buffer[0], bytes_read, m_sound_stream_info.sample_rate);
 
-						m_sound_source.queue_buffer(processed_buffer);
+						current_source->queue_buffer(processed_buffer);
 
 						//If there should have been a buffer underrun, just resume playing the source
-						if (m_sound_source.get_state() == sound_state::stopped)
+						if (current_source->get_state() == sound_state::stopped)
 						{
-							m_sound_source.play();
+							current_source->play();
 						}
 					}
 				}
