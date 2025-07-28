@@ -96,6 +96,9 @@ namespace age
 
 	void music::open(std::string_view fn)
 	{
+		//ToDo: Aslo the m_istream needs to be locked, else it can just be overwritten while being used
+		std::lock_guard stream_lock{ m_stream_mutex };
+
 		m_istream = std::make_unique<assetistream>(fn.data(), std::ios::binary);
 
 		open_from_stream(*m_istream);
@@ -103,6 +106,8 @@ namespace age
 
 	void music::open(std::istream& is)
 	{
+		std::lock_guard stream_lock{ m_stream_mutex };
+
 		m_istream.reset();
 
 		open_from_stream(is);
@@ -110,6 +115,8 @@ namespace age
 
 	void music::open(std::unique_ptr<std::istream> is)
 	{
+		std::lock_guard stream_lock{ m_stream_mutex };
+
 		m_istream = std::move(is);
 
 		open_from_stream(*m_istream);
@@ -117,6 +124,8 @@ namespace age
 
 	void music::open(std::byte data[], size_t size)
 	{
+		std::lock_guard stream_lock{ m_stream_mutex };
+
 		m_istream = std::make_unique<memistream>(data, size);
 
 		open_from_stream(*m_istream);
@@ -208,8 +217,6 @@ namespace age
 	void music::open_from_stream(std::istream& is)
 	{
 		stop();
-
-		std::lock_guard stream_lock{ m_stream_mutex };
 
 		m_sound_stream_info = sound_stream::info{};
 		m_sound_stream = sound_stream_factory::create_from_stream(is);

@@ -2,7 +2,7 @@
 
 #include <array>
 #include <vector>
-#include <queue>
+#include <list>
 #include <string_view>
 #include <mutex>
 
@@ -73,10 +73,13 @@ namespace age
 		void* m_device;
 		void* m_context;
 
-		std::vector<sound_source> m_sound_sources;
+		//std::vector<sound_source> m_sound_sources;
 		//ToDo: Replace the std::queue with a std::list and use myList.splice(myList.end(), myList, myList.begin()); to bring the first element to the end
-		mutable std::queue<sound_source*> m_available_sources;
-		mutable std::vector<sound_source*> m_unvailable_sources;
+		mutable std::list<sound_source> m_available_sources;
+		mutable std::list<sound_source> m_unavailable_sources;
+
+		//mutable std::queue<sound_source*> m_available_sources;
+		//mutable std::vector<sound_source*> m_unavailable_sources;
 		mutable std::mutex m_source_queue_mutex;
 
 
