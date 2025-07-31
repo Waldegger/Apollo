@@ -42,10 +42,10 @@ namespace age
 		sound_source* play_buffer(const sound_buffer& buffer, const sound_properties& properties) const;
 
 		sound_source* get_free_source(bool for_permanent_use = false) const;
-		void make_source_available(const sound_source* value);
+		void make_source_available(const sound_source* value) const;
 
-		void stop_all_sounds();
-		void remove_buffer_from_active_sources(const sound_buffer& buffer);
+		void stop_all_sounds() const;
+		void remove_buffer_from_active_sources(const sound_buffer& buffer) const;
 
 		bool is_initialised() const;
 	protected:

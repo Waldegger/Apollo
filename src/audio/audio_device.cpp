@@ -53,7 +53,7 @@ namespace age
 		return result;
 	}
 
-	void audio_device::make_source_available(const sound_source* value)
+	void audio_device::make_source_available(const sound_source* value) const
 	{
 		std::lock_guard container_lock{ m_source_queue_mutex };
 
@@ -67,16 +67,22 @@ namespace age
 		}
 	}
 
-	void audio_device::stop_all_sounds()
+	void audio_device::stop_all_sounds() const
 	{
-		for (auto& source : m_available_sources)
+		auto stop_source_sound = [](const sound_source& source) -> void
 		{
 			if (auto sound = source.get_attached_sound())
 				sound->stop();
-		}
+		};
+
+		for (auto& source : m_available_sources)
+			stop_source_sound(source);
+
+		for (auto& source : m_unavailable_sources)
+			stop_source_sound(source);
 	}
 
-	void audio_device::remove_buffer_from_active_sources(const sound_buffer& buffer)
+	void audio_device::remove_buffer_from_active_sources(const sound_buffer& buffer) const
 	{
 		std::lock_guard container_lock{ m_source_queue_mutex };
 
