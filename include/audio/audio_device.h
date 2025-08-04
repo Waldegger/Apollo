@@ -44,8 +44,8 @@ namespace age
 		sound_source* get_free_source(bool for_permanent_use = false) const;
 		void make_source_available(const sound_source* value) const;
 
-		void stop_all_sounds() const;
-		void remove_buffer_from_active_sources(const sound_buffer& buffer) const;
+		void stop_all_sounds();
+		void remove_buffer_from_active_sources(const sound_buffer& buffer);
 
 		bool is_initialised() const;
 	protected:
@@ -73,10 +73,10 @@ namespace age
 		void* m_device;
 		void* m_context;
 
-		//std::vector<sound_source> m_sound_sources;
+		std::vector<sound_source> m_sound_sources;
 		//ToDo: Replace the std::queue with a std::list and use myList.splice(myList.end(), myList, myList.begin()); to bring the first element to the end
-		mutable std::list<sound_source> m_available_sources;
-		mutable std::list<sound_source> m_unavailable_sources;
+		mutable std::list<sound_source*> m_available_sources;
+		mutable std::list<sound_source*> m_unavailable_sources;
 
 		//mutable std::queue<sound_source*> m_available_sources;
 		//mutable std::vector<sound_source*> m_unavailable_sources;

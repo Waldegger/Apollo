@@ -17,9 +17,7 @@ namespace age
 		: m_device{ nullptr }
 		, m_context{ nullptr }
 		, m_is_initialised{ false }
-	{
-
-	}
+	{}
 
 	audio_device::~audio_device()
 	{
@@ -36,16 +34,16 @@ namespace age
 		{
 			auto& sound_source = *it;
 
-			if (sound_source.get_state() == sound_state::stopped)
+			if (sound_source->get_state() == sound_state::stopped)
 			{
-				sound_source.detach_sound();
+				sound_source->detach_sound();
 
 				if (for_permanent_use)
 					m_unavailable_sources.splice(m_unavailable_sources.end(), m_available_sources, it);
 				else
 					m_available_sources.splice(m_available_sources.end(), m_available_sources, it);
 
-				result = &sound_source;
+				result = sound_source;
 				break;
 			}
 		}
@@ -59,7 +57,7 @@ namespace age
 
 		for (auto it = m_unavailable_sources.begin(); it != m_unavailable_sources.end(); ++it)
 		{
-			if (&(*it) == value)
+			if (*it == value)
 			{
 				m_available_sources.splice(m_available_sources.end(), m_unavailable_sources, it);
 				break;
@@ -67,29 +65,24 @@ namespace age
 		}
 	}
 
-	void audio_device::stop_all_sounds() const
+	void audio_device::stop_all_sounds()
 	{
-		auto stop_source_sound = [](const sound_source& source) -> void
+		auto stop_source_sound = [](sound_source& source) -> void
 		{
 			if (auto sound = source.get_attached_sound())
 				sound->stop();
+
+			source.stop();
 		};
 
-		for (auto& source : m_available_sources)
-			stop_source_sound(source);
-
-		for (auto& source : m_unavailable_sources)
+		for (auto& source : m_sound_sources)
 			stop_source_sound(source);
 	}
 
-	void audio_device::remove_buffer_from_active_sources(const sound_buffer& buffer) const
+	void audio_device::remove_buffer_from_active_sources(const sound_buffer& buffer)
 	{
-		std::lock_guard container_lock{ m_source_queue_mutex };
-
-		for (auto& source: m_available_sources)
-		{
+		for (auto& source: m_sound_sources)
 			source.detach_buffer(buffer);
-		}
 	}
 
 	bool audio_device::is_initialised() const
@@ -113,7 +106,7 @@ namespace age
 			size_t index = 0;
 			do
 			{
-				result.push_back(&device_specifier_string[index]);
+				result.emplace_back(&device_specifier_string[index]);
 				index = strlen(&device_specifier_string[index]) + 1;
 
 			} while (device_specifier_string[index] != '\0');
@@ -271,8 +264,10 @@ namespace age
 	{
 		if (m_context)
 		{
-			for (auto& source : m_available_sources)
+			for (auto& source : m_sound_sources)
 				source.detach_sound();
+
+			m_sound_sources.clear();
 
 			{
 				std::lock_guard container_lock{ m_source_queue_mutex };
@@ -294,8 +289,10 @@ namespace age
 
 	void audio_device::setup_sources()
 	{
+		m_sound_sources.resize(MAX_SOURCES);
+
 		std::lock_guard container_lock{ m_source_queue_mutex };
-		for (uint32_t i = 0; i < MAX_SOURCES; ++i)
-			m_available_sources.emplace_back();
+		for (auto& source : m_sound_sources)
+			m_available_sources.emplace_back(&source);
 	}
 }

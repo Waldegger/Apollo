@@ -96,7 +96,6 @@ namespace age
 
 	void music::open(std::string_view fn)
 	{
-		//ToDo: Aslo the m_istream needs to be locked, else it can just be overwritten while being used
 		std::lock_guard stream_lock{ m_stream_mutex };
 
 		m_istream = std::make_unique<assetistream>(fn.data(), std::ios::binary);
@@ -242,6 +241,7 @@ namespace age
 			current_source->stop();
 			current_source->clear_buffers();
 
+			detach_source();
 			audio_device::get().make_source_available(current_source);
 		};
 
@@ -325,13 +325,13 @@ namespace age
 
 				while (processed_buffers--)
 				{
+					std::lock_guard stream_lock{ m_stream_mutex };
+
 					if (m_requested_state == sound_state::stopped)
 					{
 						stop_source();
 						return;
 					}
-
-					std::lock_guard stream_lock{ m_stream_mutex };
 
 					size_t bytes_read = m_sound_stream->read(&m_samples_buffer[0], m_samples_buffer.size());
 

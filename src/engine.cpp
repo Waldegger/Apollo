@@ -151,15 +151,15 @@ namespace age
 			"};\n"
 			"in vec2 a_position;\n"
 			"in vec4 a_color;\n"
-			"in vec2 a_tex_coords;\n"
+			"in vec2 a_uv;\n"
 			"out vec4 v_color;\n"
-			"out vec2 v_tex_coords;\n"
+			"out vec2 v_uv;\n"
 			"void main()\n"
 			"{\n"
 			"	gl_Position = vp_m * model_m * vec4(a_position, 0.0, 1.0);\n"
 			"	v_color = a_color;\n"
-			"	vec4 t_coords = tex_m * vec4(a_tex_coords, 0.0, 1.0);\n"
-			"	v_tex_coords = t_coords.xy;\n"
+			"	vec4 t_coords = tex_m * vec4(a_uv, 0.0, 1.0);\n"
+			"	v_uv = t_coords.xy;\n"
 			"}";
 
 		std::string_view fragment_shader_source =
@@ -167,11 +167,11 @@ namespace age
 			"precision mediump float;\n"
 			"uniform sampler2D u_texture;\n"
 			"in vec4 v_color;\n"
-			"in vec2 v_tex_coords;\n"
+			"in vec2 v_uv;\n"
 			"out vec4 frag_color;\n"
 			"void main()\n"
 			"{\n"
-			"	vec4 texel = texture2D(u_texture, v_tex_coords);\n"
+			"	vec4 texel = texture2D(u_texture, v_uv);\n"
 			"	if(texel.a == 0.0) discard;\n"
 			"	frag_color = v_color * texel;\n"
 			"}";
@@ -183,7 +183,7 @@ namespace age
 		m_default_shader_program.attach_shader(m_default_fragment_shader);
 		m_default_shader_program.bind_attrib_location(get_a_position_index(), "a_position");
 		m_default_shader_program.bind_attrib_location(get_a_color_index(), "a_color");
-		m_default_shader_program.bind_attrib_location(get_a_tex_coords_index(), "a_tex_coords");
+		m_default_shader_program.bind_attrib_location(get_a_tex_coords_index(), "a_uv");
 		m_default_shader_program.link();
 
 		/*
