@@ -79,15 +79,17 @@ target_include_directories(${LIB_NAME}
 # Link other libraries (e.g. freetype, SDL2).
 # Dependencies are handled in file cmake/dependencies.cmake
 include(cmake/dependencies.cmake)
-target_link_libraries(${LIB_NAME} PRIVATE
-        ${OpenGL_GL_LIBRARY}
-        ${FREETYPE_TARGET}
-        ${GLAD_TARGET}
-        ${OGG_TARGET}
-        ${VORBIS_TARGET}
-        ${VORBISFILE_TARGET}
-        ${OPENAL_TARGET}
-        ${SDL2_TARGET}
+target_link_libraries(${LIB_NAME}
+        PRIVATE
+            ${OpenGL_GL_LIBRARY}
+            ${FREETYPE_TARGET}
+            ${GLAD_TARGET}
+            ${OGG_TARGET}
+            ${VORBIS_TARGET}
+            ${VORBISFILE_TARGET}
+            ${OPENAL_TARGET}
+        PUBLIC
+            ${SDL2_TARGET}
 )
 
 # Also create the DemoApp

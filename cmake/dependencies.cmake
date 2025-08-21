@@ -1,5 +1,34 @@
 include(FetchContent)
 
+# Helper function to fetch content without polluting the IDE
+# ------------------------------
+function(fetch_hide_from_ide name)
+    set(options )
+    set(oneValueArgs GIT_REPOSITORY GIT_TAG CMAKE_ARGS)
+    cmake_parse_arguments(FH "${options}" "${oneValueArgs}" "" ${ARGN})
+
+    # Download and make available
+    FetchContent_Declare(${name}
+            GIT_REPOSITORY ${FH_GIT_REPOSITORY}
+            GIT_TAG ${FH_GIT_TAG}
+            CMAKE_ARGS ${FH_CMAKE_ARGS}
+    )
+
+    # Make available while hiding from IDE
+    FetchContent_GetProperties(${name})
+    if(NOT ${name}_POPULATED)
+        # This replaces Populate + add_subdirectory
+        FetchContent_MakeAvailable(${name})
+
+        # Optional: still hide in IDE (EXCLUDE_FROM_ALL equivalent)
+        # Some projects don't need this if they provide proper targets
+        if(TARGET ${name})
+            set_target_properties(${name} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+        endif()
+    endif()
+endfunction()
+# ------------------------------
+
 # ------------------------------
 # OpenGL
 # ------------------------------
@@ -13,12 +42,18 @@ find_package(Freetype QUIET)
 if(NOT Freetype_FOUND)
     message(STATUS "FreeType not found, fetching with FetchContent...")
 
-    FetchContent_Declare(
+#    FetchContent_Declare(
+#        freetype
+#        GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
+#        GIT_TAG VER-2-13-2
+#    )
+#    FetchContent_MakeAvailable(freetype)
+
+    fetch_hide_from_ide(
         freetype
         GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
         GIT_TAG VER-2-13-2
     )
-    FetchContent_MakeAvailable(freetype)
 
     set(FREETYPE_TARGET freetype)
 else()
@@ -33,14 +68,22 @@ find_package(Ogg QUIET)
 if(NOT Ogg_FOUND)
     message(STATUS "Ogg not found, fetching with FetchContent...")
 
-    FetchContent_Declare(
-        ogg
-        GIT_REPOSITORY https://github.com/xiph/ogg.git
-        GIT_TAG v1.3.6  # latest stable tag at the moment
-        CMAKE_ARGS
+#    FetchContent_Declare(
+#        ogg
+#        GIT_REPOSITORY https://github.com/xiph/ogg.git
+#        GIT_TAG v1.3.6  # latest stable tag at the moment
+#        CMAKE_ARGS
+#            -DCMAKE_POLICY_VERSION=3.5
+#    )
+#    FetchContent_MakeAvailable(ogg)
+
+    fetch_hide_from_ide(
+            ogg
+            GIT_REPOSITORY https://github.com/xiph/ogg.git
+            GIT_TAG v1.3.6  # latest stable tag at the moment
+            CMAKE_ARGS
             -DCMAKE_POLICY_VERSION=3.5
     )
-    FetchContent_MakeAvailable(ogg)
 
     set(OGG_TARGET ogg)
     set(OGG_INCLUDE_DIR ${ogg_SOURCE_DIR}/include)
@@ -60,15 +103,24 @@ find_package(Vorbis QUIET)
 if(NOT Vorbis_FOUND)
     message(STATUS "Vorbis not found, fetching with FetchContent...")
 
-    FetchContent_Declare(
+#    FetchContent_Declare(
+#            vorbis
+#            GIT_REPOSITORY https://github.com/xiph/vorbis.git
+#            GIT_TAG v1.3.7  # latest stable tag at the moment
+#            CMAKE_ARGS
+#                -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR}
+#                -DOGG_LIBRARY=${OGG_LIBRARY}
+#    )
+#    FetchContent_MakeAvailable(vorbis)
+
+    fetch_hide_from_ide(
             vorbis
             GIT_REPOSITORY https://github.com/xiph/vorbis.git
             GIT_TAG v1.3.7  # latest stable tag at the moment
             CMAKE_ARGS
-                -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR}
-                -DOGG_LIBRARY=${OGG_LIBRARY}
+            -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR}
+            -DOGG_LIBRARY=${OGG_LIBRARY}
     )
-    FetchContent_MakeAvailable(vorbis)
 
     set(VORBIS_TARGET vorbis)
     set(VORBISFILE_TARGET vorbisfile)
@@ -85,12 +137,18 @@ find_package(OpenAL QUIET)
 if(NOT OpenAL_FOUND)
     message(STATUS "OpenAL not found, fetching with FetchContent...")
 
-    FetchContent_Declare(
-        openal-soft
-        GIT_REPOSITORY https://github.com/kcat/openal-soft.git
-        GIT_TAG 1.22.1  # use latest stable release or tag you want
+#    FetchContent_Declare(
+#        openal-soft
+#        GIT_REPOSITORY https://github.com/kcat/openal-soft.git
+#        GIT_TAG 1.22.1  # use latest stable release or tag you want
+#    )
+#    FetchContent_MakeAvailable(openal-soft)
+
+    fetch_hide_from_ide(
+            openal-soft
+            GIT_REPOSITORY https://github.com/kcat/openal-soft.git
+            GIT_TAG 1.22.1  # use latest stable release or tag you want
     )
-    FetchContent_MakeAvailable(openal-soft)
 
     set(OPENAL_TARGET OpenAL::OpenAL)
 else()
@@ -105,12 +163,18 @@ find_package(SDL2 QUIET)
 if(NOT SDL2_FOUND)
     message(STATUS "SDL2 not found, fetching with FetchContent...")
 
-    FetchContent_Declare(
-        sdl2
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-        GIT_TAG release-2.26.5  # latest stable release tag
+#    FetchContent_Declare(
+#        sdl2
+#        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+#        GIT_TAG release-2.26.5  # latest stable release tag
+#    )
+#    FetchContent_MakeAvailable(sdl2)
+
+    fetch_hide_from_ide(
+            sdl2
+            GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+            GIT_TAG release-2.26.5  # latest stable release tag
     )
-    FetchContent_MakeAvailable(sdl2)
 
     set(SDL2_TARGET SDL2-static)  # or SDL2-static if appropriate
 else()
