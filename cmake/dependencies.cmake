@@ -36,7 +36,9 @@ if(NOT Ogg_FOUND)
     FetchContent_Declare(
         ogg
         GIT_REPOSITORY https://github.com/xiph/ogg.git
-        GIT_TAG v1.3.5  # latest stable tag at the moment
+        GIT_TAG v1.3.6  # latest stable tag at the moment
+        CMAKE_ARGS
+            -DCMAKE_POLICY_VERSION=3.5
     )
     FetchContent_MakeAvailable(ogg)
 
@@ -62,7 +64,9 @@ if(NOT Vorbis_FOUND)
             vorbis
             GIT_REPOSITORY https://github.com/xiph/vorbis.git
             GIT_TAG v1.3.7  # latest stable tag at the moment
-            CMAKE_ARGS -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR} -DOGG_LIBRARY=${OGG_LIBRARY}
+            CMAKE_ARGS
+                -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR}
+                -DOGG_LIBRARY=${OGG_LIBRARY}
     )
     FetchContent_MakeAvailable(vorbis)
 
