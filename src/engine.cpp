@@ -3,7 +3,7 @@
 #define NO_SDL_GLEXT
 #define GL_GLEXT_PROTOTYPES 1
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <glad/glad.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -17,8 +17,6 @@ namespace age
 {
 	engine::engine()
 		: m_initializer{ SDL_INIT_VIDEO }
-		, m_exit_code{ 0 }
-		, m_running{ false }
 		, m_started{ false }
 	{
 		static bool engine_instanced;
@@ -39,7 +37,12 @@ namespace age
 		m_instance = nullptr;
 	}
 
-	int32_t engine::start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
+	engine::app_result engine::init(int argc, char* argv[])
+	{
+		return on_init(argc, argv);
+	}
+
+	void engine::start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags)
 	{
 		/*
 		SDL_WINDOW_FULLSCREEN: fullscreen window
@@ -58,16 +61,14 @@ namespace age
 
 		if (m_started)
 		{
-			throw std::runtime_error{ "Engine is already running. Stop first before start again" };
+			throw std::runtime_error{ "Engine is already running." };
 		}
 
 		m_started = true;
-		m_running = true;
 
 		uint32_t sdl_flags = SDL_WINDOW_OPENGL;
-		std::array<uint32_t, 8> own_flags{
+		std::array<uint32_t, 7> own_flags{
 			static_cast<uint32_t>(window_flags::fullscreen),
-			static_cast<uint32_t>(window_flags::fullscreen_desktop),
 			static_cast<uint32_t>(window_flags::hidden),
 			static_cast<uint32_t>(window_flags::borderless),
 			static_cast<uint32_t>(window_flags::resizable),
@@ -76,15 +77,14 @@ namespace age
 			static_cast<uint32_t>(window_flags::input_grabbed),
 		};
 
-		std::array<uint32_t, 8> lib_flags{
+		std::array<uint32_t, 7> lib_flags{
 			SDL_WINDOW_FULLSCREEN,
-			SDL_WINDOW_FULLSCREEN_DESKTOP,
 			SDL_WINDOW_HIDDEN,
 			SDL_WINDOW_BORDERLESS,
 			SDL_WINDOW_RESIZABLE,
 			SDL_WINDOW_MINIMIZED,
 			SDL_WINDOW_MAXIMIZED,
-			SDL_WINDOW_INPUT_GRABBED
+			SDL_WINDOW_MOUSE_GRABBED
 		};
 
 		for (size_t i = 0; i < own_flags.size(); ++i)
@@ -95,31 +95,7 @@ namespace age
 
 		m_render_window.open(title, display_index, width, height, sdl_flags);
 
-		create();
-
-		//Put main loop here
-		//----
-		SDL_Event e;
-		while (m_running)
-		{
-			while (SDL_PollEvent(&e))
-				on_process_event(e);
-			
-			update();
-		}
-		//----
-
-		destroy();
-
-		m_started = false;
-		return m_exit_code;
-	}
-
-	void engine::stop(int32_t exit_code)
-	{
-		m_running = false;
-
-		m_exit_code = exit_code;
+		user_create();
 	}
 
 	int32_t engine::init_lib(uint32_t flags)
@@ -214,8 +190,7 @@ namespace age
 		m_default_vertex_array_object.bind();
 		m_default_vertex_buffer_object.bind();
 		m_default_element_buffer_object.bind();
-	
-		
+
 		m_vp_matrix_ubo.buffer_data(sizeof(glm::mat4x4), glm::value_ptr(glm::mat4{ 1.0f }));
 		m_model_matrix_ubo.buffer_data(sizeof(glm::mat4x4), glm::value_ptr(glm::mat4{ 1.0f }));
 		m_texture_matrix_ubo.buffer_data(sizeof(glm::mat4x4), glm::value_ptr(glm::mat4{ 1.0f }));
@@ -237,23 +212,28 @@ namespace age
 		//m_default_vertex_array_object.release();
 	}
 
-	void engine::create()
+	engine::app_result engine::user_create()
 	{
-		on_create();
+		return on_user_create();
 	}
 
-	void engine::update()
+	engine::app_result engine::update()
 	{
-		on_update();
+		return on_update();
 	}
 
-	void engine::destroy()
+	void engine::user_destroy()
 	{
-		on_destroy();
+		on_user_destroy();
 	}
 
-	void engine::on_process_event(SDL_Event& e)
+	engine::app_result engine::process_event(SDL_Event& e)
 	{
+		return on_process_event(e);
+	}
 
+	engine::app_result engine::on_process_event(SDL_Event& e)
+	{
+		return app_result::exit_success;
 	}
 }

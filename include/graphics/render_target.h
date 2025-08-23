@@ -37,8 +37,8 @@ namespace age
 	public:
 		int_rect get_viewport(const view_2d& view) const;
 
-		glm::vec2 map_pixel_to_coords(const glm::ivec2& point) const;
-		glm::ivec2 map_coords_to_pixel(const glm::vec2& point) const;
+		glm::vec2 map_pixel_to_coords(const glm::vec2& point) const;
+		glm::vec2 map_coords_to_pixel(const glm::vec2& point) const;
 		
 		virtual glm::u32vec2 get_size() const = 0;
 

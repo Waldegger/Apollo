@@ -1,6 +1,6 @@
 #include "system/assetstream.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #if defined(ANDROID) || defined(__ANDROID__)
 namespace age

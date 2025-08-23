@@ -1,8 +1,8 @@
 #include "graphics/render_window.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <glad/glad.h>
-#include <SDL_opengl.h>
+//#include <SDL3/SDL_opengl.h>
 
 #include <string>
 #include <sstream>
@@ -32,10 +32,11 @@ namespace age
 			SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, warning.str().c_str());
 		}
 
-		m_windowhandle.reset(SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL));
+		//m_windowhandle.reset(SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL));
+		m_windowhandle.reset(SDL_CreateWindow("", 64, 64, SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL));
 		if (!m_windowhandle)
 		{
-			throw std::runtime_error{ std::string{ "Failed to create window\nSDL2 Error: " } + SDL_GetError() };
+			throw std::runtime_error{ std::string{ "Failed to create window\nSDL Error: " } + SDL_GetError() };
 		}
 
 		m_context.create(*this);
@@ -63,20 +64,18 @@ namespace age
 		SDL_SetWindowPosition(handle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		if (flags & SDL_WINDOW_FULLSCREEN)
 			SDL_SetWindowFullscreen(handle, SDL_WINDOW_FULLSCREEN);
-		if (flags & SDL_WINDOW_FULLSCREEN_DESKTOP)
-			SDL_SetWindowFullscreen(handle, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		if (flags & SDL_WINDOW_BORDERLESS)
-			SDL_SetWindowBordered(handle, SDL_FALSE);
+			SDL_SetWindowBordered(handle, false);
 		if (flags & SDL_WINDOW_RESIZABLE)
-			SDL_SetWindowResizable(handle, SDL_TRUE);
+			SDL_SetWindowResizable(handle, false);
 		if (flags & SDL_WINDOW_MINIMIZED)
 			SDL_MinimizeWindow(handle);
 		if (flags & SDL_WINDOW_MAXIMIZED)
 			SDL_MaximizeWindow(handle);
-		if (flags & SDL_WINDOW_INPUT_GRABBED)
+		if (flags & SDL_WINDOW_MOUSE_GRABBED)
 		{
-			SDL_SetWindowKeyboardGrab(handle, SDL_TRUE);
-			SDL_SetWindowInputFocus(handle);
+			SDL_SetWindowKeyboardGrab(handle, true);
+			SDL_RaiseWindow(handle);
 		}
 		if (!(flags & SDL_WINDOW_HIDDEN))
 			SDL_ShowWindow(handle);

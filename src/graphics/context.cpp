@@ -2,7 +2,7 @@
 
 #include <mutex>
 #include <string>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <stdexcept>
 #include <glad/glad.h>
 
@@ -16,7 +16,7 @@ namespace age
         {
             if (!is_active())
             {
-                if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), m_GL_context.get()) != 0)
+                if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), static_cast<SDL_GLContext>(m_GL_context.get())))
                 {
                     throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
                 }
@@ -26,9 +26,9 @@ namespace age
 
         if (is_active())
         {
-            if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), nullptr) != 0)
+            if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), nullptr))
             {
-                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
             }
         }
     }
@@ -45,9 +45,9 @@ namespace age
 
         if (current_context != m_GL_context.get())
         {
-            if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), m_GL_context.get()))
+            if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), static_cast<SDL_GLContext>(m_GL_context.get())))
             {
-                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
             }
         }
 
@@ -55,16 +55,16 @@ namespace age
 
         if (current_context != m_GL_context.get())
         {
-            if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), current_context))
+            if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), current_context))
             {
-                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
             }
         }
     }
 
     void context::delete_context_lib(void* context)
     {
-        SDL_GL_DeleteContext(context);
+        SDL_GL_DestroyContext(static_cast<SDL_GLContext>(context));
     }
 
     void context::reset_GL_state() const
@@ -75,7 +75,7 @@ namespace age
 
         if (current_context != m_GL_context.get())
         {
-            SDL_GL_MakeCurrent(internal_window_handle, m_GL_context.get());
+            SDL_GL_MakeCurrent(internal_window_handle, static_cast<SDL_GLContext>(m_GL_context.get()));
         }
 
         // Unbind textures
@@ -114,7 +114,7 @@ namespace age
         m_GL_context.reset(SDL_GL_CreateContext(static_cast<SDL_Window*>(internal_window_handle)));
         if (!m_GL_context)
         {
-            throw std::runtime_error{ std::string{ "Failed to create context\nSDL2 Error: " } + SDL_GetError() };
+            throw std::runtime_error{ std::string{ "Failed to create context\nSDL Error: " } + SDL_GetError() };
         }
 
         if (!shared)
@@ -124,15 +124,15 @@ namespace age
             SDL_GLContext shared_context = SDL_GL_CreateContext(static_cast<SDL_Window*>(internal_window_handle));
             if (!shared_context)
             {
-                throw std::runtime_error{ std::string{ "Failed to create shared context\nSDL2 Error: " } + SDL_GetError() };
+                throw std::runtime_error{ std::string{ "Failed to create shared context\nSDL Error: " } + SDL_GetError() };
             }
 
             m_GL_shared_context.reset(shared_context);
 
             //SDL_GL_CreateContext makes the new context current. So lets reset it to the old one
-            if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(internal_window_handle), m_GL_context.get()) != 0)
+            if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(internal_window_handle), static_cast<SDL_GLContext>(m_GL_context.get())))
             {
-                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
             }
         }
     }
@@ -141,7 +141,7 @@ namespace age
     {
         std::lock_guard<std::mutex> lock{ m_acquire_context_mutex };
 
-        if (!m_GL_shared_context.get())
+        if (!m_GL_shared_context)
         {
             throw std::runtime_error{ std::string{ "Acquiring a shared context from a shared context is not possible. Acquire from main context!" }};
         }
@@ -159,9 +159,9 @@ namespace age
 
         auto current_context = SDL_GL_GetCurrentContext();
 
-        if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), m_GL_shared_context.get()))
+        if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), static_cast<SDL_GLContext>(m_GL_shared_context.get())))
         {
-            throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+            throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
         }
 
         std::shared_ptr<context> shared_context;
@@ -179,9 +179,9 @@ namespace age
             throw;
         }
 
-        if (SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), current_context))
+        if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), current_context))
         {
-            throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+            throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
         }
 
         m_shared_context_list.push_back(shared_context);

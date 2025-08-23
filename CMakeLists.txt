@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)                # Require CMake 3.16+
+cmake_minimum_required(VERSION 3.5)                # Require CMake 3.16+
 
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)               # Required for OGG, Vorbis and SDL2
 
@@ -89,7 +89,7 @@ target_link_libraries(${LIB_NAME}
             ${VORBISFILE_TARGET}
             ${OPENAL_TARGET}
         PUBLIC
-            ${SDL2_TARGET}
+            ${SDL3_TARGET}
 )
 
 # Also create the DemoApp
@@ -117,7 +117,7 @@ endif()
 target_link_libraries(${EXE_NAME}
         PRIVATE
         ${LIB_NAME}
-        ${SDL2_TARGET}
+        ${SDL3_TARGET}
         Threads::Threads
 )
 target_include_directories(${EXE_NAME} PRIVATE

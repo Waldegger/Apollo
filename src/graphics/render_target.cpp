@@ -71,26 +71,26 @@ namespace age
 						{ static_cast<int>(0.5f + width * viewport.width), static_cast<int>(0.5f + height * viewport.height) });
 	}
 
-	glm::vec2 render_target::map_pixel_to_coords(const glm::i32vec2& point) const
+	glm::vec2 render_target::map_pixel_to_coords(const glm::vec2& point) const
 	{
 		glm::vec2 normalized;
 
 		float_rect viewport = float_rect{ m_viewport };
-		normalized.x = -1.f + 2.f * (static_cast<float>(point.x) - viewport.left) / viewport.width;
-		normalized.y = 1.f - 2.f * (static_cast<float>(point.y) - viewport.top) / viewport.height;
+		normalized.x = -1.f + 2.f * (point.x - viewport.left) / viewport.width;
+		normalized.y = 1.f - 2.f * (point.y - viewport.top) / viewport.height;
 
 		return glm::vec2{ get_inverse_projection() * glm::vec4{ normalized.x, normalized.y, 0.0f, 1.0f } };
 	}
 
-	glm::i32vec2 render_target::map_coords_to_pixel(const glm::vec2& point) const
+	glm::vec2 render_target::map_coords_to_pixel(const glm::vec2& point) const
 	{
 		auto normalized = glm::vec2{ m_projection_matrix * glm::vec4{ point.x, point.y, 0.0f, 1.0f } };
 
 		// Then convert to viewport coordinates
-		glm::i32vec2  pixel;
+		glm::vec2  pixel;
 		auto viewport = float_rect{m_viewport};
-		pixel.x = static_cast<int>((normalized.x + 1.f) / 2.f * viewport.width + viewport.left);
-		pixel.y = static_cast<int>((-normalized.y + 1.f) / 2.f * viewport.height + viewport.top);
+		pixel.x = (normalized.x + 1.0f) / 2.0f * viewport.width + viewport.left;
+		pixel.y = (-normalized.y + 1.0f) / 2.0f * viewport.height + viewport.top;
 
 		return pixel;
 	}

@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 
 #include <stdexcept>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include "utility/gl_check.h"
 

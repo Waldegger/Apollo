@@ -1,6 +1,6 @@
 #include "test_app.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <fstream>
 #include <sstream>
@@ -18,7 +18,17 @@
 #include "audio/sound_buffer.h"
 #include "audio/audio_device.h"
 
-void test_app::on_create()
+age::engine::app_result test_app::on_init(int argc, char* argv[])
+{
+    static constexpr uint32_t SCREEN_WIDTH = 540;
+    static constexpr uint32_t SCREEN_HEIGHT = 960;
+
+    start("Apollo goes outer space", 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+
+    return app_result::keep_running;
+}
+
+age::engine::app_result test_app::on_user_create()
 {
     age::image test_image;
     test_image.load("./test_data/test.png");
@@ -108,9 +118,11 @@ void test_app::on_create()
     m_test_music.play(true);
 
     m_clock.start();
+
+    return app_result::keep_running;
 }
 
-void test_app::on_update()
+age::engine::app_result test_app::on_update()
 {
     m_delta_time = static_cast<float>(m_clock.restart());
 
@@ -160,139 +172,143 @@ void test_app::on_update()
 
     //Update screen
     get_render_window().display();
+
+    return engine::app_result::keep_running;
 }
 
-void test_app::on_destroy()
+void test_app::on_user_destroy()
 {
 
 }
 
-void test_app::on_process_event(SDL_Event& e)
+age::engine::app_result test_app::on_process_event(SDL_Event& e)
 {
     switch (e.type)
     {
-        case SDL_QUIT:
+        case SDL_EVENT_QUIT:
         {
-            stop(0);
+            return app_result::exit_success;
         }
         break;
 
-        case SDL_WINDOWEVENT:
-            switch (e.window.event)
+        case SDL_EVENT_WINDOW_RESIZED:
+        {
+            std::cout << "window size changed to: " << e.window.data1 << ", " << e.window.data2 << '\n';
+        }
+        break;
+
+        case SDL_EVENT_KEY_DOWN:
+            switch (e.key.key)
             {
-                case SDL_WINDOWEVENT_SIZE_CHANGED:
-                {
-                    std::cout << "window size changed to: " << e.window.data1 << ", " << e.window.data2 << '\n';
+                case SDLK_LEFT:
+                    m_key_left = true;
                     break;
-                }
+                case SDLK_RIGHT:
+                    m_key_right = true;
+                    break;
             }
-        break;
+            break;
 
-    case SDL_KEYDOWN:
-        switch (e.key.keysym.sym)
+        case SDL_EVENT_KEY_UP:
         {
-            case SDLK_LEFT:
-                m_key_left = true;
+            switch (e.key.key)
+            {
+            case SDLK_ESCAPE:
+                return app_result::exit_success;
                 break;
-            case SDLK_RIGHT:
-                m_key_right = true;
-                break;
-        }
-        break;
-
-    case SDL_KEYUP:
-        switch (e.key.keysym.sym)
-        {
             case SDLK_LEFT:
                 m_key_left = false;
                 break;
             case SDLK_RIGHT:
                 m_key_right = false;
                 break;
-            case SDLK_s:
+            case SDLK_S:
                 m_test_sound.play();
                 break;
-            case SDLK_a:
-            {
-                auto sound_pos = m_test_sound.get_position();
-                sound_pos.x -= 1.0f;
-                m_test_sound.update_position(sound_pos);
-            }
-            break;
-            case SDLK_d:
-            {
-                auto sound_pos = m_test_sound.get_position();
-                sound_pos.x += 1.0f;
-                m_test_sound.update_position(sound_pos);
-            }
-            break;
-            case SDLK_p:
-            {
-
-                switch (m_test_music.get_state())
+            case SDLK_A:
                 {
-                case age::sound_state::playing:
-                {
-                    m_test_music.pause();
+                    auto sound_pos = m_test_sound.get_position();
+                    sound_pos.x -= 1.0f;
+                    m_test_sound.update_position(sound_pos);
                 }
                 break;
-                case age::sound_state::paused:
+            case SDLK_D:
                 {
+                    auto sound_pos = m_test_sound.get_position();
+                    sound_pos.x += 1.0f;
+                    m_test_sound.update_position(sound_pos);
+                }
+                break;
+            case SDLK_P:
+                {
+
+                    switch (m_test_music.get_state())
+                    {
+                    case age::sound_state::playing:
+                        {
+                            m_test_music.pause();
+                        }
+                        break;
+                    case age::sound_state::paused:
+                        {
+                            m_test_music.play(true);
+                        }
+                        break;
+                    }
+
+                }
+                break;
+            case SDLK_T:
+                {
+                    m_test_music.stop();
+                }
+                break;
+            case SDLK_R:
+                {
+                    m_test_music.play();
+                }
+                break;
+            case SDLK_C:
+                {
+
+                    m_test_music.open("./test_data/track1.ogg");
+                    m_test_music.set_volume(1.0f);
                     m_test_music.play(true);
+
                 }
                 break;
-                }
-
-            }
-            break;
-            case SDLK_t:
-            {
-                m_test_music.stop();
-            }
-            break;
-            case SDLK_r:
-            {
-                m_test_music.play();
-            }
-            break;
-            case SDLK_c:
-            {
-
-                m_test_music.open("./test_data/track1.ogg");
-                m_test_music.set_volume(1.0f);
-                m_test_music.play(true);
-
-            }
-            break;
-            case SDLK_x:
-            {
-                age::audio_device::get().stop_all_sounds();
-            }
-            break;
-            case SDLK_1:
-            {
-                switch (m_text_counter % 4)
+            case SDLK_X:
                 {
+                    age::audio_device::get().stop_all_sounds();
+                }
+                break;
+            case SDLK_1:
+                {
+                    switch (m_text_counter % 4)
+                    {
                     case 0:
                         m_test_text.set_string("Hello my Name\nis Jimmy Pop");
-                    break;
+                        break;
                     case 1:
                         m_test_text.set_string("And I'm a dump\nwhite guy");
-                    break;
+                        break;
                     case 2:
                         m_test_text.set_string("The roof,\nthe roof");
-                    break;
+                        break;
                     case 3:
                         m_test_text.set_string("The roof\nis on fire");
-                    break;
+                        break;
                     default:
                         m_test_text.set_string("Ullibububuauaaddad");
-                }
+                    }
 
-                m_text_counter++;
+                    m_text_counter++;
+                }
+                break;
             }
             break;
         }
-        break;
     }
+
+    return engine::app_result::keep_running;
 }

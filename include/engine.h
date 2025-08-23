@@ -34,6 +34,18 @@ namespace age
 	class engine
 	{
 	public:
+		enum class app_result
+		{
+			keep_running,
+			exit_success,
+			exit_failure
+		};
+
+		friend app_result engine_init(age::engine& engine, int argc, char** argv);
+		friend app_result engine_update(engine& engine);
+		friend app_result engine_process_event(engine& engine, SDL_Event* event);
+		friend void engine_quit(engine& engine);
+
 		engine();
 		virtual ~engine();
 
@@ -44,9 +56,8 @@ namespace age
 		engine& operator = (engine&& other) = delete;
 
 	public:
-	
-		int32_t start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags);
-		void stop(int32_t exit_code = EXIT_SUCCESS);
+
+		void start(std::string_view title, uint32_t display_index, uint32_t width, uint32_t height, uint32_t flags);
 
 		inline const render_window& get_render_window() const { return m_render_window; }
 		inline render_window& get_render_window() { return m_render_window; }
@@ -86,19 +97,22 @@ namespace age
 	protected:
 
 	private:
-		virtual void on_create() = 0;
-		virtual void on_update() = 0;
-		virtual void on_destroy() = 0;
-		virtual void on_process_event(SDL_Event& e);
+		virtual app_result on_init(int argc, char* argv[]) = 0;
+		virtual app_result on_user_create() = 0;
+		virtual app_result on_update() = 0;
+		virtual void on_user_destroy() = 0;
+		virtual app_result on_process_event(SDL_Event& e);
 
 		static int32_t init_lib(uint32_t flags);
 		static void quit_lib();
 
 		void init_defaults();
 
-		void create();
-		void update();
-		void destroy();
+		app_result init(int argc, char* argv[]);
+		app_result user_create();
+		app_result update();
+		void user_destroy();
+		app_result process_event(SDL_Event& e);
 
 		inline static engine* m_instance = nullptr;
 
@@ -117,9 +131,7 @@ namespace age
 		shader m_default_fragment_shader{ shader::shader_type::fragment };
 		shader_program m_default_shader_program;
 		texture m_default_texture;
-		
-		int32_t m_exit_code;
-		bool m_running;
+
 		bool m_started;
 	};
 }

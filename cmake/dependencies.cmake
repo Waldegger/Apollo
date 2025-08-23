@@ -42,13 +42,6 @@ find_package(Freetype QUIET)
 if(NOT Freetype_FOUND)
     message(STATUS "FreeType not found, fetching with FetchContent...")
 
-#    FetchContent_Declare(
-#        freetype
-#        GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
-#        GIT_TAG VER-2-13-2
-#    )
-#    FetchContent_MakeAvailable(freetype)
-
     fetch_hide_from_ide(
         freetype
         GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
@@ -67,15 +60,6 @@ endif()
 find_package(Ogg QUIET)
 if(NOT Ogg_FOUND)
     message(STATUS "Ogg not found, fetching with FetchContent...")
-
-#    FetchContent_Declare(
-#        ogg
-#        GIT_REPOSITORY https://github.com/xiph/ogg.git
-#        GIT_TAG v1.3.6  # latest stable tag at the moment
-#        CMAKE_ARGS
-#            -DCMAKE_POLICY_VERSION=3.5
-#    )
-#    FetchContent_MakeAvailable(ogg)
 
     fetch_hide_from_ide(
             ogg
@@ -103,16 +87,6 @@ find_package(Vorbis QUIET)
 if(NOT Vorbis_FOUND)
     message(STATUS "Vorbis not found, fetching with FetchContent...")
 
-#    FetchContent_Declare(
-#            vorbis
-#            GIT_REPOSITORY https://github.com/xiph/vorbis.git
-#            GIT_TAG v1.3.7  # latest stable tag at the moment
-#            CMAKE_ARGS
-#                -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR}
-#                -DOGG_LIBRARY=${OGG_LIBRARY}
-#    )
-#    FetchContent_MakeAvailable(vorbis)
-
     fetch_hide_from_ide(
             vorbis
             GIT_REPOSITORY https://github.com/xiph/vorbis.git
@@ -137,13 +111,6 @@ find_package(OpenAL QUIET)
 if(NOT OpenAL_FOUND)
     message(STATUS "OpenAL not found, fetching with FetchContent...")
 
-#    FetchContent_Declare(
-#        openal-soft
-#        GIT_REPOSITORY https://github.com/kcat/openal-soft.git
-#        GIT_TAG 1.22.1  # use latest stable release or tag you want
-#    )
-#    FetchContent_MakeAvailable(openal-soft)
-
     fetch_hide_from_ide(
             openal-soft
             GIT_REPOSITORY https://github.com/kcat/openal-soft.git
@@ -159,25 +126,18 @@ endif()
 # ------------------------------
 # SDL2 (update to SDL3 when everything works)
 # ------------------------------
-find_package(SDL2 QUIET)
-if(NOT SDL2_FOUND)
-    message(STATUS "SDL2 not found, fetching with FetchContent...")
-
-#    FetchContent_Declare(
-#        sdl2
-#        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-#        GIT_TAG release-2.26.5  # latest stable release tag
-#    )
-#    FetchContent_MakeAvailable(sdl2)
-
+find_package(SDL3 QUIET)
+if(NOT SDL3_FOUND)
+    message(STATUS "SDL3 not found, fetching with FetchContent...")
+    
     fetch_hide_from_ide(
-            sdl2
+            sdl3
             GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-            GIT_TAG release-2.26.5  # latest stable release tag
+            GIT_TAG release-3.2.0  # latest 3.2 patch version
     )
 
-    set(SDL2_TARGET SDL2-static)  # or SDL2-static if appropriate
+    set(SDL3_TARGET SDL3-static)  # or SDL3-static if appropriate
 else()
     message(STATUS "Using system-installed SDL2")
-    set(SDL2_TARGET SDL2::SDL2)
+    set(SDL3_TARGET SDL3::SDL3)
 endif()

@@ -1,6 +1,6 @@
 #include "system/clock.h"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 namespace age
 {
@@ -17,6 +17,6 @@ namespace age
 		m_last_time = m_now;
 		m_now = SDL_GetPerformanceCounter();
 
-		return (double)((m_now - m_last_time) / (double)SDL_GetPerformanceFrequency());
+		return static_cast<double>(m_now - m_last_time) / static_cast<double>(SDL_GetPerformanceFrequency());
 	}
 }

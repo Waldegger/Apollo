@@ -2,7 +2,7 @@
 
 #include <thread>
 #include <mutex>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <stdexcept>
 #include <string>
 #include <glad/glad.h>
@@ -43,7 +43,7 @@ namespace age
 
     transient_context_lock::thread_storage_cleaner::~thread_storage_cleaner()
     {
-        SDL_TLSCleanup();
+        SDL_CleanupTLS();
     }
 }
 

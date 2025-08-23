@@ -30,10 +30,11 @@ protected:
 	
 
 private:
-    void on_create() override;
-    void on_update() override;
-    void on_destroy() override;
-    void on_process_event(SDL_Event& e) override;
+    app_result on_init(int argc, char* argv[]) override;
+    app_result on_user_create() override;
+    engine::app_result on_update() override;
+    void on_user_destroy() override;
+    engine::app_result on_process_event(SDL_Event& e) override;
 
     static constexpr uint32_t A_POSITION_INDEX = 0;
     static constexpr uint32_t A_COLOR_INDEX = 1;
