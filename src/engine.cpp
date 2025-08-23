@@ -94,8 +94,19 @@ namespace age
 		}
 
 		m_render_window.open(title, display_index, width, height, sdl_flags);
-
 		user_create();
+	}
+
+	void engine::exit()
+	{
+		SDL_Event event;
+		SDL_memset(&event, 0, sizeof(event));
+		event.type = SDL_EVENT_QUIT;
+
+		if (!SDL_PushEvent(&event))
+		{
+			throw std::runtime_error{ "SDL_PushEvent failed: " + std::string{SDL_GetError()} };
+		}
 	}
 
 	int32_t engine::init_lib(uint32_t flags)
