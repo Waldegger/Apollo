@@ -18,6 +18,7 @@ namespace age
 	engine::engine()
 		: m_initializer{ SDL_INIT_VIDEO }
 		, m_started{ false }
+		, m_exit_requested{ false }
 	{
 		static bool engine_instanced;
 
@@ -97,16 +98,9 @@ namespace age
 		user_create();
 	}
 
-	void engine::exit()
+	void engine::stop()
 	{
-		SDL_Event event;
-		SDL_memset(&event, 0, sizeof(event));
-		event.type = SDL_EVENT_QUIT;
-
-		if (!SDL_PushEvent(&event))
-		{
-			throw std::runtime_error{ "SDL_PushEvent failed: " + std::string{SDL_GetError()} };
-		}
+		m_exit_requested = true;
 	}
 
 	int32_t engine::init_lib(uint32_t flags)
@@ -230,6 +224,8 @@ namespace age
 
 	engine::app_result engine::update()
 	{
+		if (m_exit_requested) return app_result::exit_success;
+
 		return on_update();
 	}
 

@@ -18,7 +18,7 @@ namespace age
 		if (resolution < 3)
 			throw std::runtime_error{ "Failure creating circle: The resolution must be 3 or higher" };
 
-		radius = fabs(radius);
+		radius = glm::abs(radius);
 
 		gen_vertices();
 	}

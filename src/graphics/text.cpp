@@ -443,7 +443,7 @@ namespace age
 		// If we're using outline, update the current bounds
 		if (m_outline_thickness != 0.0f)
 		{
-			float outline = std::abs(std::ceil(m_outline_thickness));
+			float outline = glm::abs(std::ceil(m_outline_thickness));
 			min_x -= outline;
 			max_x += outline;
 			min_y -= outline;
