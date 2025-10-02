@@ -10,7 +10,11 @@ project(${LIB_NAME} VERSION 0.1 LANGUAGES C CXX)    # Project name, version, and
 set(CMAKE_CXX_STANDARD 17)                          # Use C++17
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                 # Enforce that standard
 
-add_compile_options(-Wno-error=changes-meaning)
+# Check if the CXX compiler is GNU or Clang
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Apply the option globally to all targets defined *after* this point.
+    add_compile_options(-Wno-error=changes-meaning)
+endif()
 
 # Add your library target
 add_library(${LIB_NAME} STATIC
