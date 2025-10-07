@@ -10,10 +10,18 @@ project(${LIB_NAME} VERSION 0.1 LANGUAGES C CXX)    # Project name, version, and
 set(CMAKE_CXX_STANDARD 17)                          # Use C++17
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                 # Enforce that standard
 
-# Check if the CXX compiler is GNU or Clang
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    # Apply the option globally to all targets defined *after* this point.
-    add_compile_options(-Wno-error=changes-meaning)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(
+            -Wall
+            -Wextra
+            -Wuninitialized
+            -Wno-error=changes-meaning
+    )
+elseif(MSVC)
+    add_compile_options(
+            /W4   # Enable warning level 4 on MSVC
+            /WX   # Treat warnings as errors
+    )
 endif()
 
 # Add your library target

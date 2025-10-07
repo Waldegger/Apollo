@@ -96,7 +96,8 @@ inline SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event)
 
 inline void SDL_AppQuit(void* appstate, SDL_AppResult result)
 {
-    std::unique_ptr<age::engine> app(static_cast<age::engine*>(appstate));
+    if (!appstate) return;
 
+    std::unique_ptr<age::engine> app(static_cast<age::engine*>(appstate));
     engine_quit(*app);
 }
