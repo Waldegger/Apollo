@@ -3,25 +3,23 @@ include(FetchContent)
 # Helper function to fetch content without polluting the IDE
 # ------------------------------
 function(fetch_hide_from_ide name)
-    set(options )
-    set(oneValueArgs GIT_REPOSITORY GIT_TAG CMAKE_ARGS)
-    cmake_parse_arguments(FH "${options}" "${oneValueArgs}" "" ${ARGN})
+    set(options)
+    set(oneValueArgs GIT_REPOSITORY GIT_TAG)
+    set(multiValueArgs CMAKE_ARGS)
+    cmake_parse_arguments(FH "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    # Download and make available
-    FetchContent_Declare(${name}
+    FetchContent_Declare(
+            ${name}
             GIT_REPOSITORY ${FH_GIT_REPOSITORY}
             GIT_TAG ${FH_GIT_TAG}
             CMAKE_ARGS ${FH_CMAKE_ARGS}
     )
 
-    # Make available while hiding from IDE
+    # Use modern FetchContent_MakeAvailable instead of deprecated Populate
     FetchContent_GetProperties(${name})
     if(NOT ${name}_POPULATED)
-        # This replaces Populate + add_subdirectory
         FetchContent_MakeAvailable(${name})
-
-        # Optional: still hide in IDE (EXCLUDE_FROM_ALL equivalent)
-        # Some projects don't need this if they provide proper targets
+        # Optional: hide from IDE/project tree
         if(TARGET ${name})
             set_target_properties(${name} PROPERTIES EXCLUDE_FROM_ALL TRUE)
         endif()
@@ -32,8 +30,37 @@ endfunction()
 # ------------------------------
 # OpenGL
 # ------------------------------
+# Resolve 'FindOpenGL' ambiguity warning on Linux.
+# CMP0072 policy set to 'NEW' tells CMake to prefer the modern
+# GLVND (Vendor-Neutral Dispatch) libraries over the legacy 'libGL.so'.
+cmake_policy(SET CMP0072 NEW)
 find_package(OpenGL REQUIRED)
 set(OpenGL_GL_LIBRARY OpenGL::GL)
+
+# HarfBuzz (Required for FreeType to pass its dependency check)
+# ------------------------------
+find_package(HarfBuzz QUIET)
+if(NOT HarfBuzz_FOUND)
+    message(STATUS "HarfBuzz not found, fetching with FetchContent...")
+
+    fetch_hide_from_ide(
+            harfbuzz
+            GIT_REPOSITORY https://github.com/harfbuzz/harfbuzz.git
+            GIT_TAG 12.1.0 # A recent stable tag
+            CMAKE_ARGS
+            # HarfBuzz requires several dependencies; disable unnecessary ones for a cleaner build
+            -DHB_BUILD_TESTS=OFF
+            -DHB_BUILD_TOOLS=OFF
+            -DHB_HAVE_GLIB=OFF
+            -DHB_HAVE_GOBJECT=OFF
+            -DHB_HAVE_ICU=OFF
+    )
+
+    set(HARFBUZZ_TARGET harfbuzz)
+else()
+    message(STATUS "Using system-installed HarfBuzz")
+    set(HARFBUZZ_TARGET HarfBuzz::HarfBuzz)
+endif()
 
 # ------------------------------
 # FreeType
@@ -45,7 +72,10 @@ if(NOT Freetype_FOUND)
     fetch_hide_from_ide(
         freetype
         GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
-        GIT_TAG VER-2-13-2
+        GIT_TAG VER-2-14-1
+        CMAKE_ARGS
+            # 1. Explicitly enable HarfBuzz support
+            -DFT_WITH_HARFBUZZ=ON
     )
 
     set(FREETYPE_TARGET freetype)
@@ -66,7 +96,7 @@ if(NOT Ogg_FOUND)
             GIT_REPOSITORY https://github.com/xiph/ogg.git
             GIT_TAG v1.3.6  # latest stable tag at the moment
             CMAKE_ARGS
-            -DCMAKE_POLICY_VERSION=3.5
+                -DCMAKE_POLICY_VERSION=3.5
     )
 
     set(OGG_TARGET ogg)
@@ -107,6 +137,9 @@ endif()
 # ------------------------------
 # OpenAL-Soft
 # ------------------------------
+# ------------------------------
+# OpenAL-Soft
+# ------------------------------
 find_package(OpenAL QUIET)
 if(NOT OpenAL_FOUND)
     message(STATUS "OpenAL not found, fetching with FetchContent...")
@@ -114,17 +147,27 @@ if(NOT OpenAL_FOUND)
     fetch_hide_from_ide(
             openal-soft
             GIT_REPOSITORY https://github.com/kcat/openal-soft.git
-            GIT_TAG 1.22.1  # use latest stable release or tag you want
+            #GIT_TAG 1.24.3  #This version has a bug with CMake. As soon as there is a newer one, the newer one can be used
+            GIT_TAG master
     )
 
-    set(OPENAL_TARGET OpenAL::OpenAL)
+    set(OPENAL_TARGET OpenAL::OpenAL) # Still use the alias for linking
 else()
     message(STATUS "Using system-installed OpenAL")
     set(OPENAL_TARGET OpenAL::OpenAL)
+
+    # *** Fix for System ALIAS Target ***
+    if(TARGET OpenAL::OpenAL)
+        # We cannot set CXX_STANDARD on an ALIAS, but we can set features on the interface.
+        message(STATUS "Fixing system OpenAL::OpenAL interface features.")
+        set_target_properties(OpenAL::OpenAL PROPERTIES
+                INTERFACE_CXX_FEATURES "cxx_std_17"
+        )
+    endif()
 endif()
 
 # ------------------------------
-# SDL2 (update to SDL3 when everything works)
+# SDL3
 # ------------------------------
 find_package(SDL3 QUIET)
 if(NOT SDL3_FOUND)
@@ -138,6 +181,6 @@ if(NOT SDL3_FOUND)
 
     set(SDL3_TARGET SDL3-static)  # or SDL3-static if appropriate
 else()
-    message(STATUS "Using system-installed SDL2")
+    message(STATUS "Using system-installed SDL3")
     set(SDL3_TARGET SDL3::SDL3)
 endif()

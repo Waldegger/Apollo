@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.5)                # Require CMake 3.16+
+cmake_minimum_required(VERSION 3.16)                # Require CMake 3.16+
 
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)               # Required for OGG, Vorbis and SDL2
+set(CMAKE_POLICY_VERSION_MINIMUM 3.16)               # Required for OGG, Vorbis and SDL3
 
 set(LIB_NAME Apollo)
 set(EXE_NAME DemoApp)
@@ -135,3 +135,16 @@ target_link_libraries(${EXE_NAME}
 target_include_directories(${EXE_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+# --- Copy OpenAL DLL after build (Windows only)
+if (WIN32)
+    # Figure out where the OpenAL DLL ended up
+    get_target_property(_openal_location OpenAL::OpenAL LOCATION)
+
+    add_custom_command(TARGET ${EXE_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${_openal_location}"
+            $<TARGET_FILE_DIR:${EXE_NAME}>
+            COMMENT "Copying OpenAL DLL to output directory"
+    )
+endif()
