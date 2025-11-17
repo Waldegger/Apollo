@@ -1,6 +1,4 @@
-cmake_minimum_required(VERSION 3.16)                # Require CMake 3.16+
-
-set(CMAKE_POLICY_VERSION_MINIMUM 3.16)               # Required for OGG, Vorbis and SDL3
+cmake_minimum_required(VERSION 3.10...3.16)                # Require CMake 3.10 to 3.16
 
 set(LIB_NAME Apollo)
 set(EXE_NAME DemoApp)

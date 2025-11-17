@@ -120,7 +120,7 @@ if(NOT Vorbis_FOUND)
     fetch_hide_from_ide(
             vorbis
             GIT_REPOSITORY https://github.com/xiph/vorbis.git
-            GIT_TAG v1.3.7  # latest stable tag at the moment
+            GIT_TAG 43bbff0141028e58d476c1d5fd45dd5573db576d  # latest stable tag at the moment
             CMAKE_ARGS
             -DOGG_INCLUDE_DIR=${OGG_INCLUDE_DIR}
             -DOGG_LIBRARY=${OGG_LIBRARY}
@@ -169,18 +169,18 @@ endif()
 # ------------------------------
 # SDL3
 # ------------------------------
-find_package(SDL3 QUIET)
-if(NOT SDL3_FOUND)
+#find_package(SDL3 QUIET)
+#if(NOT SDL3_FOUND)
     message(STATUS "SDL3 not found, fetching with FetchContent...")
     
     fetch_hide_from_ide(
             sdl3
             GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-            GIT_TAG release-3.2.0  # latest 3.2 patch version
+            GIT_TAG release-3.2.26  # latest 3.2.26 patch version
     )
 
     set(SDL3_TARGET SDL3-static)  # or SDL3-static if appropriate
-else()
-    message(STATUS "Using system-installed SDL3")
-    set(SDL3_TARGET SDL3::SDL3)
-endif()
+#else()
+#    message(STATUS "Using system-installed SDL3")
+#    set(SDL3_TARGET SDL3::SDL3)
+#endif()

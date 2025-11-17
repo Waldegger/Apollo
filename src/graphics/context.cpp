@@ -18,7 +18,7 @@ namespace age
             {
                 if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), static_cast<SDL_GLContext>(m_GL_context.get())))
                 {
-                    throw std::runtime_error{ std::string{ "Failed to make context current\nSDL2 Error: " } + SDL_GetError() };
+                    throw std::runtime_error{ std::string{ "Failed to make context current\nSDL3 Error: " } + SDL_GetError() };
                 }
             }
             return;
@@ -28,7 +28,7 @@ namespace age
         {
             if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), nullptr))
             {
-                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
+                throw std::runtime_error{ std::string{ "Failed to make context current\nSDL3 Error: " } + SDL_GetError() };
             }
         }
     }
@@ -45,7 +45,7 @@ namespace age
 
         if (current_context != m_GL_context.get())
         {
-            if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), static_cast<SDL_GLContext>(m_GL_context.get())))
+            if (!SDL_GL_MakeCurrent(internal_window_handle, static_cast<SDL_GLContext>(m_GL_context.get())))
             {
                 throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
             }
@@ -55,7 +55,7 @@ namespace age
 
         if (current_context != m_GL_context.get())
         {
-            if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), current_context))
+            if (!SDL_GL_MakeCurrent(internal_window_handle, current_context))
             {
                 throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };
             }
@@ -103,6 +103,14 @@ namespace age
 
     void context::create(const render_window& window, bool shared)
     {
+        //Use OpenGL 4.3
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+        //OpenGL ES profile - only a subset of the base OpenGL functionality is available
+        //SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+
         m_render_window = &window;
         auto internal_window_handle = m_render_window->get_internal_handle();
 
@@ -159,6 +167,8 @@ namespace age
 
         auto current_context = SDL_GL_GetCurrentContext();
 
+        //For testing in WayLand
+        //if (!SDL_GL_MakeCurrent(nullptr, static_cast<SDL_GLContext>(m_GL_shared_context.get())))
         if (!SDL_GL_MakeCurrent(static_cast<SDL_Window*>(m_render_window->get_internal_handle()), static_cast<SDL_GLContext>(m_GL_shared_context.get())))
         {
             throw std::runtime_error{ std::string{ "Failed to make context current\nSDL Error: " } + SDL_GetError() };

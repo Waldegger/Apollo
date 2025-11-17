@@ -16,14 +16,6 @@ namespace age
 	render_window::render_window()
 		: m_clear_flags{ GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT }
 	{
-		//Use OpenGL 4.3
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-		//OpenGL ES profile - only a subset of the base OpenGL functionality is available
-		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-
 		if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0)
 		{
 			std::stringstream warning;
@@ -40,6 +32,9 @@ namespace age
 		}
 
 		m_context.create(*this);
+
+		//For testing purpose only as multithreeaded OpenGL has ome issues on Wayland
+		//m_context.acquire_shared_context();
 
 		//Use Vsync
 		if (SDL_GL_SetSwapInterval(1) < 0)
